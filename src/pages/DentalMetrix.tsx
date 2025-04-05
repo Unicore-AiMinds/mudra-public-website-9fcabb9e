@@ -165,7 +165,7 @@ const DentalMetrix = () => {
               
               <ServiceCard title="Full Mouth Rehabilitation" description="Comprehensive treatment plan that addresses multiple dental issues simultaneously, restoring both function and aesthetics for patients with extensive dental problems." icon={<Heart size={24} />} image="https://images.unsplash.com/photo-1580377968103-83d4ae369039?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
               
-              <ServiceCard title="Artificial Eyes, Ears & Nose" description="Specialized maxillofacial prosthetics that restore appearance and function for patients who have lost facial structures due to congenital conditions, trauma, or surgical procedures." icon={<Building size={24} />} image="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
+              <ServiceCard title="Scaling and Polishing" description="A professional dental cleaning procedure where a dentist or hygienist removes plaque and tartar (calculus) from the teeth using specialized instruments, followed by polishing the tooth surfaces to remove stains and create a smooth finish." icon={<Building size={24} />} image="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
             </div>
           </div>
         </section>
