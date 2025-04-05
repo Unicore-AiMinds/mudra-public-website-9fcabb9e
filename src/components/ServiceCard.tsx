@@ -18,17 +18,14 @@ const ServiceCard = ({ title, description, icon, image }: ServiceCardProps) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       {image && (
-        <div className="h-40 overflow-hidden">
-          <div 
-            className="h-full w-full bg-gray-200 transition-transform duration-500"
-            style={{
-              backgroundImage: `url(${image})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              transform: isHovered ? 'scale(1.05)' : 'scale(1)',
-            }}
-          />
-        </div>
+        <img 
+          src={image}
+          alt={title}
+          className="h-40 w-full object-cover transition-transform duration-500"
+          style={{
+            transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+          }}
+        />
       )}
       
       <div className="p-5">
