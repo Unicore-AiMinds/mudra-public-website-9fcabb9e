@@ -1,4 +1,4 @@
-
+import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import TravelCard from '@/components/TravelCard';
@@ -302,12 +302,18 @@ const ExplorePune = () => {
                     Our team can help coordinate your treatment schedule with your travel plans.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4">
-                    <a href="/dental-metrix#contact" className="px-6 py-3 bg-white text-mudra-primary rounded-md font-medium hover:bg-mudra-accent hover:text-white transition-colors text-center">
+                    <Link 
+                      to="/dental-metrix#contact" 
+                      className="px-6 py-3 bg-white text-mudra-primary rounded-md font-medium hover:bg-mudra-accent hover:text-white transition-colors text-center"
+                    >
                       Contact Dental Metrix
-                    </a>
-                    <a href="/meditouch#contact" className="px-6 py-3 bg-transparent border border-white text-white rounded-md font-medium hover:bg-white/10 transition-colors text-center">
+                    </Link>
+                    <Link 
+                      to="/meditouch#contact" 
+                      className="px-6 py-3 bg-transparent border border-white text-white rounded-md font-medium hover:bg-white/10 transition-colors text-center"
+                    >
                       Contact Meditouch
-                    </a>
+                    </Link>
                   </div>
                 </div>
                 

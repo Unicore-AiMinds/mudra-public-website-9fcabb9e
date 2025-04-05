@@ -1,20 +1,43 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
+
 const Index = () => {
+  const navigate = useNavigate();
+
+  const handleExploreServices = () => {
+    // Navigate to the divisions section
+    const divisionsSection = document.getElementById('divisions');
+    if (divisionsSection) {
+      divisionsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleScheduleConsultation = () => {
+    // Navigate to the contact page
+    navigate('/contact');
+  };
+
   return <div className="min-h-screen">
       <Navbar />
       
       <main>
-        <Hero title="Discover the Perfect Harmony of Dental & Aesthetic Excellence" subtitle="Mudra Clinic brings together specialized dental and aesthetic services under one roof, providing comprehensive care for your smile and appearance." cta={{
-        text: 'Explore Our Services',
-        link: '#divisions'
-      }} secondaryCta={{
-        text: 'Contact Us',
-        link: '/contact'
-      }} />
+        <Hero 
+          title="Discover the Perfect Harmony of Dental & Aesthetic Excellence" 
+          subtitle="Mudra Clinic brings together specialized dental and aesthetic services under one roof, providing comprehensive care for your smile and appearance." 
+          cta={{
+            text: 'Explore Our Services',
+            link: '#divisions',
+            onClick: handleExploreServices
+          }} 
+          secondaryCta={{
+            text: 'Contact Us',
+            link: '/contact',
+            onClick: handleScheduleConsultation
+          }} 
+        />
         
         <section id="divisions" className="py-20">
           <div className="container mx-auto px-4 md:px-6">
@@ -245,4 +268,5 @@ const Index = () => {
       <Footer />
     </div>;
 };
+
 export default Index;
