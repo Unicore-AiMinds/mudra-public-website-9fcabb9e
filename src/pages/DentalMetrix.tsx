@@ -1,408 +1,234 @@
-
-import React from "react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import ScrollToTop from "../components/ScrollToTop";
-import { Card, CardContent } from "../components/ui/card";
-import { Button } from "../components/ui/button";
-import ServiceCard from "../components/ServiceCard";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
-import { Separator } from "@radix-ui/react-separator";
+import { useEffect, useRef } from 'react';
+import { Stethoscope, Smile, Sparkles, Heart, Building, Clock, CalendarClock, MapPin } from 'lucide-react';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import Hero from '@/components/Hero';
+import ServiceCard from '@/components/ServiceCard';
+import SectionNav from '@/components/SectionNav';
+import TestimonialsSection from '@/components/TestimonialsSection';
+import ContactForm from '@/components/ContactForm';
+import LocationMap from '@/components/LocationMap';
 
 const DentalMetrix = () => {
+  const contactSectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const revealElements = document.querySelectorAll('.reveal-section');
+      revealElements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        const viewportHeight = window.innerHeight;
+        if (elementTop < viewportHeight - 100) {
+          element.classList.add('visible');
+        }
+      });
+    };
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Trigger on initial load
+
+    // Check if we need to scroll to contact section on load (from URL hash)
+    if (window.location.hash === '#contact') {
+      setTimeout(() => {
+        scrollToContact();
+      }, 500);
+    }
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const scrollToContact = () => {
+    if (contactSectionRef.current) {
+      contactSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const sectionNavItems = [
+    { id: 'about', label: 'About' },
+    { id: 'services', label: 'Services' },
+    { id: 'testimonials', label: 'Testimonials' },
+    { id: 'contact', label: 'Contact' }
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       <Navbar />
-
-      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Dental Metrix
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Advanced dental solutions with a focus on implants and cosmetic
-            dentistry
-          </p>
-        </div>
-
-        <Tabs defaultValue="overview" className="w-full mb-12">
-          <TabsList className="grid grid-cols-4 mb-8">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="services">Services</TabsTrigger>
-            <TabsTrigger value="team">Our Team</TabsTrigger>
-            <TabsTrigger value="technology">Technology</TabsTrigger>
-          </TabsList>
-          <TabsContent value="overview">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      
+      <main className="scroll-smooth pt-16 md:pt-20">
+        <Hero 
+          title="Crafting Confident Smiles with Precision" 
+          subtitle="Dental Metrix provides advanced implant solutions and esthetic dentistry to restore function and beauty to your smile." 
+          backgroundImage="https://images.unsplash.com/photo-1606811971618-23b39c5204f2?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
+          cta={{
+            text: 'Book Appointment',
+            link: '#contact'
+          }}
+          onCtaClick={scrollToContact}
+        />
+        
+        <SectionNav 
+          sections={sectionNavItems} 
+          backTo={{
+            path: '/',
+            label: 'Mudra Group'
+          }} 
+          logo="dental-metrix-logo.png" 
+          logoAlt="Dental Metrix" 
+        />
+        
+        <section id="about" className="py-20 reveal-section">
+          <div className="container mx-auto px-4 md:px-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                  About Dental Metrix
-                </h2>
-                <p className="text-gray-600 mb-4">
-                  Dental Metrix is a state-of-the-art dental clinic specializing
-                  in advanced dental treatments including implants, cosmetic
-                  dentistry, and oral surgery. Our mission is to provide
-                  world-class dental care using the latest technology and
-                  techniques.
-                </p>
-                <p className="text-gray-600 mb-4">
-                  With over 15 years of experience, our team of specialists
-                  ensures that each patient receives personalized care tailored
-                  to their specific needs. We pride ourselves on creating
-                  comfortable, pain-free experiences for all our patients.
-                </p>
-                <div className="mt-6">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    Why Choose Us?
-                  </h3>
-                  <ul className="list-disc pl-5 text-gray-600 space-y-2">
-                    <li>Internationally trained dental specialists</li>
-                    <li>Advanced digital dentistry technology</li>
-                    <li>Comprehensive treatment planning</li>
-                    <li>Comfortable, modern facilities</li>
-                    <li>Transparent pricing and payment options</li>
-                  </ul>
-                </div>
-              </div>
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                  Make an Appointment
-                </h3>
-                <form>
-                  <div className="grid grid-cols-1 gap-4">
-                    <div>
-                      <label
-                        htmlFor="name"
-                        className="block text-sm font-medium text-gray-700 mb-1"
-                      >
-                        Full Name
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="block text-sm font-medium text-gray-700 mb-1"
-                      >
-                        Email Address
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="phone"
-                        className="block text-sm font-medium text-gray-700 mb-1"
-                      >
-                        Phone Number
-                      </label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="service"
-                        className="block text-sm font-medium text-gray-700 mb-1"
-                      >
-                        Service Interested In
-                      </label>
-                      <select
-                        id="service"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                      >
-                        <option>Dental Implants</option>
-                        <option>Cosmetic Dentistry</option>
-                        <option>Orthodontics</option>
-                        <option>Oral Surgery</option>
-                        <option>General Dentistry</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="message"
-                        className="block text-sm font-medium text-gray-700 mb-1"
-                      >
-                        Additional Information
-                      </label>
-                      <textarea
-                        id="message"
-                        rows={4}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                      ></textarea>
-                    </div>
-                    <Button type="submit" className="w-full">
-                      Request Appointment
-                    </Button>
+                <h2 className="text-3xl font-serif font-semibold mb-6">About Dental Metrix</h2>
+                
+                <div className="w-20 h-1 bg-mudra-accent mb-8"></div>
+                
+                <div className="space-y-6">
+                  <p className="text-gray-700">
+                    Dental Metrix represents the pinnacle of advanced esthetic and implant dentistry in Pune. 
+                    We combine cutting-edge technology with meticulous attention to detail, 
+                    ensuring exceptional results for every patient.
+                  </p>
+                  
+                  <div className="bg-mudra-primary/5 p-6 rounded-lg border border-mudra-primary/10">
+                    <h3 className="font-serif text-xl font-medium mb-4">Meet Dr. Bhargavi Railkar-Kolhapure</h3>
+                    <p className="text-gray-700 mb-4">
+                      Lead Prosthodontist with extensive credentials and expertise in advanced dental procedures:
+                    </p>
+                    <ul className="space-y-2">
+                      <li className="flex items-baseline">
+                        <span className="w-2 h-2 bg-mudra-primary rounded-full mr-2 mt-1.5"></span>
+                        <span>MDS Prosthodontics & Implantology</span>
+                      </li>
+                      <li className="flex items-baseline">
+                        <span className="w-2 h-2 bg-mudra-primary rounded-full mr-2 mt-1.5"></span>
+                        <span>Certification in Maxillofacial Prosthodontics</span>
+                      </li>
+                      <li className="flex items-baseline">
+                        <span className="w-2 h-2 bg-mudra-primary rounded-full mr-2 mt-1.5"></span>
+                        <span>Advanced Training in Full Mouth Rehabilitation</span>
+                      </li>
+                      <li className="flex items-baseline">
+                        <span className="w-2 h-2 bg-mudra-primary rounded-full mr-2 mt-1.5"></span>
+                        <span>Specializes in Complex Implant Cases</span>
+                      </li>
+                    </ul>
                   </div>
-                </form>
-              </div>
-            </div>
-          </TabsContent>
-          <TabsContent value="services">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              Our Services
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <ServiceCard
-                title="Dental Implants"
-                description="Permanent tooth replacement solutions that look, feel, and function like natural teeth. Includes single tooth implants, All-on-4, and implant-supported dentures."
-                price="Starting from ₹35,000 per implant"
-              />
-              <ServiceCard
-                title="Cosmetic Dentistry"
-                description="Enhance your smile with our range of cosmetic procedures including veneers, teeth whitening, smile makeovers, and composite bonding."
-                price="Starting from ₹15,000"
-              />
-              <ServiceCard
-                title="Scaling and Polishing"
-                description="A professional dental cleaning procedure where a dentist or hygienist removes plaque and tartar (calculus) from the teeth using specialized instruments, followed by polishing the tooth surfaces to remove stains and create a smooth finish."
-                price="Starting from ₹60,000"
-              />
-              <ServiceCard
-                title="Orthodontics"
-                description="Straighten your teeth with modern orthodontic options including traditional braces, clear aligners, and Invisalign treatments."
-                price="Starting from ₹50,000"
-              />
-              <ServiceCard
-                title="Oral Surgery"
-                description="Specialized surgical procedures including wisdom tooth extraction, bone grafting, sinus lifts, and corrective jaw surgery."
-                price="Starting from ₹8,000"
-              />
-              <ServiceCard
-                title="General Dentistry"
-                description="Comprehensive dental care including check-ups, cleanings, fillings, root canals, crowns, and bridges to maintain optimal oral health."
-                price="Starting from ₹1,500"
-              />
-            </div>
-          </TabsContent>
-          <TabsContent value="team">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              Meet Our Specialists
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <Card>
-                <CardContent className="p-6">
-                  <div className="w-24 h-24 rounded-full bg-gray-300 mx-auto mb-4"></div>
-                  <h3 className="text-xl font-bold text-center text-gray-900 mb-1">
-                    Dr. Aditya Sharma
-                  </h3>
-                  <p className="text-gray-600 text-center mb-3">
-                    Implantologist & Oral Surgeon
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    MDS (Oral Surgery), Fellowship in Implantology (Germany).
-                    Over 12 years of experience specializing in dental implants
-                    and complex oral surgeries.
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-6">
-                  <div className="w-24 h-24 rounded-full bg-gray-300 mx-auto mb-4"></div>
-                  <h3 className="text-xl font-bold text-center text-gray-900 mb-1">
-                    Dr. Priya Mehta
-                  </h3>
-                  <p className="text-gray-600 text-center mb-3">
-                    Cosmetic Dentist
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    MDS (Prosthodontics), Certification in Aesthetic Dentistry
-                    (USA). Specialized in smile design, veneers, and full mouth
-                    rehabilitation.
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-6">
-                  <div className="w-24 h-24 rounded-full bg-gray-300 mx-auto mb-4"></div>
-                  <h3 className="text-xl font-bold text-center text-gray-900 mb-1">
-                    Dr. Rahul Desai
-                  </h3>
-                  <p className="text-gray-600 text-center mb-3">
-                    Orthodontist
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    MDS (Orthodontics), Fellowship in Invisible Orthodontics.
-                    Expert in complex orthodontic cases and Invisalign
-                    treatments.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-          <TabsContent value="technology">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              Our Advanced Technology
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">
-                    Digital Scanning & 3D Printing
-                  </h3>
-                  <p className="text-gray-600 mb-4">
-                    We utilize intraoral scanners to create precise digital
-                    impressions, eliminating the need for uncomfortable
-                    traditional impressions. Our in-house 3D printing capability
-                    allows for same-day fabrication of surgical guides and
-                    temporary restorations.
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">
-                    Cone Beam CT (CBCT)
-                  </h3>
-                  <p className="text-gray-600 mb-4">
-                    Our advanced 3D imaging system provides detailed views of
-                    your oral structures, allowing for precise treatment planning
-                    for implants, extractions, and other complex procedures while
-                    minimizing radiation exposure.
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">
-                    Computer-Guided Implant Surgery
-                  </h3>
-                  <p className="text-gray-600 mb-4">
-                    Using specialized software and custom surgical guides, we can
-                    place dental implants with exceptional precision and minimal
-                    invasiveness, resulting in faster healing and better
-                    outcomes.
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">
-                    Digital Smile Design
-                  </h3>
-                  <p className="text-gray-600 mb-4">
-                    Advanced software that allows you to preview your new smile
-                    before treatment begins. Our digital workflow ensures
-                    predictable results that match your expectations.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-        </Tabs>
-
-        <section className="bg-white rounded-lg shadow-md p-8 mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Patient Testimonials
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="border border-gray-200 rounded-lg p-6">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 rounded-full bg-gray-300 mr-4"></div>
-                <div>
-                  <h4 className="font-semibold text-gray-900">
-                    Rajiv Malhotra
-                  </h4>
-                  <p className="text-sm text-gray-600">Dental Implant Patient</p>
-                </div>
-              </div>
-              <div className="mb-2 flex">
-                <span className="text-yellow-400">★★★★★</span>
-              </div>
-              <p className="text-gray-600">
-                "After losing my front teeth in an accident, I was devastated.
-                Dr. Sharma and the team at Dental Metrix restored my smile with
-                implants that look completely natural. The entire process was
-                smooth and much less painful than I expected."
-              </p>
-            </div>
-            <div className="border border-gray-200 rounded-lg p-6">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 rounded-full bg-gray-300 mr-4"></div>
-                <div>
-                  <h4 className="font-semibold text-gray-900">Anita Patel</h4>
-                  <p className="text-sm text-gray-600">
-                    Smile Makeover Patient
+                  
+                  <p className="text-gray-700">
+                    Our clinic philosophy centers on comprehensive, personalized care that prioritizes 
+                    both function and aesthetics. We believe in creating natural-looking smiles that 
+                    enhance your overall appearance while supporting optimal oral health.
                   </p>
                 </div>
               </div>
-              <div className="mb-2 flex">
-                <span className="text-yellow-400">★★★★★</span>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="rounded-lg overflow-hidden h-64">
+                  <img src="https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="Dental Professional" className="w-full h-full object-cover" />
+                </div>
+                <div className="rounded-lg overflow-hidden h-64 mt-8">
+                  <img alt="Dental Office" src="/lovable-uploads/b695f2b9-856f-453f-9c6f-0291ff2ff322.jpg" className="w-full h-full object-fill" />
+                </div>
+                <div className="rounded-lg overflow-hidden h-64">
+                  <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="Dental Equipment" className="w-full h-full object-cover" />
+                </div>
+                <div className="rounded-lg overflow-hidden h-64 mt-8">
+                  <img src="https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="Dental Treatment" className="w-full h-full object-cover" />
+                </div>
               </div>
+            </div>
+          </div>
+        </section>
+        
+        <section id="services" className="py-20 bg-gray-50 reveal-section">
+          <div className="container mx-auto px-4 md:px-6">
+            <div className="max-w-3xl mx-auto text-center mb-16">
+              <h2 className="text-3xl font-serif font-semibold mb-4">Our Dental Services</h2>
               <p className="text-gray-600">
-                "I had been self-conscious about my smile for years. After my
-                veneers treatment at Dental Metrix, I can't stop smiling! Dr.
-                Priya truly understood what I wanted and delivered results that
-                exceeded my expectations."
+                We offer a comprehensive range of advanced dental treatments designed to restore 
+                function, enhance aesthetics, and improve your overall quality of life.
               </p>
+              <div className="w-20 h-1 bg-mudra-accent mx-auto mt-8"></div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <ServiceCard title="Dental Implants" description="Permanent replacement for missing teeth that look, feel and function like natural teeth. Our advanced implantology approaches ensure optimal integration and long-term success." icon={<Stethoscope size={24} />} image="https://images.unsplash.com/photo-1606811971618-23b39c5204f2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
+              
+              <ServiceCard title="Smile Designing" description="Comprehensive approach to improving your smile's appearance using various treatments including veneers, bonding, and contouring to create harmonious, natural-looking results." icon={<Smile size={24} />} image="https://images.unsplash.com/photo-1581582494801-5f32dd761f6b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
+              
+              <ServiceCard title="Teeth Whitening" description="Professional whitening treatments that deliver dramatic results, removing years of stains and discoloration for a brighter, more youthful smile." icon={<Sparkles size={24} />} image="https://images.unsplash.com/photo-1593022356769-11f762e25ed9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
+              
+              <ServiceCard title="Dental Aligners" description="Discreet alternative to traditional braces, custom-designed clear aligners gradually shift teeth into their ideal position for a straight, well-aligned smile." icon={<Stethoscope size={24} />} image="https://images.unsplash.com/photo-1598256989800-fe5f95da9787?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
+              
+              <ServiceCard title="Full Mouth Rehabilitation" description="Comprehensive treatment plan that addresses multiple dental issues simultaneously, restoring both function and aesthetics for patients with extensive dental problems." icon={<Heart size={24} />} image="https://images.unsplash.com/photo-1580377968103-83d4ae369039?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
+              
+              <ServiceCard title="Artificial Eyes, Ears & Nose" description="Specialized maxillofacial prosthetics that restore appearance and function for patients who have lost facial structures due to congenital conditions, trauma, or surgical procedures." icon={<Building size={24} />} image="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
             </div>
           </div>
         </section>
-
-        <section className="bg-white rounded-lg shadow-md p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            International Patient Services
-          </h2>
-          <p className="text-gray-600 mb-6">
-            At Dental Metrix, we welcome patients from around the world seeking
-            high-quality dental care at competitive prices. Our international
-            patient services include:
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <div className="border border-gray-200 rounded-lg p-4 text-center">
-              <h3 className="font-semibold text-gray-900 mb-2">
-                Virtual Consultations
-              </h3>
-              <p className="text-sm text-gray-600">
-                Initial assessment and treatment planning via video call
-              </p>
+        
+        <div id="testimonials" className="reveal-section">
+          <TestimonialsSection type="dental" />
+        </div>
+        
+        <section id="contact" ref={contactSectionRef} className="py-20 reveal-section">
+          <div className="container mx-auto px-4 md:px-6">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-serif font-semibold mb-4">Contact Dental Metrix</h2>
+                <div className="w-20 h-1 bg-mudra-accent mx-auto"></div>
+              </div>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                <div className="lg:col-span-3">
+                  <ContactForm formType="dental" />
+                </div>
+                
+                <div className="lg:col-span-2 space-y-6">
+                  <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                    <h3 className="font-serif text-xl font-medium mb-4">Clinic Information</h3>
+                    
+                    <div className="space-y-4">
+                      <div className="flex items-start">
+                        <Building className="h-5 w-5 text-mudra-primary mt-1 mr-3 flex-shrink-0" />
+                        <div>
+                          <p className="font-medium">Mudra Dental & Aesthetic Clinic</p>
+                          <p className="text-gray-600 text-sm">
+                            Manas Apartment, 1st Floor, Lakaki Road, Opp. Hotel Ambience, Model Colony, Shivajinagar, Pune 411 016
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center">
+                        <Clock className="h-5 w-5 text-mudra-primary mr-3 flex-shrink-0" />
+                        <div>
+                          <p className="font-medium">Clinic Hours</p>
+                          <p className="text-gray-600 text-sm">Mon - Sat: 10:00 am - 7:00 pm</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center">
+                        <CalendarClock className="h-5 w-5 text-mudra-primary mr-3 flex-shrink-0" />
+                        <div>
+                          <p className="font-medium">Phone Number</p>
+                          <p className="text-gray-600 text-sm">91529 51573</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <LocationMap />
+                </div>
+              </div>
             </div>
-            <div className="border border-gray-200 rounded-lg p-4 text-center">
-              <h3 className="font-semibold text-gray-900 mb-2">
-                Travel Assistance
-              </h3>
-              <p className="text-sm text-gray-600">
-                Help with accommodation, local transportation, and tourism
-              </p>
-            </div>
-            <div className="border border-gray-200 rounded-lg p-4 text-center">
-              <h3 className="font-semibold text-gray-900 mb-2">
-                Language Support
-              </h3>
-              <p className="text-sm text-gray-600">
-                Translation services available in multiple languages
-              </p>
-            </div>
-            <div className="border border-gray-200 rounded-lg p-4 text-center">
-              <h3 className="font-semibold text-gray-900 mb-2">
-                Accelerated Treatment
-              </h3>
-              <p className="text-sm text-gray-600">
-                Optimized treatment schedules to minimize your stay
-              </p>
-            </div>
-          </div>
-          <div className="flex justify-center">
-            <Button variant="outline" className="mr-4">
-              Download Patient Guide
-            </Button>
-            <Button>Contact International Desk</Button>
           </div>
         </section>
-      </div>
-
+      </main>
+      
       <Footer />
-      <ScrollToTop />
     </div>
   );
 };

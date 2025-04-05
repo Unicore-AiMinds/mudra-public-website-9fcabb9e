@@ -12,6 +12,7 @@ import LocationMap from '@/components/LocationMap';
 const Meditouch = () => {
   const contactSectionRef = useRef<HTMLElement>(null);
 
+  // This effect handles scroll reveal animations
   useEffect(() => {
     const handleScroll = () => {
       const revealElements = document.querySelectorAll('.reveal-section');
@@ -26,6 +27,7 @@ const Meditouch = () => {
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // Trigger on initial load
 
+    // Check if we need to scroll to contact section on load (from URL hash)
     if (window.location.hash === '#contact') {
       setTimeout(() => {
         scrollToContact();
@@ -155,47 +157,17 @@ const Meditouch = () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <ServiceCard 
-                title="Hair Transplant" 
-                description="Advanced FUE (Follicular Unit Extraction) technique for natural-looking hair restoration with minimal scarring and faster recovery times." 
-                icon={Scissors} 
-                image="https://images.unsplash.com/photo-1473679408190-0693dd22fe6a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
-              />
+              <ServiceCard title="Hair Transplant" description="Advanced FUE (Follicular Unit Extraction) technique for natural-looking hair restoration with minimal scarring and faster recovery times." icon={<Scissors size={24} />} image="https://images.unsplash.com/photo-1473679408190-0693dd22fe6a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
               
-              <ServiceCard 
-                title="Hair & Face PRP" 
-                description="Platelet-Rich Plasma therapy uses your body's natural growth factors to stimulate hair growth and rejuvenate facial skin for a youthful appearance." 
-                icon={Droplet} 
-                image="https://images.unsplash.com/photo-1614859135736-99160a1757e2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
-              />
+              <ServiceCard title="Hair & Face PRP" description="Platelet-Rich Plasma therapy uses your body's natural growth factors to stimulate hair growth and rejuvenate facial skin for a youthful appearance." icon={<Droplet size={24} />} image="https://images.unsplash.com/photo-1614859135736-99160a1757e2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
               
-              <ServiceCard 
-                title="HydraFacial" 
-                description="Multi-step treatment that cleanses, exfoliates, extracts, and hydrates skin using serums filled with antioxidants, peptides, and hyaluronic acid." 
-                icon={Sparkles} 
-                image="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
-              />
+              <ServiceCard title="HydraFacial" description="Multi-step treatment that cleanses, exfoliates, extracts, and hydrates skin using serums filled with antioxidants, peptides, and hyaluronic acid." icon={<Sparkles size={24} />} image="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
               
-              <ServiceCard 
-                title="Laser Hair Reduction" 
-                description="Permanent reduction of unwanted hair using state-of-the-art laser technology, effective for various skin and hair types with minimal discomfort." 
-                icon={Zap} 
-                image="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
-              />
+              <ServiceCard title="Laser Hair Reduction" description="Permanent reduction of unwanted hair using state-of-the-art laser technology, effective for various skin and hair types with minimal discomfort." icon={<Zap size={24} />} image="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
               
-              <ServiceCard 
-                title="Skin Tightening (HIFU)" 
-                description="High-Intensity Focused Ultrasound technology lifts and tightens skin by targeting deep layers without surgery, stimulating collagen production for natural rejuvenation." 
-                icon={Gauge} 
-                image="https://images.unsplash.com/photo-1560750588-73207b1ef5b8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
-              />
+              <ServiceCard title="Skin Tightening (HIFU)" description="High-Intensity Focused Ultrasound technology lifts and tightens skin by targeting deep layers without surgery, stimulating collagen production for natural rejuvenation." icon={<Gauge size={24} />} image="https://images.unsplash.com/photo-1560750588-73207b1ef5b8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
               
-              <ServiceCard 
-                title="Body Fat & Cellulite Reduction" 
-                description="Non-invasive treatments to reduce stubborn fat deposits and improve the appearance of cellulite for a more contoured silhouette." 
-                icon={HandMetal} 
-                image="https://images.unsplash.com/photo-1624623876661-5e7e74075ccb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
-              />
+              <ServiceCard title="Body Fat & Cellulite Reduction" description="Non-invasive treatments to reduce stubborn fat deposits and improve the appearance of cellulite for a more contoured silhouette." icon={<HandMetal size={24} />} image="https://images.unsplash.com/photo-1624623876661-5e7e74075ccb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mt-6">
