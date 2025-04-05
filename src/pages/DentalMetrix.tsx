@@ -1,6 +1,5 @@
-
 import { useEffect } from 'react';
-import { Tooth, Smile, Sparkles, Stethoscope, Heart, Building, Clock, CalendarClock } from 'lucide-react';
+import { Stethoscope, Smile, Sparkles, Heart, Building, Clock, CalendarClock, MapPin } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
@@ -11,7 +10,6 @@ import ContactForm from '@/components/ContactForm';
 import LocationMap from '@/components/LocationMap';
 
 const DentalMetrix = () => {
-  // This effect handles scroll reveal animations
   useEffect(() => {
     const handleScroll = () => {
       const revealElements = document.querySelectorAll('.reveal-section');
@@ -163,7 +161,7 @@ const DentalMetrix = () => {
               <ServiceCard 
                 title="Dental Implants" 
                 description="Permanent replacement for missing teeth that look, feel and function like natural teeth. Our advanced implantology approaches ensure optimal integration and long-term success."
-                icon={<Tooth size={24} />}
+                icon={<Stethoscope size={24} />}
                 image="https://images.unsplash.com/photo-1606811971618-23b39c5204f2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
               />
               
