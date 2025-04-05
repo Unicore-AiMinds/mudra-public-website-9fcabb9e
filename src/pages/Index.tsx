@@ -1,28 +1,20 @@
-
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
-
 const Index = () => {
-  return (
-    <div className="min-h-screen">
+  return <div className="min-h-screen">
       <Navbar />
       
       <main>
-        <Hero 
-          title="Discover the Perfect Harmony of Dental & Aesthetic Excellence" 
-          subtitle="Mudra Clinic brings together specialized dental and aesthetic services under one roof, providing comprehensive care for your smile and appearance."
-          cta={{
-            text: 'Explore Our Services',
-            link: '#divisions',
-          }}
-          secondaryCta={{
-            text: 'Contact Us',
-            link: '/contact',
-          }}
-        />
+        <Hero title="Discover the Perfect Harmony of Dental & Aesthetic Excellence" subtitle="Mudra Clinic brings together specialized dental and aesthetic services under one roof, providing comprehensive care for your smile and appearance." cta={{
+        text: 'Explore Our Services',
+        link: '#divisions'
+      }} secondaryCta={{
+        text: 'Contact Us',
+        link: '/contact'
+      }} />
         
         <section id="divisions" className="py-20">
           <div className="container mx-auto px-4 md:px-6">
@@ -39,10 +31,9 @@ const Index = () => {
               {/* Dental Metrix Card */}
               <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-lg hover:border-mudra-primary/20 h-full">
                 <div className="h-64 overflow-hidden relative">
-                  <div 
-                    className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                    style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3)' }}
-                  />
+                  <div className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style={{
+                  backgroundImage: 'url(https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3)'
+                }} />
                   <div className="absolute inset-0 bg-gradient-to-t from-mudra-primary/90 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-6">
                     <div className="h-16 w-48 bg-white rounded-md flex items-center justify-center mb-4">
@@ -79,10 +70,7 @@ const Index = () => {
                     </li>
                   </ul>
                   
-                  <Link 
-                    to="/dental-metrix" 
-                    className="inline-flex items-center text-mudra-primary hover:text-mudra-secondary transition-colors font-medium"
-                  >
+                  <Link to="/dental-metrix" className="inline-flex items-center text-mudra-primary hover:text-mudra-secondary transition-colors font-medium">
                     Visit Dental Metrix
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
@@ -92,10 +80,9 @@ const Index = () => {
               {/* Meditouch Card */}
               <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-lg hover:border-mudra-primary/20 h-full">
                 <div className="h-64 overflow-hidden relative">
-                  <div 
-                    className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                    style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3)' }}
-                  />
+                  <div className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style={{
+                  backgroundImage: 'url(https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3)'
+                }} />
                   <div className="absolute inset-0 bg-gradient-to-t from-mudra-secondary/90 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-6">
                     <div className="h-16 w-48 bg-white rounded-md flex items-center justify-center mb-4">
@@ -132,10 +119,7 @@ const Index = () => {
                     </li>
                   </ul>
                   
-                  <Link 
-                    to="/meditouch" 
-                    className="inline-flex items-center text-mudra-secondary hover:text-mudra-primary transition-colors font-medium"
-                  >
+                  <Link to="/meditouch" className="inline-flex items-center text-mudra-secondary hover:text-mudra-primary transition-colors font-medium">
                     Visit Meditouch
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
@@ -181,10 +165,7 @@ const Index = () => {
                     providing comprehensive care that enhances your natural beauty and confidence."
                   </p>
                   
-                  <Link 
-                    to="/contact" 
-                    className="inline-flex items-center px-6 py-3 bg-mudra-primary text-white rounded-md hover:bg-mudra-secondary transition-colors"
-                  >
+                  <Link to="/contact" className="inline-flex items-center px-6 py-3 bg-mudra-primary text-white rounded-md hover:bg-mudra-secondary transition-colors">
                     Schedule a Consultation
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
@@ -208,11 +189,7 @@ const Index = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-lg hover:border-mudra-primary/20 image-card">
                 <div className="h-48 overflow-hidden">
-                  <img 
-                    src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
-                    alt="Pune City"
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
+                  <img alt="Pune City" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="/lovable-uploads/11798f90-38f2-40db-b3bd-8e8ac6328850.jpg" />
                 </div>
                 
                 <div className="p-6">
@@ -220,10 +197,7 @@ const Index = () => {
                   <p className="text-gray-600 text-sm mb-4">
                     Discover attractions, dining, and accommodations in and around Pune during your visit.
                   </p>
-                  <Link 
-                    to="/explore-pune" 
-                    className="inline-flex items-center text-mudra-primary hover:text-mudra-secondary transition-colors font-medium text-sm"
-                  >
+                  <Link to="/explore-pune" className="inline-flex items-center text-mudra-primary hover:text-mudra-secondary transition-colors font-medium text-sm">
                     View Travel Guide
                     <ArrowRight className="ml-1 h-4 w-4" />
                   </Link>
@@ -232,11 +206,7 @@ const Index = () => {
               
               <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-lg hover:border-mudra-primary/20 image-card">
                 <div className="h-48 overflow-hidden">
-                  <img 
-                    src="https://images.unsplash.com/photo-1606811971618-23b39c5204f2?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
-                    alt="Dental Consultation"
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
+                  <img alt="Dental Consultation" src="/lovable-uploads/30de7436-0ae6-4822-9328-75927ae20900.jpg" className="w-full h-full transition-transform duration-500 group-hover:scale-105 object-contain" />
                 </div>
                 
                 <div className="p-6">
@@ -244,10 +214,7 @@ const Index = () => {
                   <p className="text-gray-600 text-sm mb-4">
                     Comprehensive dental care including implants, smile design, and full rehabilitation.
                   </p>
-                  <Link 
-                    to="/dental-metrix" 
-                    className="inline-flex items-center text-mudra-primary hover:text-mudra-secondary transition-colors font-medium text-sm"
-                  >
+                  <Link to="/dental-metrix" className="inline-flex items-center text-mudra-primary hover:text-mudra-secondary transition-colors font-medium text-sm">
                     Learn More
                     <ArrowRight className="ml-1 h-4 w-4" />
                   </Link>
@@ -256,11 +223,7 @@ const Index = () => {
               
               <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-lg hover:border-mudra-primary/20 image-card">
                 <div className="h-48 overflow-hidden">
-                  <img 
-                    src="https://images.unsplash.com/photo-1501699169013-3bf264bc16e7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
-                    alt="Aesthetic Treatment"
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
+                  <img alt="Aesthetic Treatment" src="/lovable-uploads/c0e3ce1f-672d-45e9-9a2b-14f226f52519.jpg" className="w-full h-full transition-transform duration-500 group-hover:scale-105 object-contain" />
                 </div>
                 
                 <div className="p-6">
@@ -268,10 +231,7 @@ const Index = () => {
                   <p className="text-gray-600 text-sm mb-4">
                     Advanced hair, skin, and body treatments delivered by specialized practitioners.
                   </p>
-                  <Link 
-                    to="/meditouch" 
-                    className="inline-flex items-center text-mudra-primary hover:text-mudra-secondary transition-colors font-medium text-sm"
-                  >
+                  <Link to="/meditouch" className="inline-flex items-center text-mudra-primary hover:text-mudra-secondary transition-colors font-medium text-sm">
                     Learn More
                     <ArrowRight className="ml-1 h-4 w-4" />
                   </Link>
@@ -283,8 +243,6 @@ const Index = () => {
       </main>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
