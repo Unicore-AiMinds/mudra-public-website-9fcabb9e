@@ -8,7 +8,6 @@ import SectionNav from '@/components/SectionNav';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import ContactForm from '@/components/ContactForm';
 import LocationMap from '@/components/LocationMap';
-
 const DentalMetrix = () => {
   useEffect(() => {
     const handleScroll = () => {
@@ -24,28 +23,10 @@ const DentalMetrix = () => {
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // Trigger on initial load
 
-    // Check if we should scroll to the contact section (from URL hash)
-    if (window.location.hash === '#contact') {
-      setTimeout(() => {
-        const contactSection = document.getElementById('contact');
-        if (contactSection) {
-          contactSection.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 500); // Small delay to ensure DOM is ready
-    }
-
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
-  const scrollToContact = () => {
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   const sectionNavItems = [{
     id: 'about',
     label: 'About'
@@ -59,26 +40,19 @@ const DentalMetrix = () => {
     id: 'contact',
     label: 'Contact'
   }];
-
   return <div className="min-h-screen">
       <Navbar />
       
       <main className="scroll-smooth pt-16 md:pt-20">
-        <Hero 
-          title="Crafting Confident Smiles with Precision" 
-          subtitle="Dental Metrix provides advanced implant solutions and esthetic dentistry to restore function and beauty to your smile." 
-          backgroundImage="https://images.unsplash.com/photo-1606811971618-23b39c5204f2?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
-          cta={{
-            text: 'Book Appointment',
-            link: '#contact',
-            onClick: scrollToContact
-          }} 
-        />
+        <Hero title="Crafting Confident Smiles with Precision" subtitle="Dental Metrix provides advanced implant solutions and esthetic dentistry to restore function and beauty to your smile." backgroundImage="https://images.unsplash.com/photo-1606811971618-23b39c5204f2?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" cta={{
+        text: 'Book Appointment',
+        link: '#contact'
+      }} />
         
         <SectionNav sections={sectionNavItems} backTo={{
         path: '/',
         label: 'Mudra Group'
-        }} logo="dental-metrix-logo.png" logoAlt="Dental Metrix" />
+      }} logo="dental-metrix-logo.png" logoAlt="Dental Metrix" />
         
         <section id="about" className="py-20 reveal-section">
           <div className="container mx-auto px-4 md:px-6">
@@ -234,5 +208,4 @@ const DentalMetrix = () => {
       <Footer />
     </div>;
 };
-
 export default DentalMetrix;
