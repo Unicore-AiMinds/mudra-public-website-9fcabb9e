@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+import { ImageIcon } from 'lucide-react';
 
 interface ServiceCardProps {
   title: string;
@@ -18,14 +19,13 @@ const ServiceCard = ({ title, description, icon, image }: ServiceCardProps) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       {image && (
-        <img 
-          src={image}
-          alt={title}
-          className="h-40 w-full object-cover transition-transform duration-500"
+        <div className="h-40 w-full bg-gray-100 flex items-center justify-center transition-transform duration-500"
           style={{
             transform: isHovered ? 'scale(1.05)' : 'scale(1)',
           }}
-        />
+        >
+          <ImageIcon className="h-12 w-12 text-gray-400" />
+        </div>
       )}
       
       <div className="p-5">
