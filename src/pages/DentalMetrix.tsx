@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Stethoscope, Smile, Sparkles, Heart, Building, Clock, CalendarClock, MapPin } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -8,7 +8,10 @@ import SectionNav from '@/components/SectionNav';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import ContactForm from '@/components/ContactForm';
 import LocationMap from '@/components/LocationMap';
+
 const DentalMetrix = () => {
+  const contactSectionRef = useRef<HTMLElement>(null);
+
   useEffect(() => {
     const handleScroll = () => {
       const revealElements = document.querySelectorAll('.reveal-section');
@@ -23,36 +26,56 @@ const DentalMetrix = () => {
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // Trigger on initial load
 
+    // Check if we need to scroll to contact section on load (from URL hash)
+    if (window.location.hash === '#contact') {
+      setTimeout(() => {
+        scrollToContact();
+      }, 500);
+    }
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-  const sectionNavItems = [{
-    id: 'about',
-    label: 'About'
-  }, {
-    id: 'services',
-    label: 'Services'
-  }, {
-    id: 'testimonials',
-    label: 'Testimonials'
-  }, {
-    id: 'contact',
-    label: 'Contact'
-  }];
-  return <div className="min-h-screen">
+
+  const scrollToContact = () => {
+    if (contactSectionRef.current) {
+      contactSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const sectionNavItems = [
+    { id: 'about', label: 'About' },
+    { id: 'services', label: 'Services' },
+    { id: 'testimonials', label: 'Testimonials' },
+    { id: 'contact', label: 'Contact' }
+  ];
+
+  return (
+    <div className="min-h-screen">
       <Navbar />
       
       <main className="scroll-smooth pt-16 md:pt-20">
-        <Hero title="Crafting Confident Smiles with Precision" subtitle="Dental Metrix provides advanced implant solutions and esthetic dentistry to restore function and beauty to your smile." backgroundImage="https://images.unsplash.com/photo-1606811971618-23b39c5204f2?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" cta={{
-        text: 'Book Appointment',
-        link: '#contact'
-      }} />
+        <Hero 
+          title="Crafting Confident Smiles with Precision" 
+          subtitle="Dental Metrix provides advanced implant solutions and esthetic dentistry to restore function and beauty to your smile." 
+          backgroundImage="https://images.unsplash.com/photo-1606811971618-23b39c5204f2?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
+          cta={{
+            text: 'Book Appointment',
+            link: '#contact'
+          }}
+          onCtaClick={scrollToContact}
+        />
         
-        <SectionNav sections={sectionNavItems} backTo={{
-        path: '/',
-        label: 'Mudra Group'
-      }} logo="dental-metrix-logo.png" logoAlt="Dental Metrix" />
+        <SectionNav 
+          sections={sectionNavItems} 
+          backTo={{
+            path: '/',
+            label: 'Mudra Group'
+          }} 
+          logo="dental-metrix-logo.png" 
+          logoAlt="Dental Metrix" 
+        />
         
         <section id="about" className="py-20 reveal-section">
           <div className="container mx-auto px-4 md:px-6">
@@ -151,7 +174,7 @@ const DentalMetrix = () => {
           <TestimonialsSection type="dental" />
         </div>
         
-        <section id="contact" className="py-20 reveal-section">
+        <section id="contact" ref={contactSectionRef} className="py-20 reveal-section">
           <div className="container mx-auto px-4 md:px-6">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
@@ -206,6 +229,8 @@ const DentalMetrix = () => {
       </main>
       
       <Footer />
-    </div>;
+    </div>
+  );
 };
+
 export default DentalMetrix;

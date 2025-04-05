@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Scissors, Zap, Droplet, Gauge, HandMetal, Sparkles, Building, Clock, CalendarClock } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -8,7 +8,10 @@ import SectionNav from '@/components/SectionNav';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import ContactForm from '@/components/ContactForm';
 import LocationMap from '@/components/LocationMap';
+
 const Meditouch = () => {
+  const contactSectionRef = useRef<HTMLElement>(null);
+
   // This effect handles scroll reveal animations
   useEffect(() => {
     const handleScroll = () => {
@@ -24,36 +27,56 @@ const Meditouch = () => {
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // Trigger on initial load
 
+    // Check if we need to scroll to contact section on load (from URL hash)
+    if (window.location.hash === '#contact') {
+      setTimeout(() => {
+        scrollToContact();
+      }, 500);
+    }
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-  const sectionNavItems = [{
-    id: 'about',
-    label: 'About'
-  }, {
-    id: 'services',
-    label: 'Services'
-  }, {
-    id: 'testimonials',
-    label: 'Testimonials'
-  }, {
-    id: 'contact',
-    label: 'Contact'
-  }];
-  return <div className="min-h-screen">
+
+  const scrollToContact = () => {
+    if (contactSectionRef.current) {
+      contactSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const sectionNavItems = [
+    { id: 'about', label: 'About' },
+    { id: 'services', label: 'Services' },
+    { id: 'testimonials', label: 'Testimonials' },
+    { id: 'contact', label: 'Contact' }
+  ];
+
+  return (
+    <div className="min-h-screen">
       <Navbar />
       
       <main className="scroll-smooth pt-16 md:pt-20">
-        <Hero title="Reveal Your Radiance: Advanced Skin & Hair Solutions" subtitle="At Meditouch, our multidisciplinary team combines expertise with cutting-edge technologies to deliver personalized aesthetic treatments." backgroundImage="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" cta={{
-        text: 'Request Consultation',
-        link: '#contact'
-      }} />
+        <Hero 
+          title="Reveal Your Radiance: Advanced Skin & Hair Solutions" 
+          subtitle="At Meditouch, our multidisciplinary team combines expertise with cutting-edge technologies to deliver personalized aesthetic treatments." 
+          backgroundImage="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
+          cta={{
+            text: 'Request Consultation',
+            link: '#contact'
+          }}
+          onCtaClick={scrollToContact}
+        />
         
-        <SectionNav sections={sectionNavItems} backTo={{
-        path: '/',
-        label: 'Mudra Group'
-      }} logo="meditouch-logo.png" logoAlt="Meditouch" />
+        <SectionNav 
+          sections={sectionNavItems} 
+          backTo={{
+            path: '/',
+            label: 'Mudra Group'
+          }} 
+          logo="meditouch-logo.png" 
+          logoAlt="Meditouch" 
+        />
         
         <section id="about" className="py-20 reveal-section">
           <div className="container mx-auto px-4 md:px-6">
@@ -63,7 +86,7 @@ const Meditouch = () => {
                   <img alt="Aesthetic Treatment" src="/lovable-uploads/a60c3883-6a5c-4418-9847-73ccdec99f7b.jpg" className="w-full h-full object-cover" />
                 </div>
                 <div className="rounded-lg overflow-hidden h-64 mt-8">
-                  <img src="https://images.unsplash.com/photo-1560750588-73207b1ef5b8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="Spa Facial" className="w-full h-full object-cover" />
+                  <img src="https://images.unsplash.com/photo-1614859135736-99160a1757e2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="Spa Facial" className="w-full h-full object-cover" />
                 </div>
                 <div className="rounded-lg overflow-hidden h-64">
                   <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="Hair Treatment" className="w-full h-full object-cover" />
@@ -218,7 +241,7 @@ const Meditouch = () => {
           <TestimonialsSection type="aesthetic" />
         </div>
         
-        <section id="contact" className="py-20 reveal-section">
+        <section id="contact" ref={contactSectionRef} className="py-20 reveal-section">
           <div className="container mx-auto px-4 md:px-6">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
@@ -273,6 +296,8 @@ const Meditouch = () => {
       </main>
       
       <Footer />
-    </div>;
+    </div>
+  );
 };
+
 export default Meditouch;

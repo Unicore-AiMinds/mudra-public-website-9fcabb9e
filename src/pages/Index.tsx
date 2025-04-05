@@ -1,20 +1,42 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
+
 const Index = () => {
-  return <div className="min-h-screen">
+  const navigate = useNavigate();
+
+  const scrollToServices = () => {
+    const servicesSection = document.getElementById('divisions');
+    if (servicesSection) {
+      servicesSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const navigateToContact = () => {
+    navigate('/contact');
+  };
+
+  return (
+    <div className="min-h-screen">
       <Navbar />
       
       <main>
-        <Hero title="Discover the Perfect Harmony of Dental & Aesthetic Excellence" subtitle="Mudra Clinic brings together specialized dental and aesthetic services under one roof, providing comprehensive care for your smile and appearance." cta={{
-        text: 'Explore Our Services',
-        link: '#divisions'
-      }} secondaryCta={{
-        text: 'Contact Us',
-        link: '/contact'
-      }} />
+        <Hero 
+          title="Discover the Perfect Harmony of Dental & Aesthetic Excellence" 
+          subtitle="Mudra Clinic brings together specialized dental and aesthetic services under one roof, providing comprehensive care for your smile and appearance." 
+          cta={{
+            text: 'Explore Our Services',
+            link: '#divisions'
+          }} 
+          secondaryCta={{
+            text: 'Contact Us',
+            link: '/contact'
+          }}
+          onCtaClick={scrollToServices}
+          onSecondaryCtaClick={navigateToContact}
+        />
         
         <section id="divisions" className="py-20">
           <div className="container mx-auto px-4 md:px-6">
@@ -165,7 +187,10 @@ const Index = () => {
                     providing comprehensive care that enhances your natural beauty and confidence."
                   </p>
                   
-                  <Link to="/contact" className="inline-flex items-center px-6 py-3 bg-mudra-primary text-white rounded-md hover:bg-mudra-secondary transition-colors">
+                  <Link 
+                    to="/contact" 
+                    className="inline-flex items-center px-6 py-3 bg-mudra-primary text-white rounded-md hover:bg-mudra-secondary transition-colors"
+                  >
                     Schedule a Consultation
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
@@ -243,6 +268,8 @@ const Index = () => {
       </main>
       
       <Footer />
-    </div>;
+    </div>
+  );
 };
+
 export default Index;

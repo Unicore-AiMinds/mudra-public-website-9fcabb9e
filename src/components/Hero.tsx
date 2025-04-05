@@ -14,6 +14,8 @@ interface HeroProps {
     text: string;
     link: string;
   };
+  onCtaClick?: () => void;
+  onSecondaryCtaClick?: () => void;
 }
 
 const Hero = ({ 
@@ -21,7 +23,9 @@ const Hero = ({
   subtitle, 
   backgroundImage = 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=2068&auto=format&fit=crop',
   cta,
-  secondaryCta
+  secondaryCta,
+  onCtaClick,
+  onSecondaryCtaClick
 }: HeroProps) => {
   return (
     <div className="relative min-h-[70vh] md:min-h-[80vh] flex items-center bg-gradient-to-r from-mudra-primary/90 to-mudra-secondary/90 overflow-hidden">
@@ -47,6 +51,12 @@ const Hero = ({
               <Link 
                 to={cta.link} 
                 className="px-8 py-3 bg-white text-mudra-primary rounded-md font-medium hover:bg-mudra-accent hover:text-white transition-colors flex items-center"
+                onClick={(e) => {
+                  if (onCtaClick && cta.link.startsWith('#')) {
+                    e.preventDefault();
+                    onCtaClick();
+                  }
+                }}
               >
                 {cta.text}
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -57,6 +67,12 @@ const Hero = ({
               <Link 
                 to={secondaryCta.link} 
                 className="px-8 py-3 bg-transparent border border-white text-white rounded-md font-medium hover:bg-white/10 transition-colors"
+                onClick={(e) => {
+                  if (onSecondaryCtaClick) {
+                    e.preventDefault();
+                    onSecondaryCtaClick();
+                  }
+                }}
               >
                 {secondaryCta.text}
               </Link>
