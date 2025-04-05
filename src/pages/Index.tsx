@@ -1,3 +1,4 @@
+
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import Navbar from '@/components/Navbar';
@@ -38,7 +39,7 @@ const Index = () => {
           onSecondaryCtaClick={navigateToContact}
         />
         
-        <section id="divisions" className="py-20">
+        <section id="divisions" className="py-20 pt-32"> {/* Increased top padding to push content down */}
           <div className="container mx-auto px-4 md:px-6">
             <div className="max-w-3xl mx-auto text-center mb-16">
               <h2 className="text-3xl font-serif font-semibold mb-4">Our Specialized Clinics</h2>
