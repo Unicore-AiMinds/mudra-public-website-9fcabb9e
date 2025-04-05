@@ -1,6 +1,7 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import TravelCard from '@/components/TravelCard';
+import { ImageIcon } from 'lucide-react';
 
 const ExplorePune = () => {
   const localAttractions = [
@@ -213,12 +214,8 @@ const ExplorePune = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {accommodations.map((accommodation, index) => (
                   <div key={index} className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-md image-card">
-                    <div className="h-48 overflow-hidden">
-                      <img 
-                        src={accommodation.image} 
-                        alt={accommodation.name}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
+                    <div className="h-48 bg-gray-100 flex items-center justify-center">
+                      <ImageIcon className="h-16 w-16 text-gray-400" />
                     </div>
                     
                     <div className="p-5">
@@ -254,12 +251,8 @@ const ExplorePune = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {culinaryHighlights.map((item, index) => (
                   <div key={index} className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-md image-card">
-                    <div className="h-48 overflow-hidden">
-                      <img 
-                        src={item.image} 
-                        alt={item.name}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
+                    <div className="h-48 bg-gray-100 flex items-center justify-center">
+                      <ImageIcon className="h-16 w-16 text-gray-400" />
                     </div>
                     
                     <div className="p-5">
