@@ -8,61 +8,51 @@ import SectionNav from '@/components/SectionNav';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import ContactForm from '@/components/ContactForm';
 import LocationMap from '@/components/LocationMap';
-
 const DentalMetrix = () => {
   useEffect(() => {
     const handleScroll = () => {
       const revealElements = document.querySelectorAll('.reveal-section');
-      
-      revealElements.forEach((element) => {
+      revealElements.forEach(element => {
         const elementTop = element.getBoundingClientRect().top;
         const viewportHeight = window.innerHeight;
-        
         if (elementTop < viewportHeight - 100) {
           element.classList.add('visible');
         }
       });
     };
-    
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // Trigger on initial load
-    
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-  
-  const sectionNavItems = [
-    { id: 'about', label: 'About' },
-    { id: 'services', label: 'Services' },
-    { id: 'testimonials', label: 'Testimonials' },
-    { id: 'contact', label: 'Contact' },
-  ];
-  
-  return (
-    <div className="min-h-screen">
+  const sectionNavItems = [{
+    id: 'about',
+    label: 'About'
+  }, {
+    id: 'services',
+    label: 'Services'
+  }, {
+    id: 'testimonials',
+    label: 'Testimonials'
+  }, {
+    id: 'contact',
+    label: 'Contact'
+  }];
+  return <div className="min-h-screen">
       <Navbar />
       
       <main className="scroll-smooth pt-16 md:pt-20">
-        <Hero 
-          title="Crafting Confident Smiles with Precision" 
-          subtitle="Dental Metrix provides advanced implant solutions and esthetic dentistry to restore function and beauty to your smile."
-          backgroundImage="https://images.unsplash.com/photo-1606811971618-23b39c5204f2?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
-          cta={{
-            text: 'Book Appointment',
-            link: '#contact',
-          }}
-        />
+        <Hero title="Crafting Confident Smiles with Precision" subtitle="Dental Metrix provides advanced implant solutions and esthetic dentistry to restore function and beauty to your smile." backgroundImage="https://images.unsplash.com/photo-1606811971618-23b39c5204f2?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" cta={{
+        text: 'Book Appointment',
+        link: '#contact'
+      }} />
         
-        <SectionNav 
-          sections={sectionNavItems} 
-          backTo={{
-            path: '/',
-            label: 'Mudra Group',
-          }}
-          logo="dental-metrix-logo.png"
-          logoAlt="Dental Metrix"
-        />
+        <SectionNav sections={sectionNavItems} backTo={{
+        path: '/',
+        label: 'Mudra Group'
+      }} logo="dental-metrix-logo.png" logoAlt="Dental Metrix" />
         
         <section id="about" className="py-20 reveal-section">
           <div className="container mx-auto px-4 md:px-6">
@@ -114,32 +104,16 @@ const DentalMetrix = () => {
               
               <div className="grid grid-cols-2 gap-4">
                 <div className="rounded-lg overflow-hidden h-64">
-                  <img 
-                    src="https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
-                    alt="Dental Professional" 
-                    className="w-full h-full object-cover"
-                  />
+                  <img src="https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="Dental Professional" className="w-full h-full object-cover" />
                 </div>
                 <div className="rounded-lg overflow-hidden h-64 mt-8">
-                  <img 
-                    src="https://images.unsplash.com/photo-1612712191426-54334a37f7d5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
-                    alt="Dental Office" 
-                    className="w-full h-full object-cover"
-                  />
+                  <img alt="Dental Office" src="/lovable-uploads/b695f2b9-856f-453f-9c6f-0291ff2ff322.jpg" className="w-full h-full object-fill" />
                 </div>
                 <div className="rounded-lg overflow-hidden h-64">
-                  <img 
-                    src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
-                    alt="Dental Equipment" 
-                    className="w-full h-full object-cover"
-                  />
+                  <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="Dental Equipment" className="w-full h-full object-cover" />
                 </div>
                 <div className="rounded-lg overflow-hidden h-64 mt-8">
-                  <img 
-                    src="https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
-                    alt="Dental Treatment" 
-                    className="w-full h-full object-cover"
-                  />
+                  <img src="https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="Dental Treatment" className="w-full h-full object-cover" />
                 </div>
               </div>
             </div>
@@ -158,47 +132,17 @@ const DentalMetrix = () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <ServiceCard 
-                title="Dental Implants" 
-                description="Permanent replacement for missing teeth that look, feel and function like natural teeth. Our advanced implantology approaches ensure optimal integration and long-term success."
-                icon={<Stethoscope size={24} />}
-                image="https://images.unsplash.com/photo-1606811971618-23b39c5204f2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
-              />
+              <ServiceCard title="Dental Implants" description="Permanent replacement for missing teeth that look, feel and function like natural teeth. Our advanced implantology approaches ensure optimal integration and long-term success." icon={<Stethoscope size={24} />} image="https://images.unsplash.com/photo-1606811971618-23b39c5204f2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
               
-              <ServiceCard 
-                title="Smile Designing" 
-                description="Comprehensive approach to improving your smile's appearance using various treatments including veneers, bonding, and contouring to create harmonious, natural-looking results."
-                icon={<Smile size={24} />}
-                image="https://images.unsplash.com/photo-1581582494801-5f32dd761f6b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
-              />
+              <ServiceCard title="Smile Designing" description="Comprehensive approach to improving your smile's appearance using various treatments including veneers, bonding, and contouring to create harmonious, natural-looking results." icon={<Smile size={24} />} image="https://images.unsplash.com/photo-1581582494801-5f32dd761f6b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
               
-              <ServiceCard 
-                title="Teeth Whitening" 
-                description="Professional whitening treatments that deliver dramatic results, removing years of stains and discoloration for a brighter, more youthful smile."
-                icon={<Sparkles size={24} />}
-                image="https://images.unsplash.com/photo-1593022356769-11f762e25ed9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
-              />
+              <ServiceCard title="Teeth Whitening" description="Professional whitening treatments that deliver dramatic results, removing years of stains and discoloration for a brighter, more youthful smile." icon={<Sparkles size={24} />} image="https://images.unsplash.com/photo-1593022356769-11f762e25ed9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
               
-              <ServiceCard 
-                title="Dental Aligners" 
-                description="Discreet alternative to traditional braces, custom-designed clear aligners gradually shift teeth into their ideal position for a straight, well-aligned smile."
-                icon={<Stethoscope size={24} />}
-                image="https://images.unsplash.com/photo-1598256989800-fe5f95da9787?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
-              />
+              <ServiceCard title="Dental Aligners" description="Discreet alternative to traditional braces, custom-designed clear aligners gradually shift teeth into their ideal position for a straight, well-aligned smile." icon={<Stethoscope size={24} />} image="https://images.unsplash.com/photo-1598256989800-fe5f95da9787?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
               
-              <ServiceCard 
-                title="Full Mouth Rehabilitation" 
-                description="Comprehensive treatment plan that addresses multiple dental issues simultaneously, restoring both function and aesthetics for patients with extensive dental problems."
-                icon={<Heart size={24} />}
-                image="https://images.unsplash.com/photo-1580377968103-83d4ae369039?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
-              />
+              <ServiceCard title="Full Mouth Rehabilitation" description="Comprehensive treatment plan that addresses multiple dental issues simultaneously, restoring both function and aesthetics for patients with extensive dental problems." icon={<Heart size={24} />} image="https://images.unsplash.com/photo-1580377968103-83d4ae369039?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
               
-              <ServiceCard 
-                title="Artificial Eyes, Ears & Nose" 
-                description="Specialized maxillofacial prosthetics that restore appearance and function for patients who have lost facial structures due to congenital conditions, trauma, or surgical procedures."
-                icon={<Building size={24} />}
-                image="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
-              />
+              <ServiceCard title="Artificial Eyes, Ears & Nose" description="Specialized maxillofacial prosthetics that restore appearance and function for patients who have lost facial structures due to congenital conditions, trauma, or surgical procedures." icon={<Building size={24} />} image="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
             </div>
           </div>
         </section>
@@ -262,8 +206,6 @@ const DentalMetrix = () => {
       </main>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default DentalMetrix;
