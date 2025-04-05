@@ -17,10 +17,11 @@ const Meditouch = () => {
       <Hero 
         title="Meditouch" 
         subtitle="Expert Medical Care in Pune" 
-        description="A modern multi-specialty medical center providing comprehensive healthcare services with a focus on personalized patient care."
-        imageSrc="/public/lovable-uploads/30de7436-0ae6-4822-9328-75927ae20900.jpg"
-        buttonText="Book Appointment"
-        buttonLink="#contact"
+        backgroundImage="/public/lovable-uploads/30de7436-0ae6-4822-9328-75927ae20900.jpg"
+        cta={{
+          text: "Book Appointment",
+          link: "#contact"
+        }}
       />
       
       <section className="py-16 bg-white" id="about">
@@ -72,7 +73,7 @@ const Meditouch = () => {
         </div>
       </section>
       
-      <TestimonialsSection />
+      <TestimonialsSection type="aesthetic" />
       
       <section className="py-16 bg-white" id="facilities">
         <div className="container mx-auto px-4">
@@ -130,7 +131,7 @@ const Meditouch = () => {
           <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">Contact Us</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div>
-              <ContactForm />
+              <ContactForm formType="aesthetic" />
             </div>
             <div>
               <h3 className="text-xl font-semibold mb-4 text-gray-800">Visit Our Clinic</h3>

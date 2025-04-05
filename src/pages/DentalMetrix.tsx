@@ -17,10 +17,11 @@ const DentalMetrix = () => {
       <Hero 
         title="DentalMetrix" 
         subtitle="Advanced Dental Care Solutions in Pune" 
-        description="State-of-the-art dental care clinic providing comprehensive dental services with the latest technology and personalized patient care."
-        imageSrc="/public/lovable-uploads/11798f90-38f2-40db-b3bd-8e8ac6328850.jpg"
-        buttonText="Book Appointment"
-        buttonLink="#contact"
+        backgroundImage="/public/lovable-uploads/11798f90-38f2-40db-b3bd-8e8ac6328850.jpg"
+        cta={{
+          text: "Book Appointment",
+          link: "#contact"
+        }}
       />
       
       <section className="py-16 bg-white" id="about">
@@ -73,7 +74,7 @@ const DentalMetrix = () => {
         </div>
       </section>
       
-      <TestimonialsSection />
+      <TestimonialsSection type="dental" />
       
       <section className="py-16 bg-white" id="technology">
         <div className="container mx-auto px-4">
@@ -131,7 +132,7 @@ const DentalMetrix = () => {
           <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">Contact Us</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div>
-              <ContactForm />
+              <ContactForm formType="dental" />
             </div>
             <div>
               <h3 className="text-xl font-semibold mb-4 text-gray-800">Visit Our Clinic</h3>
