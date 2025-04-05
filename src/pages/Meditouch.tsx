@@ -8,7 +8,6 @@ import SectionNav from '@/components/SectionNav';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import ContactForm from '@/components/ContactForm';
 import LocationMap from '@/components/LocationMap';
-
 const Meditouch = () => {
   const contactSectionRef = useRef<HTMLElement>(null);
 
@@ -33,50 +32,43 @@ const Meditouch = () => {
         scrollToContact();
       }, 500);
     }
-
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
   const scrollToContact = () => {
     if (contactSectionRef.current) {
-      contactSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+      contactSectionRef.current.scrollIntoView({
+        behavior: 'smooth'
+      });
     }
   };
-
-  const sectionNavItems = [
-    { id: 'about', label: 'About' },
-    { id: 'services', label: 'Services' },
-    { id: 'testimonials', label: 'Testimonials' },
-    { id: 'contact', label: 'Contact' }
-  ];
-
-  return (
-    <div className="min-h-screen">
+  const sectionNavItems = [{
+    id: 'about',
+    label: 'About'
+  }, {
+    id: 'services',
+    label: 'Services'
+  }, {
+    id: 'testimonials',
+    label: 'Testimonials'
+  }, {
+    id: 'contact',
+    label: 'Contact'
+  }];
+  return <div className="min-h-screen">
       <Navbar />
       
       <main className="scroll-smooth pt-16 md:pt-20">
-        <Hero 
-          title="Reveal Your Radiance: Advanced Skin & Hair Solutions" 
-          subtitle="At Meditouch, our multidisciplinary team combines expertise with cutting-edge technologies to deliver personalized aesthetic treatments." 
-          backgroundImage="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
-          cta={{
-            text: 'Request Consultation',
-            link: '#contact'
-          }}
-          onCtaClick={scrollToContact}
-        />
+        <Hero title="Reveal Your Radiance: Advanced Skin & Hair Solutions" subtitle="At Meditouch, our multidisciplinary team combines expertise with cutting-edge technologies to deliver personalized aesthetic treatments." backgroundImage="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" cta={{
+        text: 'Request Consultation',
+        link: '#contact'
+      }} onCtaClick={scrollToContact} />
         
-        <SectionNav 
-          sections={sectionNavItems} 
-          backTo={{
-            path: '/',
-            label: 'Mudra Group'
-          }} 
-          logo="meditouch-logo.png" 
-          logoAlt="Meditouch" 
-        />
+        <SectionNav sections={sectionNavItems} backTo={{
+        path: '/',
+        label: 'Mudra Group'
+      }} logo="meditouch-logo.png" logoAlt="Meditouch" />
         
         <section id="about" className="py-20 reveal-section">
           <div className="container mx-auto px-4 md:px-6">
@@ -86,7 +78,7 @@ const Meditouch = () => {
                   <img alt="Aesthetic Treatment" src="/lovable-uploads/a60c3883-6a5c-4418-9847-73ccdec99f7b.jpg" className="w-full h-full object-cover" />
                 </div>
                 <div className="rounded-lg overflow-hidden h-64 mt-8">
-                  <img src="https://images.unsplash.com/photo-1614859135736-99160a1757e2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="Spa Facial" className="w-full h-full object-cover" />
+                  <img alt="Spa Facial" src="/lovable-uploads/2c59451c-5962-4ba0-a86f-b560d5ebeca4.jpg" className="w-full h-full object-cover" />
                 </div>
                 <div className="rounded-lg overflow-hidden h-64">
                   <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="Hair Treatment" className="w-full h-full object-cover" />
@@ -296,8 +288,6 @@ const Meditouch = () => {
       </main>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Meditouch;
