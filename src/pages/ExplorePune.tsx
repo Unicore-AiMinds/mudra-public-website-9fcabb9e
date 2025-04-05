@@ -1,4 +1,3 @@
-
 import React from "react";
 import SectionNav from "../components/SectionNav";
 import TravelCard from "../components/TravelCard";
@@ -24,6 +23,10 @@ const ExplorePune = () => {
             { id: "attractions", label: "Attractions" },
             { id: "transportation", label: "Transportation" },
           ]}
+          backTo={{
+            path: "/",
+            label: "Home"
+          }}
         />
 
         <section id="accommodation" className="py-10">
@@ -182,21 +185,21 @@ const ExplorePune = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <TravelCard
-              title="Shaniwar Wada"
+              name="Shaniwar Wada"
               description="Historic fortification in the city of Pune, built in 1732 as the seat of the Peshwas."
-              price="Entry: ₹200"
+              cost="Entry: ₹200"
               rating="4.5 ★"
             />
             <TravelCard
-              title="Aga Khan Palace"
+              name="Aga Khan Palace"
               description="Built by Sultan Muhammed Shah Aga Khan III in 1892, this palace holds historical significance."
-              price="Entry: ₹150"
+              cost="Entry: ₹150"
               rating="4.6 ★"
             />
             <TravelCard
-              title="Dagdusheth Halwai Ganpati Temple"
+              name="Dagdusheth Halwai Ganpati Temple"
               description="One of the most visited Ganesh temples in Maharashtra, known for its grand celebrations."
-              price="Free entry"
+              cost="Free entry"
               rating="4.8 ★"
             />
           </div>
@@ -211,17 +214,17 @@ const ExplorePune = () => {
             <ServiceCard
               title="Private Taxi Services"
               description="Convenient door-to-door service. Recommended for patients after procedures."
-              price="₹500-1500 depending on distance"
+              icon={null}
             />
             <ServiceCard
               title="Ola & Uber"
               description="Readily available ride-sharing services throughout the city."
-              price="₹200-800 depending on distance"
+              icon={null}
             />
             <ServiceCard
               title="Auto Rickshaws"
               description="Affordable option for shorter distances within the city."
-              price="₹100-300 depending on distance"
+              icon={null}
             />
           </div>
         </section>

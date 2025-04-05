@@ -1,39 +1,31 @@
-
-import { useState } from 'react';
-import { ImageIcon } from 'lucide-react';
+import React from 'react';
+import { LucideIcon } from 'lucide-react';
 
 interface ServiceCardProps {
   title: string;
   description: string;
-  icon?: React.ReactNode;
+  icon?: LucideIcon;
   image?: string;
+  price?: string;
 }
 
-const ServiceCard = ({ title, description, icon, image }: ServiceCardProps) => {
-  const [isHovered, setIsHovered] = useState(false);
-  
+const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, icon: Icon, image, price }) => {
   return (
-    <div 
-      className="relative h-full bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 border border-gray-100 hover:shadow-md hover:border-mudra-primary/20 image-card"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <div className="bg-white rounded-lg shadow-md overflow-hidden">
       {image && (
-        <div className="h-40 w-full bg-gray-100 flex items-center justify-center transition-transform duration-500"
-          style={{
-            transform: isHovered ? 'scale(1.05)' : 'scale(1)',
-          }}
-        >
-          <ImageIcon className="h-12 w-12 text-gray-400" />
+        <div className="h-48 overflow-hidden">
+          <img className="w-full h-full object-cover" src={image} alt={title} />
         </div>
       )}
-      
-      <div className="p-5">
-        <div className="flex items-start mb-3">
-          {icon && <div className="mr-3 text-mudra-primary">{icon}</div>}
-          <h3 className={`font-serif text-lg font-medium ${icon ? '' : 'mb-3'}`}>{title}</h3>
-        </div>
-        <p className="text-gray-600 text-sm">{description}</p>
+      <div className="p-6">
+        <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
+        <p className="text-gray-600 mb-4">{description}</p>
+        {price && <div className="text-gray-900 font-semibold">{price}</div>}
+        {Icon && (
+          <div className="mt-4">
+            <Icon className="h-6 w-6 text-mudra-primary" />
+          </div>
+        )}
       </div>
     </div>
   );
