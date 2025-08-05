@@ -7,14 +7,19 @@ interface ServiceCardProps {
   description: string;
   icon?: React.ReactNode;
   image?: string;
+  theme?: 'mudra' | 'meditouch';
 }
 
-const ServiceCard = ({ title, description, icon, image }: ServiceCardProps) => {
+const ServiceCard = ({ title, description, icon, image, theme = 'mudra' }: ServiceCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   
   return (
     <div 
-      className="relative h-full bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 border border-gray-100 hover:shadow-md hover:border-mudra-primary/20 image-card"
+      className={`relative h-full bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 border border-gray-100 hover:shadow-md ${
+        theme === 'meditouch' 
+          ? 'hover:border-meditouch-primary/30 hover:shadow-meditouch-primary/10' 
+          : 'hover:border-mudra-primary/20'
+      } image-card`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -30,7 +35,11 @@ const ServiceCard = ({ title, description, icon, image }: ServiceCardProps) => {
       
       <div className="p-5">
         <div className="flex items-start mb-3">
-          {icon && <div className="mr-3 text-mudra-primary">{icon}</div>}
+          {icon && <div className={`mr-3 ${
+            theme === 'meditouch' 
+              ? 'text-meditouch-secondary' 
+              : 'text-mudra-primary'
+          }`}>{icon}</div>}
           <h3 className={`font-serif text-lg font-medium ${icon ? '' : 'mb-3'}`}>{title}</h3>
         </div>
         <p className="text-gray-600 text-sm">{description}</p>

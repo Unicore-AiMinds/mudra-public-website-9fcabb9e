@@ -1,73 +1,56 @@
-# Welcome to your Lovable project
+# Mudra Dental & Aesthetic Clinic Website
 
-## Project info
+A modern React-based landing page for Mudra Dental & Aesthetic Clinic, showcasing specialized dental and aesthetic services in Pune, India.
 
-**URL**: https://lovable.dev/projects/3461f991-1764-4c58-875a-cfb49859766e
+## Project Overview
 
-## How can I edit this code?
+This website features multiple service divisions and location information, built with modern web technologies for optimal performance and user experience.
 
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/3461f991-1764-4c58-875a-cfb49859766e) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Getting Started
 
 The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
 Follow these steps:
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
+# Step 1: Clone the repository
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
+# Step 2: Navigate to the project directory
 cd <YOUR_PROJECT_NAME>
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Step 3: Install the necessary dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 4: Start the development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Available Scripts
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- `npm run dev` - Start development server with auto-reloading
+- `npm run build` - Build for production
+- `npm run build:dev` - Build for development environment
+- `npm run lint` - Run linting
+- `npm run preview` - Preview production build
 
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
+## Technologies Used
 
 This project is built with:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- **Vite** - Build tool and development server
+- **TypeScript** - Type-safe JavaScript
+- **React** - UI library
+- **shadcn/ui** - Modern UI components
+- **Tailwind CSS** - Utility-first CSS framework
+- **React Router** - Client-side routing
 
-## How can I deploy this project?
+## Project Structure
 
-Simply open [Lovable](https://lovable.dev/projects/3461f991-1764-4c58-875a-cfb49859766e) and click on Share -> Publish.
+- `/src/pages/` - Route components for different pages
+- `/src/components/` - Reusable UI components
+- `/public/` - Static assets and images
 
-## Can I connect a custom domain to my Lovable project?
+## Deployment
 
-Yes it is!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+The project generates static files that can be deployed to any static hosting service like Netlify, Vercel, or GitHub Pages.

@@ -69,6 +69,17 @@ export default {
 					accent: '#d4a21b', // gold accent
 					light: '#f1f5f9', // light background
 					dark: '#1e293b', // dark text
+				},
+				meditouch: {
+					primary: '#6B2C91', // deep purple from logo
+					secondary: '#E67E22', // vibrant orange from logo
+					accent: '#8B44AC', // lighter purple for accents
+					gradient: {
+						from: '#6B2C91', // purple start
+						via: '#8B44AC', // mid purple
+						to: '#E67E22', // orange end
+					},
+					gray: '#6C757D', // neutral gray from tagline
 				}
 			},
 			fontFamily: {

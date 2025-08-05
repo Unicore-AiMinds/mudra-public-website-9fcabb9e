@@ -130,7 +130,7 @@ const DentalMetrix = () => {
                   <img src="https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="Dental Professional" className="w-full h-full object-cover" />
                 </div>
                 <div className="rounded-lg overflow-hidden h-64 mt-8">
-                  <img alt="Dental Office" src="/lovable-uploads/b695f2b9-856f-453f-9c6f-0291ff2ff322.jpg" className="w-full h-full object-fill" />
+                  <img alt="Dental Office" src="/images/b695f2b9-856f-453f-9c6f-0291ff2ff322.jpg" className="w-full h-full object-fill" />
                 </div>
                 <div className="rounded-lg overflow-hidden h-64">
                   <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="Dental Equipment" className="w-full h-full object-cover" />

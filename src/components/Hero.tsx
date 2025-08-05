@@ -16,6 +16,7 @@ interface HeroProps {
   };
   onCtaClick?: () => void;
   onSecondaryCtaClick?: () => void;
+  theme?: 'mudra' | 'meditouch';
 }
 
 const Hero = ({ 
@@ -25,10 +26,15 @@ const Hero = ({
   cta,
   secondaryCta,
   onCtaClick,
-  onSecondaryCtaClick
+  onSecondaryCtaClick,
+  theme = 'mudra'
 }: HeroProps) => {
   return (
-    <div className="relative min-h-[70vh] md:min-h-[80vh] flex items-center bg-gradient-to-r from-mudra-primary/90 to-mudra-secondary/90 overflow-hidden">
+    <div className={`relative min-h-[70vh] md:min-h-[80vh] flex items-center overflow-hidden ${
+      theme === 'meditouch' 
+        ? 'bg-gradient-to-r from-meditouch-primary/90 to-meditouch-secondary/90' 
+        : 'bg-gradient-to-r from-mudra-primary/90 to-mudra-secondary/90'
+    }`}>
       {/* Background image with overlay */}
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center opacity-30"
@@ -50,7 +56,11 @@ const Hero = ({
             {cta && (
               <Link 
                 to={cta.link} 
-                className="px-8 py-3 bg-white text-mudra-primary rounded-md font-medium hover:bg-mudra-accent hover:text-white transition-colors flex items-center"
+                className={`px-8 py-3 bg-white rounded-md font-medium transition-colors flex items-center ${
+                  theme === 'meditouch'
+                    ? 'text-meditouch-primary hover:bg-meditouch-secondary hover:text-white'
+                    : 'text-mudra-primary hover:bg-mudra-accent hover:text-white'
+                }`}
                 onClick={(e) => {
                   if (onCtaClick && cta.link.startsWith('#')) {
                     e.preventDefault();

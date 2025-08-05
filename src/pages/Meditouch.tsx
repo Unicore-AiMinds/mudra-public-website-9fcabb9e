@@ -63,35 +63,35 @@ const Meditouch = () => {
         <Hero title="Reveal Your Radiance: Advanced Skin & Hair Solutions" subtitle="At Meditouch, our multidisciplinary team combines expertise with cutting-edge technologies to deliver personalized aesthetic treatments." backgroundImage="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" cta={{
         text: 'Request Consultation',
         link: '#contact'
-      }} onCtaClick={scrollToContact} />
+      }} onCtaClick={scrollToContact} theme="meditouch" />
         
         <SectionNav sections={sectionNavItems} backTo={{
         path: '/',
         label: 'Mudra Group'
       }} logo="meditouch-logo.png" logoAlt="Meditouch" />
         
-        <section id="about" className="py-20 reveal-section">
+        <section id="about" className="py-20 bg-gradient-to-br from-white via-meditouch-primary/3 to-meditouch-secondary/3 reveal-section">
           <div className="container mx-auto px-4 md:px-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               <div className="grid grid-cols-2 gap-4 order-2 md:order-1">
-                <div className="rounded-lg overflow-hidden h-64">
-                  <img alt="Aesthetic Treatment" src="/lovable-uploads/a60c3883-6a5c-4418-9847-73ccdec99f7b.jpg" className="w-full h-full object-cover" />
+                <div className="rounded-lg overflow-hidden h-64 ring-2 ring-meditouch-primary/20 hover:ring-meditouch-secondary/40 transition-all duration-300">
+                  <img alt="Aesthetic Treatment" src="/images/a60c3883-6a5c-4418-9847-73ccdec99f7b.jpg" className="w-full h-full object-cover" />
                 </div>
                 <div className="rounded-lg overflow-hidden h-64 mt-8">
-                  <img alt="Spa Facial" src="/lovable-uploads/2c59451c-5962-4ba0-a86f-b560d5ebeca4.jpg" className="w-full h-full object-cover" />
+                  <img alt="Spa Facial" src="/images/2c59451c-5962-4ba0-a86f-b560d5ebeca4.jpg" className="w-full h-full object-cover" />
                 </div>
-                <div className="rounded-lg overflow-hidden h-64">
+                <div className="rounded-lg overflow-hidden h-64 ring-2 ring-meditouch-primary/20 hover:ring-meditouch-secondary/40 transition-all duration-300">
                   <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="Hair Treatment" className="w-full h-full object-cover" />
                 </div>
                 <div className="rounded-lg overflow-hidden h-64 mt-8">
-                  <img alt="Skin Care" src="/lovable-uploads/318f8dc7-4638-410e-86dc-4a4a611558ba.jpg" className="w-full h-full object-cover" />
+                  <img alt="Skin Care" src="/images/318f8dc7-4638-410e-86dc-4a4a611558ba.jpg" className="w-full h-full object-cover" />
                 </div>
               </div>
               
               <div className="order-1 md:order-2">
-                <h2 className="text-3xl font-serif font-semibold mb-6">About Meditouch</h2>
+                <h2 className="text-3xl font-serif font-semibold mb-6 bg-gradient-to-r from-meditouch-primary to-meditouch-secondary bg-clip-text text-transparent">About Meditouch</h2>
                 
-                <div className="w-20 h-1 bg-mudra-accent mb-8"></div>
+                <div className="w-20 h-1 bg-gradient-to-r from-meditouch-primary to-meditouch-secondary mb-8"></div>
                 
                 <div className="space-y-6">
                   <p className="text-gray-700">
@@ -100,26 +100,26 @@ const Meditouch = () => {
                     comprehensive hair, skin, and body solutions.
                   </p>
                   
-                  <div className="bg-mudra-secondary/5 p-6 rounded-lg border border-mudra-secondary/10">
-                    <h3 className="font-serif text-xl font-medium mb-4">Our Multidisciplinary Team</h3>
+                  <div className="bg-gradient-to-br from-meditouch-primary/5 to-meditouch-secondary/5 p-6 rounded-lg border border-meditouch-primary/10">
+                    <h3 className="font-serif text-xl font-medium mb-4 text-meditouch-primary">Our Multidisciplinary Team</h3>
                     <p className="text-gray-700 mb-4">
                       Meditouch brings together a collaborative team of aesthetic specialists:
                     </p>
                     <ul className="space-y-2">
                       <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-mudra-secondary rounded-full mr-2 mt-1.5"></span>
+                        <span className="w-2 h-2 bg-meditouch-primary rounded-full mr-2 mt-1.5"></span>
                         <span>Experienced Dermatologists</span>
                       </li>
                       <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-mudra-secondary rounded-full mr-2 mt-1.5"></span>
+                        <span className="w-2 h-2 bg-meditouch-primary rounded-full mr-2 mt-1.5"></span>
                         <span>Specialized Trichologists</span>
                       </li>
                       <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-mudra-secondary rounded-full mr-2 mt-1.5"></span>
+                        <span className="w-2 h-2 bg-meditouch-primary rounded-full mr-2 mt-1.5"></span>
                         <span>Skilled Plastic Surgeons</span>
                       </li>
                       <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-mudra-secondary rounded-full mr-2 mt-1.5"></span>
+                        <span className="w-2 h-2 bg-meditouch-primary rounded-full mr-2 mt-1.5"></span>
                         <span>Qualified Cosmetologists</span>
                       </li>
                     </ul>
@@ -137,47 +137,47 @@ const Meditouch = () => {
           </div>
         </section>
         
-        <section id="services" className="py-20 bg-gray-50 reveal-section">
+        <section id="services" className="py-20 bg-gradient-to-br from-meditouch-primary/5 via-white to-meditouch-secondary/5 reveal-section">
           <div className="container mx-auto px-4 md:px-6">
             <div className="max-w-3xl mx-auto text-center mb-16">
-              <h2 className="text-3xl font-serif font-semibold mb-4">Our Aesthetic Services</h2>
+              <h2 className="text-3xl font-serif font-semibold mb-4 bg-gradient-to-r from-meditouch-primary to-meditouch-secondary bg-clip-text text-transparent">Our Aesthetic Services</h2>
               <p className="text-gray-600">
                 Meditouch offers a comprehensive range of advanced hair, skin, and body treatments 
                 using the latest technologies and techniques for optimal results.
               </p>
-              <div className="w-20 h-1 bg-mudra-accent mx-auto mt-8"></div>
+              <div className="w-20 h-1 bg-gradient-to-r from-meditouch-primary to-meditouch-secondary mx-auto mt-8"></div>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <ServiceCard title="Hair Transplant" description="Advanced FUE (Follicular Unit Extraction) technique for natural-looking hair restoration with minimal scarring and faster recovery times." icon={<Scissors size={24} />} image="https://images.unsplash.com/photo-1473679408190-0693dd22fe6a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
+              <ServiceCard title="Hair Transplant" description="Advanced FUE (Follicular Unit Extraction) technique for natural-looking hair restoration with minimal scarring and faster recovery times." icon={<Scissors size={24} />} image="https://images.unsplash.com/photo-1473679408190-0693dd22fe6a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" theme="meditouch" />
               
-              <ServiceCard title="Hair & Face PRP" description="Platelet-Rich Plasma therapy uses your body's natural growth factors to stimulate hair growth and rejuvenate facial skin for a youthful appearance." icon={<Droplet size={24} />} image="https://images.unsplash.com/photo-1614859135736-99160a1757e2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
+              <ServiceCard title="Hair & Face PRP" description="Platelet-Rich Plasma therapy uses your body's natural growth factors to stimulate hair growth and rejuvenate facial skin for a youthful appearance." icon={<Droplet size={24} />} image="https://images.unsplash.com/photo-1614859135736-99160a1757e2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" theme="meditouch" />
               
-              <ServiceCard title="HydraFacial" description="Multi-step treatment that cleanses, exfoliates, extracts, and hydrates skin using serums filled with antioxidants, peptides, and hyaluronic acid." icon={<Sparkles size={24} />} image="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
+              <ServiceCard title="HydraFacial" description="Multi-step treatment that cleanses, exfoliates, extracts, and hydrates skin using serums filled with antioxidants, peptides, and hyaluronic acid." icon={<Sparkles size={24} />} image="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" theme="meditouch" />
               
-              <ServiceCard title="Laser Hair Reduction" description="Permanent reduction of unwanted hair using state-of-the-art laser technology, effective for various skin and hair types with minimal discomfort." icon={<Zap size={24} />} image="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
+              <ServiceCard title="Laser Hair Reduction" description="Permanent reduction of unwanted hair using state-of-the-art laser technology, effective for various skin and hair types with minimal discomfort." icon={<Zap size={24} />} image="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" theme="meditouch" />
               
-              <ServiceCard title="Skin Tightening (HIFU)" description="High-Intensity Focused Ultrasound technology lifts and tightens skin by targeting deep layers without surgery, stimulating collagen production for natural rejuvenation." icon={<Gauge size={24} />} image="https://images.unsplash.com/photo-1560750588-73207b1ef5b8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
+              <ServiceCard title="Skin Tightening (HIFU)" description="High-Intensity Focused Ultrasound technology lifts and tightens skin by targeting deep layers without surgery, stimulating collagen production for natural rejuvenation." icon={<Gauge size={24} />} image="https://images.unsplash.com/photo-1560750588-73207b1ef5b8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" theme="meditouch" />
               
-              <ServiceCard title="Body Fat & Cellulite Reduction" description="Non-invasive treatments to reduce stubborn fat deposits and improve the appearance of cellulite for a more contoured silhouette." icon={<HandMetal size={24} />} image="https://images.unsplash.com/photo-1624623876661-5e7e74075ccb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" />
+              <ServiceCard title="Body Fat & Cellulite Reduction" description="Non-invasive treatments to reduce stubborn fat deposits and improve the appearance of cellulite for a more contoured silhouette." icon={<HandMetal size={24} />} image="https://images.unsplash.com/photo-1624623876661-5e7e74075ccb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" theme="meditouch" />
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mt-6">
-              <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 lg:col-span-3">
-                <h3 className="font-serif text-xl font-medium mb-4">Additional Aesthetic Services</h3>
+              <div className="bg-gradient-to-br from-white to-meditouch-primary/5 p-5 rounded-lg shadow-sm border border-meditouch-primary/20 lg:col-span-3">
+                <h3 className="font-serif text-xl font-medium mb-4 text-meditouch-primary">Additional Aesthetic Services</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <ul className="space-y-3">
                       <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-mudra-secondary rounded-full mr-2 mt-1.5"></span>
+                        <span className="w-2 h-2 bg-meditouch-primary rounded-full mr-2 mt-1.5"></span>
                         <span>Chemical Peels</span>
                       </li>
                       <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-mudra-secondary rounded-full mr-2 mt-1.5"></span>
+                        <span className="w-2 h-2 bg-meditouch-primary rounded-full mr-2 mt-1.5"></span>
                         <span>Skin PRP with Microneedling</span>
                       </li>
                       <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-mudra-secondary rounded-full mr-2 mt-1.5"></span>
+                        <span className="w-2 h-2 bg-meditouch-primary rounded-full mr-2 mt-1.5"></span>
                         <span>Wart/Tag/Mole Removal</span>
                       </li>
                     </ul>
@@ -185,15 +185,15 @@ const Meditouch = () => {
                   <div>
                     <ul className="space-y-3">
                       <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-mudra-secondary rounded-full mr-2 mt-1.5"></span>
+                        <span className="w-2 h-2 bg-meditouch-primary rounded-full mr-2 mt-1.5"></span>
                         <span>Tattoo Removal</span>
                       </li>
                       <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-mudra-secondary rounded-full mr-2 mt-1.5"></span>
+                        <span className="w-2 h-2 bg-meditouch-primary rounded-full mr-2 mt-1.5"></span>
                         <span>Semi-permanent Makeup</span>
                       </li>
                       <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-mudra-secondary rounded-full mr-2 mt-1.5"></span>
+                        <span className="w-2 h-2 bg-meditouch-primary rounded-full mr-2 mt-1.5"></span>
                         <span>Personalized Skincare Consultations</span>
                       </li>
                     </ul>
@@ -201,26 +201,26 @@ const Meditouch = () => {
                 </div>
               </div>
               
-              <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 lg:col-span-2">
-                <h3 className="font-serif text-xl font-medium mb-4">Our Technologies</h3>
+              <div className="bg-gradient-to-br from-meditouch-secondary/10 to-white p-5 rounded-lg shadow-sm border border-meditouch-secondary/20 lg:col-span-2">
+                <h3 className="font-serif text-xl font-medium mb-4 text-meditouch-secondary">Our Technologies</h3>
                 <p className="text-gray-600 text-sm mb-4">
                   Meditouch utilizes advanced, clinically-proven technologies for optimal results:
                 </p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-baseline">
-                    <span className="w-2 h-2 bg-mudra-primary rounded-full mr-2 mt-1"></span>
+                    <span className="w-2 h-2 bg-meditouch-secondary rounded-full mr-2 mt-1"></span>
                     <span>High-Intensity Focused Ultrasound (HIFU)</span>
                   </li>
                   <li className="flex items-baseline">
-                    <span className="w-2 h-2 bg-mudra-primary rounded-full mr-2 mt-1"></span>
+                    <span className="w-2 h-2 bg-meditouch-secondary rounded-full mr-2 mt-1"></span>
                     <span>State-of-the-art Laser Systems</span>
                   </li>
                   <li className="flex items-baseline">
-                    <span className="w-2 h-2 bg-mudra-primary rounded-full mr-2 mt-1"></span>
+                    <span className="w-2 h-2 bg-meditouch-secondary rounded-full mr-2 mt-1"></span>
                     <span>Advanced Microneedling Devices</span>
                   </li>
                   <li className="flex items-baseline">
-                    <span className="w-2 h-2 bg-mudra-primary rounded-full mr-2 mt-1"></span>
+                    <span className="w-2 h-2 bg-meditouch-secondary rounded-full mr-2 mt-1"></span>
                     <span>Medical-grade Skincare Products</span>
                   </li>
                 </ul>
@@ -233,12 +233,12 @@ const Meditouch = () => {
           <TestimonialsSection type="aesthetic" />
         </div>
         
-        <section id="contact" ref={contactSectionRef} className="py-20 reveal-section">
+        <section id="contact" ref={contactSectionRef} className="py-20 bg-gradient-to-t from-meditouch-primary/5 to-white reveal-section">
           <div className="container mx-auto px-4 md:px-6">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
-                <h2 className="text-3xl font-serif font-semibold mb-4">Contact Meditouch</h2>
-                <div className="w-20 h-1 bg-mudra-accent mx-auto"></div>
+                <h2 className="text-3xl font-serif font-semibold mb-4 bg-gradient-to-r from-meditouch-primary to-meditouch-secondary bg-clip-text text-transparent">Contact Meditouch</h2>
+                <div className="w-20 h-1 bg-gradient-to-r from-meditouch-primary to-meditouch-secondary mx-auto"></div>
               </div>
               
               <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
@@ -247,12 +247,12 @@ const Meditouch = () => {
                 </div>
                 
                 <div className="lg:col-span-2 space-y-6">
-                  <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                    <h3 className="font-serif text-xl font-medium mb-4">Clinic Information</h3>
+                  <div className="bg-gradient-to-br from-white to-meditouch-primary/5 p-6 rounded-lg shadow-lg border border-meditouch-primary/20">
+                    <h3 className="font-serif text-xl font-medium mb-4 text-meditouch-primary">Clinic Information</h3>
                     
                     <div className="space-y-4">
                       <div className="flex items-start">
-                        <Building className="h-5 w-5 text-mudra-primary mt-1 mr-3 flex-shrink-0" />
+                        <Building className="h-5 w-5 text-meditouch-primary mt-1 mr-3 flex-shrink-0" />
                         <div>
                           <p className="font-medium">Mudra Dental & Aesthetic Clinic</p>
                           <p className="text-gray-600 text-sm">
@@ -262,7 +262,7 @@ const Meditouch = () => {
                       </div>
                       
                       <div className="flex items-center">
-                        <Clock className="h-5 w-5 text-mudra-primary mr-3 flex-shrink-0" />
+                        <Clock className="h-5 w-5 text-meditouch-primary mr-3 flex-shrink-0" />
                         <div>
                           <p className="font-medium">Clinic Hours</p>
                           <p className="text-gray-600 text-sm">Mon - Sat: 10:00 am - 7:00 pm</p>
@@ -270,7 +270,7 @@ const Meditouch = () => {
                       </div>
                       
                       <div className="flex items-center">
-                        <CalendarClock className="h-5 w-5 text-mudra-primary mr-3 flex-shrink-0" />
+                        <CalendarClock className="h-5 w-5 text-meditouch-primary mr-3 flex-shrink-0" />
                         <div>
                           <p className="font-medium">Phone Number</p>
                           <p className="text-gray-600 text-sm">91129 57369</p>
@@ -287,7 +287,7 @@ const Meditouch = () => {
         </section>
       </main>
       
-      <Footer />
+      <Footer theme="meditouch" />
     </div>;
 };
 export default Meditouch;

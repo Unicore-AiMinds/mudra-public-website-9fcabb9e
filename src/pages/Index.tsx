@@ -215,7 +215,7 @@ const Index = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-lg hover:border-mudra-primary/20 image-card">
                 <div className="h-48 overflow-hidden">
-                  <img alt="Pune City" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="/lovable-uploads/11798f90-38f2-40db-b3bd-8e8ac6328850.jpg" />
+                  <img alt="Pune City" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="/images/11798f90-38f2-40db-b3bd-8e8ac6328850.jpg" />
                 </div>
                 
                 <div className="p-6">
@@ -232,7 +232,7 @@ const Index = () => {
               
               <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-lg hover:border-mudra-primary/20 image-card">
                 <div className="h-48 overflow-hidden">
-                  <img alt="Dental Consultation" src="/lovable-uploads/30de7436-0ae6-4822-9328-75927ae20900.jpg" className="w-full h-full transition-transform duration-500 group-hover:scale-105 object-contain" />
+                  <img alt="Dental Consultation" src="/images/30de7436-0ae6-4822-9328-75927ae20900.jpg" className="w-full h-full transition-transform duration-500 group-hover:scale-105 object-contain" />
                 </div>
                 
                 <div className="p-6">
@@ -249,7 +249,7 @@ const Index = () => {
               
               <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-lg hover:border-mudra-primary/20 image-card">
                 <div className="h-48 overflow-hidden">
-                  <img alt="Aesthetic Treatment" src="/lovable-uploads/c0e3ce1f-672d-45e9-9a2b-14f226f52519.jpg" className="w-full h-full transition-transform duration-500 group-hover:scale-105 object-contain" />
+                  <img alt="Aesthetic Treatment" src="/images/c0e3ce1f-672d-45e9-9a2b-14f226f52519.jpg" className="w-full h-full transition-transform duration-500 group-hover:scale-105 object-contain" />
                 </div>
                 
                 <div className="p-6">
