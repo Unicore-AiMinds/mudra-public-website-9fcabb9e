@@ -4,29 +4,33 @@ import TravelCard from '@/components/TravelCard';
 import { ImageIcon } from 'lucide-react';
 
 const ExplorePune = () => {
+  const brandMode = import.meta.env.VITE_BRAND_MODE;
+  const clinicName = brandMode === 'dental' ? 'Dental Metrix' : 
+                    brandMode === 'meditouch' ? 'Meditouch' : 
+                    'Dental Metrix or Meditouch';
   const localAttractions = [
     {
       name: 'Aga Khan Palace',
       description: 'Historic monument and museum with beautiful architecture and gardens, significant for its connection to Mahatma Gandhi and India\'s freedom movement.',
-      image: 'https://images.unsplash.com/photo-1628773822516-0a267c8ee58a?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+      image: '/images/aga-khan-palace.webp',
       location: 'Pune',
     },
     {
       name: 'Shaniwar Wada',
       description: 'Historic fortification in the city of Pune, once the seat of the Peshwas of the Maratha Empire, known for its impressive architecture and cultural significance.',
-      image: 'https://images.unsplash.com/photo-1624265853559-a7ba3437e750?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+      image: '/images/shaniwar-wada.jpg',
       location: 'Pune',
     },
     {
       name: 'Dagdusheth Halwai Ganpati Temple',
       description: 'One of the most visited temples in Maharashtra, dedicated to Lord Ganesha, with elaborate decorations and a rich cultural history.',
-      image: 'https://images.unsplash.com/photo-1623776025811-fd139155a39b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+      image: '/images/dagduseth-halwai.jpg',
       location: 'Pune',
     },
     {
       name: 'Raja Dinkar Kelkar Museum',
       description: 'Houses a rich collection of Indian artifacts including sculptures, paintings, and everyday items from the Maratha period and beyond.',
-      image: 'https://images.unsplash.com/photo-1566127444993-e5f2d192c780?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+      image: '/images/raja-dinkar-kelkar-museum.jpg',
       location: 'Pune',
     },
   ];
@@ -35,81 +39,119 @@ const ExplorePune = () => {
     {
       name: 'Lonavala & Khandala',
       description: 'Popular hill stations with stunning viewpoints, waterfalls, and lush green landscapes, perfect for day trips or weekend getaways from Pune.',
-      image: 'https://images.unsplash.com/photo-1591804709369-a4f6bd8b3d90?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+      image: '/images/lonavala-and-khandala.webp',
       location: 'Western Ghats',
-      travelTime: '1 hour from Pune',
+      travelTime: '1.5 hours from Pune',
     },
     {
       name: 'Sinhagad Fort',
       description: 'Historic fort offering panoramic views of the surrounding valley, with a significant place in Maratha history and perfect for trekking enthusiasts.',
-      image: 'https://images.unsplash.com/photo-1589307357824-f2ff61a6e461?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+      image: '/images/sinhagad-fort.jpg',
       location: 'Thoptewadi',
-      travelTime: '30 minutes from Pune',
+      travelTime: '1 hour from Pune',
     },
     {
       name: 'Lavasa City',
       description: 'Planned city with European-style architecture, a lakefront promenade, and various recreational activities in a picturesque setting.',
-      image: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+      image: '/images/lavasa-city.avif',
       location: 'Mulshi Valley',
-      travelTime: '1 hour from Pune',
+      travelTime: '2 hours from Pune',
+    },
+    {
+      name: 'Mulshi Dam & Lake',
+      description: 'Scenic reservoir surrounded by lush green hills and valleys, offering tranquil views, water sports, and perfect spots for photography and relaxation.',
+      image: '/images/mulshi-lake.avif',
+      location: 'Mulshi',
+      travelTime: '1.5 hours from Pune',
     },
   ];
   
   const accommodations = [
     {
-      name: 'Conrad Pune',
-      description: 'Luxury 5-star hotel with elegant rooms, multiple dining options, spa facilities, and impeccable service, conveniently located near the clinic.',
-      image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-      category: 'Luxury',
+      name: 'JW Marriott Hotel Pune',
+      description: 'Luxury 5-star hotel with elegant rooms, multiple dining options, spa facilities, and impeccable service, offering world-class hospitality.',
+      image: '/images/jw-marriott.jpg',
+      category: 'Luxury Option',
       priceRange: '₹₹₹₹',
     },
     {
-      name: 'Novotel Pune',
-      description: 'Contemporary 4-star hotel offering comfortable rooms, international dining, a pool, and fitness center, ideal for business and leisure travelers.',
-      image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-      category: 'Business',
+      name: 'Ambience Hotel',
+      description: 'Comfortable mid-range hotel with modern amenities, quality service, and convenient location, perfect for business and leisure travelers.',
+      image: '/images/ambience-hotel.avif',
+      category: 'Moderate Option',
       priceRange: '₹₹₹',
     },
     {
-      name: 'Oakwood Residence Naylor Road',
-      description: 'Serviced apartments with fully equipped kitchens, living areas, and hotel amenities, perfect for extended stays and those seeking a home-like environment.',
-      image: 'https://images.unsplash.com/photo-1576495199011-eb94736d05d6?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-      category: 'Service Apartment',
+      name: 'The Ambassador Hotel',
+      description: 'Well-established moderate hotel offering reliable service, comfortable rooms, and good value for money in a central location.',
+      image: '/images/ambassador-hotel.jpg',
+      category: 'Moderate Option',
       priceRange: '₹₹₹',
     },
     {
-      name: 'Treebo Trip Natraj',
-      description: 'Affordable, clean and well-maintained hotel with basic amenities, friendly service, and a central location, offering great value for budget-conscious travelers.',
-      image: 'https://images.unsplash.com/photo-1574643156929-51fa098b0394?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-      category: 'Budget',
+      name: 'Serviced Apartments & Airbnb',
+      description: 'Independent accommodation options with fully equipped kitchens, living areas, and flexible stays, ideal for extended visits and family groups.',
+      image: '/images/airbnb.avif',
+      category: 'Affordable',
       priceRange: '₹₹',
     },
   ];
   
-  const culinaryHighlights = [
+  const legendaryLocalEats = [
     {
-      name: 'Misal Pav',
-      description: 'Spicy sprouted lentil curry served with bread rolls, a beloved Pune specialty with a perfect balance of flavors and textures.',
-      image: 'https://images.unsplash.com/photo-1626131340348-ee3c192e1184?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-      recommended: 'Bedekar Tea Stall, JJ Garden',
+      name: 'Vaishali (FC Road)',
+      description: 'An iconic establishment famous for its South Indian dishes like Dosa and Idli Sambhar.',
+      image: '/images/vaishali-new.jpg',
+      category: 'Legendary & Local',
     },
     {
-      name: 'Vada Pav',
-      description: 'Mumbai\'s favorite street food that\'s equally popular in Pune - a spicy potato fritter in a bread roll with chutneys and spices.',
-      image: 'https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-      recommended: 'Joshi Wadewale, FC Road',
+      name: 'Marz-O-Rin (Camp)',
+      description: 'A charming heritage bakery café famous for its delicious sandwiches, fresh pastries, and homemade baked goods since 1965.',
+      image: '/images/marz-o-rin.jpg',
+      category: 'Legendary & Local',
     },
     {
-      name: 'Mastani',
-      description: 'Pune\'s signature dessert drink - a rich, thick milkshake topped with ice cream, dry fruits, and various flavorings.',
-      image: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-      recommended: 'Sujata Mastani, Multiple Locations',
+      name: 'Bedekar Tea Stall (Narayan Peth)',
+      description: 'For the most authentic Puneri Misal Pav—a spicy curry of sprouts.',
+      image: '/images/bedekar-misal.avif',
+      category: 'Legendary & Local',
     },
     {
-      name: 'Poha',
-      description: 'Flattened rice preparation with peanuts, herbs, and spices - a light and flavorful breakfast option popular throughout Pune.',
-      image: 'https://images.unsplash.com/photo-1589554532035-1c2a2c8c79d3?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-      recommended: 'Nagraj Poha, Narayan Peth',
+      name: 'Garden Vadapav (Camp)',
+      description: 'A popular local spot serving delicious Vadapav, Mumbai\'s iconic street food that\'s equally beloved in Pune.',
+      image: '/images/garden-vadapav.jpg',
+      category: 'Legendary & Local',
+    },
+  ];
+
+  const fineDiningOptions = [
+    {
+      name: 'Paasha, JW Marriott (SB Road)',
+      description: 'Rooftop lounge with stunning city views and exquisite North-West Frontier cuisine.',
+      image: '/images/paasha.jpg',
+      category: 'Fine Dining & Modern Cuisine',
+      rating: '⭐',
+    },
+    {
+      name: 'Malaka Spice (Koregaon Park)',
+      description: 'A celebrated Pan-Asian restaurant with a beautiful, ambient setting.',
+      image: '/images/malaka-spice.jpg',
+      category: 'Fine Dining & Modern Cuisine',
+      rating: '⭐',
+    },
+    {
+      name: 'Hotel Ambience (Shivajinagar)',
+      description: 'Elegant dining experience featuring fusion cuisine in a sophisticated atmosphere.',
+      image: '/images/hotel-ambience.jpg',
+      category: 'Fine Dining & Modern Cuisine',
+      rating: '⭐',
+    },
+    {
+      name: 'Coriander Kitchen, Conrad (Bund Garden Road)',
+      description: 'Contemporary all-day dining restaurant offering international cuisine with sophisticated presentation and premium hospitality.',
+      image: '/images/coriander-kitchen.png',
+      category: 'Fine Dining & Modern Cuisine',
+      rating: '⭐',
     },
   ];
   
@@ -118,11 +160,11 @@ const ExplorePune = () => {
       <Navbar />
       
       <main className="pt-16 md:pt-20 bg-gray-50">
-        <div className="relative h-[40vh] md:h-[60vh] overflow-hidden">
+        <div className="relative min-h-[80vh] md:min-h-[90vh] overflow-hidden flex items-center">
           <div 
             className="absolute inset-0 bg-cover bg-center"
             style={{ 
-              backgroundImage: 'url(https://images.unsplash.com/photo-1570555014133-3ade08de9c13?w=2070&auto=format&fit=crop&q=80&ixlib=rb-4.0.3)',
+              backgroundImage: 'url(/images/onkar-gotale-3Z8s_-Qh9GY-unsplash.jpg)',
               filter: 'brightness(0.8)'
             }}
           />
@@ -135,7 +177,7 @@ const ExplorePune = () => {
                 Pune & Surroundings: Visitor Guide
               </h1>
               <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
-                Discover the perfect blend of tradition and modernity while visiting Mudra Clinic
+                Discover the perfect blend of tradition and modernity while visiting {clinicName}
               </p>
             </div>
           </div>
@@ -150,7 +192,7 @@ const ExplorePune = () => {
               </div>
               
               <p className="text-gray-700 mb-6">
-                We're delighted that you've chosen Mudra Dental & Aesthetic Clinic for your treatment. 
+                We're delighted that you've chosen {clinicName} for your treatment. 
                 Beyond providing exceptional care, we want to ensure your visit to Pune is comfortable and 
                 enjoyable. This guide highlights local attractions, accommodations, and culinary experiences 
                 to enhance your stay in our vibrant city.
@@ -189,7 +231,7 @@ const ExplorePune = () => {
                 <div>
                   <h3 className="text-xl font-serif font-medium mb-6 text-mudra-primary">Nearby Attractions (Around Pune)</h3>
                   
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {nearbyAttractions.map((attraction, index) => (
                       <TravelCard 
                         key={index}
@@ -214,8 +256,26 @@ const ExplorePune = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {accommodations.map((accommodation, index) => (
                   <div key={index} className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-md image-card">
-                    <div className="h-48 bg-gray-100 flex items-center justify-center">
-                      <ImageIcon className="h-16 w-16 text-gray-400" />
+                    <div className="h-48 bg-gray-100 overflow-hidden">
+                      {accommodation.image ? (
+                        <img 
+                          src={accommodation.image} 
+                          alt={accommodation.name}
+                          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = 'none';
+                            const parent = target.parentElement;
+                            if (parent) {
+                              parent.innerHTML = `<div class="w-full h-full flex items-center justify-center"><svg class="h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2z"></path></svg></div>`;
+                            }
+                          }}
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <ImageIcon className="h-16 w-16 text-gray-400" />
+                        </div>
+                      )}
                     </div>
                     
                     <div className="p-5">
@@ -244,28 +304,88 @@ const ExplorePune = () => {
             
             <section className="mb-16">
               <div className="flex items-center justify-between mb-8">
-                <h2 className="text-3xl font-serif font-semibold">Pune's Culinary Highlights</h2>
+                <h2 className="text-3xl font-serif font-semibold">A Culinary Journey: Where to Eat</h2>
                 <div className="h-1 w-32 bg-mudra-primary/20 rounded-full"></div>
               </div>
+              <p className="text-lg text-gray-600 mb-12 text-center max-w-2xl mx-auto">
+                From legendary cafés to fine dining, Pune is a food lover's paradise.
+              </p>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {culinaryHighlights.map((item, index) => (
-                  <div key={index} className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-md image-card">
-                    <div className="h-48 bg-gray-100 flex items-center justify-center">
-                      <ImageIcon className="h-16 w-16 text-gray-400" />
-                    </div>
-                    
-                    <div className="p-5">
-                      <h3 className="font-serif text-xl font-medium mb-2">{item.name}</h3>
-                      <p className="text-gray-600 text-sm mb-3">{item.description}</p>
-                      <div className="bg-gray-50 px-3 py-2 rounded-md">
-                        <p className="text-sm">
-                          <span className="font-medium">Where to try:</span> {item.recommended}
-                        </p>
+              {/* Legendary & Local Section */}
+              <div className="mb-12">
+                <h3 className="text-2xl font-serif font-semibold mb-6 text-mudra-primary">🏛️ Legendary & Local</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {legendaryLocalEats.map((item, index) => (
+                    <div key={index} className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-md image-card">
+                      <div className="h-48 bg-gray-100 overflow-hidden">
+                        {item.image ? (
+                          <img 
+                            src={item.image} 
+                            alt={item.name}
+                            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                              const parent = target.parentElement;
+                              if (parent) {
+                                parent.innerHTML = `<div class="w-full h-full flex items-center justify-center"><svg class="h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2z"></path></svg></div>`;
+                              }
+                            }}
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <ImageIcon className="h-16 w-16 text-gray-400" />
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="p-5">
+                        <h4 className="font-serif text-lg font-medium mb-2">{item.name}</h4>
+                        <p className="text-gray-600 text-sm">{item.description}</p>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+              </div>
+
+              {/* Fine Dining Section */}
+              <div className="mb-8">
+                <h3 className="text-2xl font-serif font-semibold mb-6 text-mudra-primary">⭐ Fine Dining & Modern Cuisine</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {fineDiningOptions.map((item, index) => (
+                    <div key={index} className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-md image-card">
+                      <div className="h-48 bg-gray-100 overflow-hidden">
+                        {item.image ? (
+                          <img 
+                            src={item.image} 
+                            alt={item.name}
+                            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                              const parent = target.parentElement;
+                              if (parent) {
+                                parent.innerHTML = `<div class="w-full h-full flex items-center justify-center"><svg class="h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2z"></path></svg></div>`;
+                              }
+                            }}
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <ImageIcon className="h-16 w-16 text-gray-400" />
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="p-5">
+                        <div className="flex items-start justify-between mb-2">
+                          <h4 className="font-serif text-lg font-medium">{item.name}</h4>
+                          {item.rating && <span className="text-lg">{item.rating}</span>}
+                        </div>
+                        <p className="text-gray-600 text-sm">{item.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
               
               <div className="mt-8 p-6 bg-white rounded-lg shadow-sm border border-gray-100">
@@ -290,16 +410,20 @@ const ExplorePune = () => {
                 <div className="bg-gradient-to-r from-mudra-primary to-mudra-secondary p-8 text-white">
                   <h2 className="text-2xl font-serif font-semibold mb-4">Plan Your Treatment Visit</h2>
                   <p className="text-white/90 mb-6">
-                    We're committed to making your visit to Mudra Clinic comfortable and convenient. 
+                    We're committed to making your visit to {clinicName} comfortable and convenient. 
                     Our team can help coordinate your treatment schedule with your travel plans.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4">
-                    <a href="/dental-metrix#contact" className="px-6 py-3 bg-white text-mudra-primary rounded-md font-medium hover:bg-mudra-accent hover:text-white transition-colors text-center">
-                      Contact Dental Metrix
-                    </a>
-                    <a href="/meditouch#contact" className="px-6 py-3 bg-transparent border border-white text-white rounded-md font-medium hover:bg-white/10 transition-colors text-center">
-                      Contact Meditouch
-                    </a>
+                    {import.meta.env.VITE_BRAND_MODE !== 'meditouch' && (
+                      <a href="/dental-metrix#contact" className="px-6 py-3 bg-white text-mudra-primary rounded-md font-medium hover:bg-mudra-accent hover:text-white transition-colors text-center">
+                        Contact Dental Metrix
+                      </a>
+                    )}
+                    {import.meta.env.VITE_BRAND_MODE !== 'dental' && (
+                      <a href="/meditouch#contact" className="px-6 py-3 bg-transparent border border-white text-white rounded-md font-medium hover:bg-white/10 transition-colors text-center">
+                        Contact Meditouch
+                      </a>
+                    )}
                   </div>
                 </div>
                 

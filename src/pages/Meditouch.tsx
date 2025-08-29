@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import { Scissors, Zap, Droplet, Gauge, HandMetal, Sparkles, Building, Clock, CalendarClock } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Scissors, Zap, Droplet, Gauge, HandMetal, Sparkles, Building, Clock, CalendarClock, Eraser, Paintbrush, ChevronLeft, ChevronRight } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
@@ -9,7 +9,33 @@ import TestimonialsSection from '@/components/TestimonialsSection';
 import ContactForm from '@/components/ContactForm';
 import LocationMap from '@/components/LocationMap';
 const Meditouch = () => {
+  const brandMode = import.meta.env.VITE_BRAND_MODE;
+  const clinicName = brandMode === 'dental' ? 'Dental Metrix' : 
+                    brandMode === 'meditouch' ? 'Meditouch' : 
+                    'Mudra Dental & Aesthetic Clinic';
   const contactSectionRef = useRef<HTMLElement>(null);
+  const [currentServiceSlide, setCurrentServiceSlide] = useState(0);
+  
+  const serviceSlides = [
+    // Slide 1: 3 services
+    [
+      { title: "HydraFacial Skin Rejuvenation", description: "A non-invasive facial treatment that deeply cleanses, exfoliates, extracts impurities from pores, and intensely hydrates the skin.", icon: <Sparkles size={24} />, image: "/images/hydrafacial-skin-rejuvenation.jpg" },
+      { title: "Removal of Warts, Skin Tags & Moles", description: "Safe and effective removal of benign skin growths using advanced techniques for smooth, clear skin.", icon: <Eraser size={24} />, image: "/images/warts-skin-tags-moles-removal.jpg" },
+      { title: "Chemical Peel", description: "A cosmetic procedure that uses a chemical solution to improve the appearance of the skin and treat acne, pimples and brightening.", icon: <Droplet size={24} />, image: "/images/chemical-peel.jpg" }
+    ],
+    // Slide 2: 3 services
+    [
+      { title: "Body Peel", description: "A chemical exfoliation treatment that removes dead skin cells from the body, improving skin texture and tone.", icon: <HandMetal size={24} />, image: "/images/body-peel.webp" },
+      { title: "Tattoo Removal (Laser)", description: "Uses a laser to break down and remove tattoo ink from the skin, offering a clean slate for those with unwanted tattoos.", icon: <Zap size={24} />, image: "/images/tattoo-removal-laser.jpg" },
+      { title: "Hair Transplants", description: "A surgical procedure that moves hair to treat hair loss, also known as hair restoration or hair replacement.", icon: <Scissors size={24} />, image: "/images/hair-transplants.jpg" }
+    ],
+    // Slide 3: 3 services
+    [
+      { title: "Hifu", description: "Skin lifting procedure that tightens skin, removes excess skin, or repositions it for a more youthful appearance.", icon: <Gauge size={24} />, image: "/images/hifu.jpg" },
+      { title: "Skin PRP with Microneedling", description: "Combines microneedling with platelet-rich plasma to rejuvenate the skin, reducing wrinkles and acne scars.", icon: <Building size={24} />, image: "/images/skin-prp-microneedling.webp" },
+      { title: "Semi Permanent Makeup", description: "Also known as micropigmentation, enhances facial features through the application of pigments by specialists.", icon: <Paintbrush size={24} />, image: "/images/semi-permanent-makeup.jpg" }
+    ]
+  ];
 
   // This effect handles scroll reveal animations
   useEffect(() => {
@@ -26,16 +52,40 @@ const Meditouch = () => {
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // Trigger on initial load
 
-    // Check if we need to scroll to contact section on load (from URL hash)
-    if (window.location.hash === '#contact') {
+    // Check if we need to scroll to any section on load (from URL hash)
+    const hash = window.location.hash;
+    if (hash) {
       setTimeout(() => {
-        scrollToContact();
+        const sectionId = hash.substring(1); // Remove the '#'
+        const element = document.getElementById(sectionId);
+        if (element) {
+          const yOffset = -100;
+          const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
       }, 500);
     }
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  // Auto-rotate services carousel every 10 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentServiceSlide((prev) => (prev === serviceSlides.length - 1 ? 0 : prev + 1));
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [serviceSlides.length]);
+
+  const handleServicePrev = () => {
+    setCurrentServiceSlide((prev) => (prev === 0 ? serviceSlides.length - 1 : prev - 1));
+  };
+
+  const handleServiceNext = () => {
+    setCurrentServiceSlide((prev) => (prev === serviceSlides.length - 1 ? 0 : prev + 1));
+  };
   const scrollToContact = () => {
     if (contactSectionRef.current) {
       contactSectionRef.current.scrollIntoView({
@@ -60,67 +110,70 @@ const Meditouch = () => {
       <Navbar />
       
       <main className="scroll-smooth pt-16 md:pt-20">
-        <Hero title="Reveal Your Radiance: Advanced Skin & Hair Solutions" subtitle="At Meditouch, our multidisciplinary team combines expertise with cutting-edge technologies to deliver personalized aesthetic treatments." backgroundImage="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" cta={{
-        text: 'Request Consultation',
-        link: '#contact'
-      }} onCtaClick={scrollToContact} theme="meditouch" />
+        <Hero 
+          title="Reveal Your Radiance: Advanced Skin & Hair Solutions" 
+          subtitle="At Meditouch, our multidisciplinary team combines expertise with cutting-edge technologies to deliver personalized aesthetic treatments." 
+          backgroundImage="/images/hero-image-1.webp"
+          cta={{
+            text: 'Request Consultation',
+            link: '#contact'
+          }} 
+          onCtaClick={scrollToContact} 
+          theme="meditouch" 
+        />
         
-        <SectionNav sections={sectionNavItems} backTo={{
-        path: '/',
-        label: 'Mudra Group'
-      }} logo="meditouch-logo.png" logoAlt="Meditouch" />
         
-        <section id="about" className="py-20 bg-gradient-to-br from-white via-meditouch-primary/3 to-meditouch-secondary/3 reveal-section">
+        <section id="about" className="py-24 bg-gradient-to-br from-meditouch-warm-50 via-white to-meditouch-primary-lightest/40 reveal-section scroll-mt-24">
           <div className="container mx-auto px-4 md:px-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-              <div className="grid grid-cols-2 gap-4 order-2 md:order-1">
-                <div className="rounded-lg overflow-hidden h-64 ring-2 ring-meditouch-primary/20 hover:ring-meditouch-secondary/40 transition-all duration-300">
-                  <img alt="Aesthetic Treatment" src="/images/a60c3883-6a5c-4418-9847-73ccdec99f7b.jpg" className="w-full h-full object-cover" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+              <div className="grid grid-cols-2 gap-6 order-2 md:order-1">
+                <div className="hover:ring-2 hover:ring-meditouch-primary/40 transition-all duration-300 rounded-lg overflow-hidden h-48">
+                  <img alt="Meditouch Clinic Interior" src="/images/hero-image-1.webp" className="w-full h-full object-cover" loading="lazy" />
                 </div>
-                <div className="rounded-lg overflow-hidden h-64 mt-8">
-                  <img alt="Spa Facial" src="/images/2c59451c-5962-4ba0-a86f-b560d5ebeca4.jpg" className="w-full h-full object-cover" />
+                <div className="mt-8 rounded-lg overflow-hidden h-48">
+                  <img alt="Aesthetic Treatment Room" src="/images/hero-image-4.webp" className="w-full h-full object-cover" loading="lazy" />
                 </div>
-                <div className="rounded-lg overflow-hidden h-64 ring-2 ring-meditouch-primary/20 hover:ring-meditouch-secondary/40 transition-all duration-300">
-                  <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="Hair Treatment" className="w-full h-full object-cover" />
+                <div className="hover:ring-2 hover:ring-meditouch-primary/40 transition-all duration-300 rounded-lg overflow-hidden h-48">
+                  <img src="/images/hero-image-3.jpeg" alt="Meditouch Facility" className="w-full h-full object-cover" loading="lazy" />
                 </div>
-                <div className="rounded-lg overflow-hidden h-64 mt-8">
-                  <img alt="Skin Care" src="/images/318f8dc7-4638-410e-86dc-4a4a611558ba.jpg" className="w-full h-full object-cover" />
+                <div className="mt-8 rounded-lg overflow-hidden h-48">
+                  <img alt="Skin Care Treatment" src="/images/hero-image-2.jpeg" className="w-full h-full object-cover" loading="lazy" />
                 </div>
               </div>
               
               <div className="order-1 md:order-2">
-                <h2 className="text-3xl font-serif font-semibold mb-6 bg-gradient-to-r from-meditouch-primary to-meditouch-secondary bg-clip-text text-transparent">About Meditouch</h2>
+                <h2 className="text-3xl font-serif font-semibold mb-8 bg-gradient-to-r from-meditouch-primary-dark to-meditouch-secondary-dark bg-clip-text text-transparent">About Meditouch</h2>
                 
-                <div className="w-20 h-1 bg-gradient-to-r from-meditouch-primary to-meditouch-secondary mb-8"></div>
+                <div className="w-24 h-1.5 bg-gradient-to-r from-meditouch-primary via-meditouch-accent to-meditouch-secondary mb-10 rounded-full"></div>
                 
-                <div className="space-y-6">
-                  <p className="text-gray-700">
+                <div className="space-y-8">
+                  <p className="text-lg text-meditouch-gray leading-relaxed">
                     Meditouch is Pune's premier destination for advanced aesthetic treatments, 
                     bringing together a multidisciplinary team of specialists to deliver 
                     comprehensive hair, skin, and body solutions.
                   </p>
                   
-                  <div className="bg-gradient-to-br from-meditouch-primary/5 to-meditouch-secondary/5 p-6 rounded-lg border border-meditouch-primary/10">
-                    <h3 className="font-serif text-xl font-medium mb-4 text-meditouch-primary">Our Multidisciplinary Team</h3>
-                    <p className="text-gray-700 mb-4">
+                  <div className="bg-gradient-to-br from-meditouch-primary-lightest/70 to-meditouch-secondary-lightest/50 p-8 rounded-2xl border-2 border-meditouch-primary-lighter/30 shadow-lg shadow-meditouch-primary/5">
+                    <h3 className="font-serif text-lg font-medium mb-4 text-meditouch-primary-dark">Our Multidisciplinary Team</h3>
+                    <p className="text-meditouch-gray/90 mb-4 text-sm leading-relaxed">
                       Meditouch brings together a collaborative team of aesthetic specialists:
                     </p>
                     <ul className="space-y-2">
                       <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-meditouch-primary rounded-full mr-2 mt-1.5"></span>
-                        <span>Experienced Dermatologists</span>
+                        <span className="w-2 h-2 bg-gradient-to-r from-meditouch-primary to-meditouch-accent rounded-full mr-2 mt-1.5"></span>
+                        <span className="text-meditouch-gray text-sm">Experienced Dermatologists</span>
                       </li>
                       <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-meditouch-primary rounded-full mr-2 mt-1.5"></span>
-                        <span>Specialized Trichologists</span>
+                        <span className="w-2 h-2 bg-gradient-to-r from-meditouch-primary to-meditouch-accent rounded-full mr-2 mt-1.5"></span>
+                        <span className="text-meditouch-gray text-sm">Specialized Trichologists</span>
                       </li>
                       <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-meditouch-primary rounded-full mr-2 mt-1.5"></span>
-                        <span>Skilled Plastic Surgeons</span>
+                        <span className="w-2 h-2 bg-gradient-to-r from-meditouch-primary to-meditouch-accent rounded-full mr-2 mt-1.5"></span>
+                        <span className="text-meditouch-gray text-sm">Skilled Plastic Surgeons</span>
                       </li>
                       <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-meditouch-primary rounded-full mr-2 mt-1.5"></span>
-                        <span>Qualified Cosmetologists</span>
+                        <span className="w-2 h-2 bg-gradient-to-r from-meditouch-primary to-meditouch-accent rounded-full mr-2 mt-1.5"></span>
+                        <span className="text-meditouch-gray text-sm">Qualified Cosmetologists</span>
                       </li>
                     </ul>
                   </div>
@@ -137,103 +190,88 @@ const Meditouch = () => {
           </div>
         </section>
         
-        <section id="services" className="py-20 bg-gradient-to-br from-meditouch-primary/5 via-white to-meditouch-secondary/5 reveal-section">
+        <section id="services" className="py-28 bg-gradient-to-br from-meditouch-gray-50 via-white to-meditouch-warm-100 reveal-section scroll-mt-24">
           <div className="container mx-auto px-4 md:px-6">
-            <div className="max-w-3xl mx-auto text-center mb-16">
-              <h2 className="text-3xl font-serif font-semibold mb-4 bg-gradient-to-r from-meditouch-primary to-meditouch-secondary bg-clip-text text-transparent">Our Aesthetic Services</h2>
-              <p className="text-gray-600">
-                Meditouch offers a comprehensive range of advanced hair, skin, and body treatments 
-                using the latest technologies and techniques for optimal results.
+            <div className="max-w-4xl mx-auto text-center mb-20">
+              <h2 className="text-4xl font-serif font-semibold mb-6 bg-gradient-to-r from-meditouch-primary-dark to-meditouch-secondary-dark bg-clip-text text-transparent">Our Comprehensive Beauty & Wellness Services</h2>
+              <p className="text-lg text-meditouch-gray leading-relaxed">
+                Advanced treatments for skin, hair and aesthetic care by Meditouch specialists
               </p>
-              <div className="w-20 h-1 bg-gradient-to-r from-meditouch-primary to-meditouch-secondary mx-auto mt-8"></div>
+              <div className="w-24 h-1.5 bg-gradient-to-r from-meditouch-primary via-meditouch-accent to-meditouch-secondary mx-auto mt-10 rounded-full"></div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <ServiceCard title="Hair Transplant" description="Advanced FUE (Follicular Unit Extraction) technique for natural-looking hair restoration with minimal scarring and faster recovery times." icon={<Scissors size={24} />} image="https://images.unsplash.com/photo-1473679408190-0693dd22fe6a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" theme="meditouch" />
-              
-              <ServiceCard title="Hair & Face PRP" description="Platelet-Rich Plasma therapy uses your body's natural growth factors to stimulate hair growth and rejuvenate facial skin for a youthful appearance." icon={<Droplet size={24} />} image="https://images.unsplash.com/photo-1614859135736-99160a1757e2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" theme="meditouch" />
-              
-              <ServiceCard title="HydraFacial" description="Multi-step treatment that cleanses, exfoliates, extracts, and hydrates skin using serums filled with antioxidants, peptides, and hyaluronic acid." icon={<Sparkles size={24} />} image="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" theme="meditouch" />
-              
-              <ServiceCard title="Laser Hair Reduction" description="Permanent reduction of unwanted hair using state-of-the-art laser technology, effective for various skin and hair types with minimal discomfort." icon={<Zap size={24} />} image="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" theme="meditouch" />
-              
-              <ServiceCard title="Skin Tightening (HIFU)" description="High-Intensity Focused Ultrasound technology lifts and tightens skin by targeting deep layers without surgery, stimulating collagen production for natural rejuvenation." icon={<Gauge size={24} />} image="https://images.unsplash.com/photo-1560750588-73207b1ef5b8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" theme="meditouch" />
-              
-              <ServiceCard title="Body Fat & Cellulite Reduction" description="Non-invasive treatments to reduce stubborn fat deposits and improve the appearance of cellulite for a more contoured silhouette." icon={<HandMetal size={24} />} image="https://images.unsplash.com/photo-1624623876661-5e7e74075ccb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" theme="meditouch" />
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mt-6">
-              <div className="bg-gradient-to-br from-white to-meditouch-primary/5 p-5 rounded-lg shadow-sm border border-meditouch-primary/20 lg:col-span-3">
-                <h3 className="font-serif text-xl font-medium mb-4 text-meditouch-primary">Additional Aesthetic Services</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <ul className="space-y-3">
-                      <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-meditouch-primary rounded-full mr-2 mt-1.5"></span>
-                        <span>Chemical Peels</span>
-                      </li>
-                      <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-meditouch-primary rounded-full mr-2 mt-1.5"></span>
-                        <span>Skin PRP with Microneedling</span>
-                      </li>
-                      <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-meditouch-primary rounded-full mr-2 mt-1.5"></span>
-                        <span>Wart/Tag/Mole Removal</span>
-                      </li>
-                    </ul>
-                  </div>
-                  <div>
-                    <ul className="space-y-3">
-                      <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-meditouch-primary rounded-full mr-2 mt-1.5"></span>
-                        <span>Tattoo Removal</span>
-                      </li>
-                      <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-meditouch-primary rounded-full mr-2 mt-1.5"></span>
-                        <span>Semi-permanent Makeup</span>
-                      </li>
-                      <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-meditouch-primary rounded-full mr-2 mt-1.5"></span>
-                        <span>Personalized Skincare Consultations</span>
-                      </li>
-                    </ul>
-                  </div>
+            {/* Services Carousel */}
+            <div className="relative">
+              <div className="overflow-hidden rounded-lg">
+                <div 
+                  className="flex transition-transform duration-500 ease-in-out"
+                  style={{ transform: `translateX(-${currentServiceSlide * 100}%)` }}
+                >
+                  {serviceSlides.map((slide, slideIndex) => (
+                    <div key={slideIndex} className="w-full flex-shrink-0">
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {slide.map((service, serviceIndex) => (
+                          <ServiceCard 
+                            key={`${slideIndex}-${serviceIndex}`}
+                            title={service.title}
+                            description={service.description}
+                            icon={service.icon}
+                            image={service.image}
+                            theme="meditouch"
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
               
-              <div className="bg-gradient-to-br from-meditouch-secondary/10 to-white p-5 rounded-lg shadow-sm border border-meditouch-secondary/20 lg:col-span-2">
-                <h3 className="font-serif text-xl font-medium mb-4 text-meditouch-secondary">Our Technologies</h3>
-                <p className="text-gray-600 text-sm mb-4">
-                  Meditouch utilizes advanced, clinically-proven technologies for optimal results:
+              {/* Navigation Controls */}
+              <div className="flex items-center justify-center mt-8 space-x-4">
+                <button 
+                  onClick={handleServicePrev}
+                  className="p-2 rounded-full border border-meditouch-primary/20 hover:bg-meditouch-primary/10 hover:border-meditouch-primary/40 transition-colors"
+                  aria-label="Previous services"
+                >
+                  <ChevronLeft className="h-5 w-5 text-meditouch-primary" />
+                </button>
+                
+                <div className="flex space-x-2">
+                  {serviceSlides.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentServiceSlide(index)}
+                      className={`w-3 h-3 rounded-full transition-colors ${
+                        index === currentServiceSlide ? 'bg-meditouch-primary' : 'bg-meditouch-primary/20'
+                      }`}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
+                </div>
+                
+                <button 
+                  onClick={handleServiceNext}
+                  className="p-2 rounded-full border border-meditouch-primary/20 hover:bg-meditouch-primary/10 hover:border-meditouch-primary/40 transition-colors"
+                  aria-label="Next services"
+                >
+                  <ChevronRight className="h-5 w-5 text-meditouch-primary" />
+                </button>
+              </div>
+              
+              <div className="text-center mt-4">
+                <p className="text-sm text-gray-500">
+                  {currentServiceSlide + 1} of {serviceSlides.length}
                 </p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-baseline">
-                    <span className="w-2 h-2 bg-meditouch-secondary rounded-full mr-2 mt-1"></span>
-                    <span>High-Intensity Focused Ultrasound (HIFU)</span>
-                  </li>
-                  <li className="flex items-baseline">
-                    <span className="w-2 h-2 bg-meditouch-secondary rounded-full mr-2 mt-1"></span>
-                    <span>State-of-the-art Laser Systems</span>
-                  </li>
-                  <li className="flex items-baseline">
-                    <span className="w-2 h-2 bg-meditouch-secondary rounded-full mr-2 mt-1"></span>
-                    <span>Advanced Microneedling Devices</span>
-                  </li>
-                  <li className="flex items-baseline">
-                    <span className="w-2 h-2 bg-meditouch-secondary rounded-full mr-2 mt-1"></span>
-                    <span>Medical-grade Skincare Products</span>
-                  </li>
-                </ul>
               </div>
             </div>
           </div>
         </section>
         
-        <div id="testimonials" className="reveal-section">
+        <div id="testimonials" className="reveal-section scroll-mt-24">
           <TestimonialsSection type="aesthetic" />
         </div>
         
-        <section id="contact" ref={contactSectionRef} className="py-20 bg-gradient-to-t from-meditouch-primary/5 to-white reveal-section">
+        <section id="contact" ref={contactSectionRef} className="py-20 bg-gradient-to-t from-meditouch-primary/5 to-white reveal-section scroll-mt-24">
           <div className="container mx-auto px-4 md:px-6">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
@@ -241,12 +279,12 @@ const Meditouch = () => {
                 <div className="w-20 h-1 bg-gradient-to-r from-meditouch-primary to-meditouch-secondary mx-auto"></div>
               </div>
               
-              <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-12">
                 <div className="lg:col-span-3">
                   <ContactForm formType="aesthetic" />
                 </div>
                 
-                <div className="lg:col-span-2 space-y-6">
+                <div className="lg:col-span-2">
                   <div className="bg-gradient-to-br from-white to-meditouch-primary/5 p-6 rounded-lg shadow-lg border border-meditouch-primary/20">
                     <h3 className="font-serif text-xl font-medium mb-4 text-meditouch-primary">Clinic Information</h3>
                     
@@ -254,7 +292,7 @@ const Meditouch = () => {
                       <div className="flex items-start">
                         <Building className="h-5 w-5 text-meditouch-primary mt-1 mr-3 flex-shrink-0" />
                         <div>
-                          <p className="font-medium">Mudra Dental & Aesthetic Clinic</p>
+                          <p className="font-medium">{clinicName}</p>
                           <p className="text-gray-600 text-sm">
                             Manas Apartment, 1st Floor, Lakaki Road, Opp. Hotel Ambience, Model Colony, Shivajinagar, Pune 411 016
                           </p>
@@ -278,9 +316,17 @@ const Meditouch = () => {
                       </div>
                     </div>
                   </div>
-                  
-                  <LocationMap />
                 </div>
+              </div>
+              
+              {/* Location Map - Full Width Below Contact Form */}
+              <div className="max-w-4xl mx-auto">
+                <div className="text-center mb-8">
+                  <h3 className="text-2xl font-serif font-semibold mb-2 bg-gradient-to-r from-meditouch-primary to-meditouch-secondary bg-clip-text text-transparent">Visit Our Clinic</h3>
+                  <p className="text-gray-600">Find us easily with our interactive map</p>
+                  <div className="w-16 h-1 bg-gradient-to-r from-meditouch-primary to-meditouch-secondary mx-auto mt-4"></div>
+                </div>
+                <LocationMap />
               </div>
             </div>
           </div>

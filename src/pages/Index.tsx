@@ -7,6 +7,10 @@ import Hero from '@/components/Hero';
 
 const Index = () => {
   const navigate = useNavigate();
+  const brandMode = import.meta.env.VITE_BRAND_MODE;
+  const clinicName = brandMode === 'dental' ? 'Dental Metrix' : 
+                    brandMode === 'meditouch' ? 'Meditouch' : 
+                    'Mudra Clinic';
 
   const scrollToServices = () => {
     const servicesSection = document.getElementById('divisions');
@@ -26,7 +30,7 @@ const Index = () => {
       <main>
         <Hero 
           title="Discover the Perfect Harmony of Dental & Aesthetic Excellence" 
-          subtitle="Mudra Clinic brings together specialized dental and aesthetic services under one roof, providing comprehensive care for your smile and appearance." 
+          subtitle={`${clinicName} brings together specialized dental and aesthetic services under one roof, providing comprehensive care for your smile and appearance.`} 
           cta={{
             text: 'Explore Our Services',
             link: '#divisions'
@@ -44,14 +48,15 @@ const Index = () => {
             <div className="max-w-3xl mx-auto text-center mb-16">
               <h2 className="text-3xl font-serif font-semibold mb-4">Our Specialized Clinics</h2>
               <p className="text-gray-600">
-                Mudra Dental & Aesthetic Clinic houses two premier divisions, each focused on delivering 
+                {clinicName} houses two premier divisions, each focused on delivering 
                 exceptional specialized care with state-of-the-art technology and expert practitioners.
               </p>
               <div className="w-20 h-1 bg-mudra-accent mx-auto mt-8"></div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+            <div className={`grid gap-8 md:gap-12 ${brandMode ? 'grid-cols-1 max-w-2xl mx-auto' : 'grid-cols-1 md:grid-cols-2'}`}>
               {/* Dental Metrix Card */}
+              {brandMode !== 'meditouch' && (
               <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-lg hover:border-mudra-primary/20 h-full">
                 <div className="h-64 overflow-hidden relative">
                   <div className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style={{
@@ -99,8 +104,10 @@ const Index = () => {
                   </Link>
                 </div>
               </div>
+              )}
               
               {/* Meditouch Card */}
+              {brandMode !== 'dental' && (
               <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-lg hover:border-mudra-primary/20 h-full">
                 <div className="h-64 overflow-hidden relative">
                   <div className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style={{
@@ -148,6 +155,7 @@ const Index = () => {
                   </Link>
                 </div>
               </div>
+              )}
             </div>
           </div>
         </section>
@@ -156,7 +164,7 @@ const Index = () => {
           <div className="container mx-auto px-4 md:px-6">
             <div className="max-w-3xl mx-auto">
               <div className="bg-white rounded-lg shadow-sm p-8 md:p-10 border border-gray-100">
-                <h2 className="text-2xl font-serif font-semibold mb-4 text-center">Why Choose Mudra Clinic?</h2>
+                <h2 className="text-2xl font-serif font-semibold mb-4 text-center">Why Choose {clinicName}?</h2>
                 
                 <div className="gradient-divider mb-8"></div>
                 
@@ -184,7 +192,7 @@ const Index = () => {
                 
                 <div className="text-center">
                   <p className="text-gray-600 italic mb-6">
-                    "At Mudra, we believe in the powerful synergy between oral health and aesthetic appearance, 
+                    "At {clinicName}, we believe in the powerful synergy between oral health and aesthetic appearance, 
                     providing comprehensive care that enhances your natural beauty and confidence."
                   </p>
                   
@@ -212,7 +220,7 @@ const Index = () => {
               <div className="w-20 h-1 bg-mudra-accent mx-auto mt-8"></div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className={`grid gap-8 ${brandMode ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-3'}`}>
               <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-lg hover:border-mudra-primary/20 image-card">
                 <div className="h-48 overflow-hidden">
                   <img alt="Pune City" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="/images/11798f90-38f2-40db-b3bd-8e8ac6328850.jpg" />
@@ -230,6 +238,7 @@ const Index = () => {
                 </div>
               </div>
               
+              {brandMode !== 'meditouch' && (
               <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-lg hover:border-mudra-primary/20 image-card">
                 <div className="h-48 overflow-hidden">
                   <img alt="Dental Consultation" src="/images/30de7436-0ae6-4822-9328-75927ae20900.jpg" className="w-full h-full transition-transform duration-500 group-hover:scale-105 object-contain" />
@@ -246,7 +255,9 @@ const Index = () => {
                   </Link>
                 </div>
               </div>
+              )}
               
+              {brandMode !== 'dental' && (
               <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-lg hover:border-mudra-primary/20 image-card">
                 <div className="h-48 overflow-hidden">
                   <img alt="Aesthetic Treatment" src="/images/c0e3ce1f-672d-45e9-9a2b-14f226f52519.jpg" className="w-full h-full transition-transform duration-500 group-hover:scale-105 object-contain" />
@@ -263,6 +274,7 @@ const Index = () => {
                   </Link>
                 </div>
               </div>
+              )}
             </div>
           </div>
         </section>

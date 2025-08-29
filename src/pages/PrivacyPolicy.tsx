@@ -3,6 +3,15 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 const PrivacyPolicy = () => {
+  const brandMode = import.meta.env.VITE_BRAND_MODE;
+  
+  const clinicName = brandMode === 'dental' ? 'Dental Metrix Clinic' :
+                    brandMode === 'meditouch' ? 'Meditouch Clinic' :
+                    'Mudra Dental & Aesthetic Clinic';
+  
+  const clinicPhone = brandMode === 'dental' ? '91529 51573' :
+                      brandMode === 'meditouch' ? '91129 57369' :
+                      '91529 51573 / 91129 57369';
   return (
     <div className="min-h-screen">
       <Navbar />
@@ -14,7 +23,7 @@ const PrivacyPolicy = () => {
             
             <div className="prose prose-gray max-w-none">
               <p className="mb-4">
-                At Mudra Dental & Aesthetic Clinic, we are committed to protecting your privacy. This Privacy Policy 
+                At {clinicName}, we are committed to protecting your privacy. This Privacy Policy 
                 explains how we collect, use, disclose, and safeguard your information when you visit our website or 
                 become a patient at our clinic.
               </p>
@@ -77,14 +86,10 @@ const PrivacyPolicy = () => {
               </p>
               
               <div className="p-4 bg-gray-50 rounded-md mb-4">
-                <p>Mudra Dental & Aesthetic Clinic</p>
-                <p>Email: info@mudraclinicpune.com</p>
-                <p>Phone: 91529 51573 / 91129 57369</p>
+                <p>{clinicName}</p>
+                <p>Phone: {clinicPhone}</p>
               </div>
               
-              <p className="mt-8 text-sm text-gray-500">
-                Last updated: April 5, 2025
-              </p>
             </div>
           </div>
         </div>

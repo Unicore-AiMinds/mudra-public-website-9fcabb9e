@@ -4,6 +4,11 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 const Sitemap = () => {
+  const brandMode = import.meta.env.VITE_BRAND_MODE;
+  
+  const clinicName = brandMode === 'dental' ? 'Dental Metrix Clinic' :
+                    brandMode === 'meditouch' ? 'Meditouch Clinic' :
+                    'Mudra Dental & Aesthetic Clinic';
   const pages = [
     {
       title: 'Main Pages',
@@ -48,7 +53,7 @@ const Sitemap = () => {
             <div className="text-center mb-12">
               <h1 className="text-4xl font-serif font-bold mb-4">Sitemap</h1>
               <p className="text-gray-600">
-                Find all pages and sections of the Mudra Dental & Aesthetic Clinic website.
+                Find all pages and sections of the {clinicName} website.
               </p>
               <div className="w-20 h-1 bg-mudra-accent mx-auto mt-6"></div>
             </div>

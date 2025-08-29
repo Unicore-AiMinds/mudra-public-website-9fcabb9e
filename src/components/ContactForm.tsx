@@ -47,25 +47,28 @@ const ContactForm = ({ formType }: ContactFormProps) => {
   const services = formType === 'dental' 
     ? [
         'Dental Implants',
-        'Smile Designing',
+        'RCT & Crown',
+        'Wisdom Tooth Extraction',
+        'Aligners',
         'Teeth Whitening',
-        'Dental Aligners',
+        'Scaling & Polishing',
+        'Pediatric Dentistry',
+        'Smile Redesign',
         'Full Mouth Rehabilitation',
-        'Artificial Eyes, Ears & Nose',
-        'General Checkup'
+        'Maxillofacial Prosthesis',
+        'General Inquiry'
       ]
     : [
-        'Hair Transplant',
-        'Hair & Face PRP',
-        'HydraFacial',
-        'Laser Hair Reduction',
-        'Skin Tightening (HIFU)',
-        'Body Fat & Cellulite Reduction',
-        'Chemical Peels',
-        'Skin PRP w/ Microneedling',
-        'Wart/Tag/Mole Removal',
-        'Tattoo Removal',
-        'Semi-permanent Makeup'
+        'HydraFacial Skin Rejuvenation',
+        'Removal of Warts, Skin Tags & Moles',
+        'Chemical Peel',
+        'Body Peel',
+        'Tattoo Removal (Laser)',
+        'Hair Transplants',
+        'Hifu',
+        'Skin PRP with Microneedling',
+        'Semi Permanent Makeup',
+        'General Inquiry'
       ];
 
   return (

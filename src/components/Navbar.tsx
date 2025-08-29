@@ -7,6 +7,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const brandMode = import.meta.env.VITE_BRAND_MODE;
 
   // Handle scroll events to change navbar appearance
   useEffect(() => {
@@ -36,31 +37,100 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16 md:h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <div className="h-10 w-36 bg-gray-100 rounded flex items-center justify-center">
-              <span className="font-serif text-xl font-medium text-mudra-primary">Mudra</span>
-            </div>
+            {brandMode === 'meditouch' ? (
+              <img 
+                src="/images/meditouch-logo.png" 
+                alt="Meditouch Logo" 
+                className="h-20 w-auto"
+              />
+            ) : brandMode === 'dental' ? (
+              <img 
+                src="/images/dental-metrix-logo.png" 
+                alt="Dental Metrix Logo" 
+                className="h-20 w-auto"
+              />
+            ) : (
+              <span className="font-serif text-xl font-medium text-mudra-primary">
+                Mudra
+              </span>
+            )}
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1">
             <Link to="/" className={location.pathname === '/' ? activeLinkClass : linkClass}>
-              Home
+              {brandMode === 'dental' ? 'Dental Metrix' : brandMode === 'meditouch' ? 'Meditouch' : 'Home'}
             </Link>
-            <Link to="/dental-metrix" className={location.pathname === '/dental-metrix' ? activeLinkClass : linkClass}>
-              Dental Metrix
-            </Link>
-            <Link to="/meditouch" className={location.pathname === '/meditouch' ? activeLinkClass : linkClass}>
-              Meditouch
-            </Link>
+            <button onClick={() => {
+              const targetPage = brandMode === 'dental' ? '/dental-metrix' : 
+                                brandMode === 'meditouch' ? '/meditouch' : '/';
+              if (location.pathname !== targetPage) {
+                window.location.href = `${targetPage}#about`;
+              } else {
+                const element = document.getElementById('about');
+                if (element) {
+                  const yOffset = -100;
+                  const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                  window.scrollTo({ top: y, behavior: 'smooth' });
+                }
+              }
+            }} className={linkClass}>
+              About
+            </button>
+            <button onClick={() => {
+              const targetPage = brandMode === 'dental' ? '/dental-metrix' : 
+                                brandMode === 'meditouch' ? '/meditouch' : '/';
+              if (location.pathname !== targetPage) {
+                window.location.href = `${targetPage}#services`;
+              } else {
+                const element = document.getElementById('services');
+                if (element) {
+                  const yOffset = -100;
+                  const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                  window.scrollTo({ top: y, behavior: 'smooth' });
+                }
+              }
+            }} className={linkClass}>
+              Services
+            </button>
+            <button onClick={() => {
+              const targetPage = brandMode === 'dental' ? '/dental-metrix' : 
+                                brandMode === 'meditouch' ? '/meditouch' : '/';
+              if (location.pathname !== targetPage) {
+                window.location.href = `${targetPage}#testimonials`;
+              } else {
+                const element = document.getElementById('testimonials');
+                if (element) {
+                  const yOffset = -100;
+                  const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                  window.scrollTo({ top: y, behavior: 'smooth' });
+                }
+              }
+            }} className={linkClass}>
+              Testimonials
+            </button>
             <Link to="/explore-pune" className={location.pathname === '/explore-pune' ? activeLinkClass : linkClass}>
               Explore Pune
             </Link>
-            <Link 
-              to="/contact" 
+            <button 
+              onClick={() => {
+                const targetPage = brandMode === 'dental' ? '/dental-metrix' : 
+                                  brandMode === 'meditouch' ? '/meditouch' : '/';
+                if (location.pathname !== targetPage) {
+                  window.location.href = `${targetPage}#contact`;
+                } else {
+                  const element = document.getElementById('contact');
+                  if (element) {
+                    const yOffset = -100;
+                    const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                  }
+                }
+              }}
               className="ml-2 py-2 px-4 bg-mudra-primary text-white rounded-md hover:bg-mudra-secondary transition-colors"
             >
               Contact Us
-            </Link>
+            </button>
           </nav>
 
           {/* Mobile menu button */}
@@ -79,23 +149,73 @@ const Navbar = () => {
           <div className="container mx-auto px-4 py-4">
             <nav className="flex flex-col space-y-3">
               <Link to="/" className="py-2 px-4 rounded-md hover:bg-gray-100 text-mudra-dark">
-                Home
+                {brandMode === 'dental' ? 'Dental Metrix' : brandMode === 'meditouch' ? 'Meditouch' : 'Home'}
               </Link>
-              <Link to="/dental-metrix" className="py-2 px-4 rounded-md hover:bg-gray-100 text-mudra-dark">
-                Dental Metrix
-              </Link>
-              <Link to="/meditouch" className="py-2 px-4 rounded-md hover:bg-gray-100 text-mudra-dark">
-                Meditouch
-              </Link>
+              <button onClick={() => {
+                const targetPage = brandMode === 'dental' ? '/dental-metrix' : 
+                                  brandMode === 'meditouch' ? '/meditouch' : '/';
+                if (location.pathname !== targetPage) {
+                  window.location.href = `${targetPage}#about`;
+                } else {
+                  document.getElementById('about')?.scrollIntoView({behavior: 'smooth'});
+                }
+              }} className="py-2 px-4 rounded-md hover:bg-gray-100 text-mudra-dark text-left">
+                About
+              </button>
+              <button onClick={() => {
+                const targetPage = brandMode === 'dental' ? '/dental-metrix' : 
+                                  brandMode === 'meditouch' ? '/meditouch' : '/';
+                if (location.pathname !== targetPage) {
+                  window.location.href = `${targetPage}#services`;
+                } else {
+                  const element = document.getElementById('services');
+                  if (element) {
+                    const yOffset = -100;
+                    const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                  }
+                }
+              }} className="py-2 px-4 rounded-md hover:bg-gray-100 text-mudra-dark text-left">
+                Services
+              </button>
+              <button onClick={() => {
+                const targetPage = brandMode === 'dental' ? '/dental-metrix' : 
+                                  brandMode === 'meditouch' ? '/meditouch' : '/';
+                if (location.pathname !== targetPage) {
+                  window.location.href = `${targetPage}#testimonials`;
+                } else {
+                  const element = document.getElementById('testimonials');
+                  if (element) {
+                    const yOffset = -100;
+                    const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                  }
+                }
+              }} className="py-2 px-4 rounded-md hover:bg-gray-100 text-mudra-dark text-left">
+                Testimonials
+              </button>
               <Link to="/explore-pune" className="py-2 px-4 rounded-md hover:bg-gray-100 text-mudra-dark">
                 Explore Pune
               </Link>
-              <Link 
-                to="/contact" 
-                className="py-2 px-4 bg-mudra-primary text-white rounded-md hover:bg-mudra-secondary transition-colors"
+              <button 
+                onClick={() => {
+                  const targetPage = brandMode === 'dental' ? '/dental-metrix' : 
+                                    brandMode === 'meditouch' ? '/meditouch' : '/';
+                  if (location.pathname !== targetPage) {
+                    window.location.href = `${targetPage}#contact`;
+                  } else {
+                    const element = document.getElementById('contact');
+                    if (element) {
+                      const yOffset = -100;
+                      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                      window.scrollTo({ top: y, behavior: 'smooth' });
+                    }
+                  }
+                }}
+                className="py-2 px-4 bg-mudra-primary text-white rounded-md hover:bg-mudra-secondary transition-colors text-left"
               >
                 Contact Us
-              </Link>
+              </button>
             </nav>
           </div>
         </div>

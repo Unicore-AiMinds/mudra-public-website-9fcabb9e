@@ -3,6 +3,15 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 const Terms = () => {
+  const brandMode = import.meta.env.VITE_BRAND_MODE;
+  
+  const clinicName = brandMode === 'dental' ? 'Dental Metrix Clinic' :
+                    brandMode === 'meditouch' ? 'Meditouch Clinic' :
+                    'Mudra Dental & Aesthetic Clinic';
+  
+  const clinicPhone = brandMode === 'dental' ? '91529 51573' :
+                      brandMode === 'meditouch' ? '91129 57369' :
+                      '91529 51573 / 91129 57369';
   return (
     <div className="min-h-screen">
       <Navbar />
@@ -14,7 +23,7 @@ const Terms = () => {
             
             <div className="prose prose-gray max-w-none">
               <p className="mb-4">
-                These Terms of Service govern your use of the website operated by Mudra Dental & Aesthetic Clinic and 
+                These Terms of Service govern your use of the website operated by {clinicName} and 
                 the services provided by our clinic. By accessing our website or utilizing our services, you acknowledge 
                 and agree to these terms.
               </p>
@@ -61,13 +70,6 @@ const Terms = () => {
                 guarantee that you will get the same or similar results.
               </p>
               
-              <h2 className="text-xl font-serif font-semibold mt-8 mb-4">Appointments and Cancellations</h2>
-              
-              <p className="mb-4">
-                By scheduling an appointment with Mudra Dental & Aesthetic Clinic, you agree to our appointment and 
-                cancellation policies. We require at least 24 hours' notice for cancellations to avoid a cancellation fee.
-              </p>
-              
               <h2 className="text-xl font-serif font-semibold mt-8 mb-4">Limitation of Liability</h2>
               
               <p className="mb-4">
@@ -83,14 +85,10 @@ const Terms = () => {
               </p>
               
               <div className="p-4 bg-gray-50 rounded-md mb-4">
-                <p>Mudra Dental & Aesthetic Clinic</p>
-                <p>Email: info@mudraclinicpune.com</p>
-                <p>Phone: 91529 51573 / 91129 57369</p>
+                <p>{clinicName}</p>
+                <p>Phone: {clinicPhone}</p>
               </div>
               
-              <p className="mt-8 text-sm text-gray-500">
-                Last updated: April 5, 2025
-              </p>
             </div>
           </div>
         </div>

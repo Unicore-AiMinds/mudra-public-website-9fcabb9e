@@ -9,6 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 const Contact = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const brandMode = import.meta.env.VITE_BRAND_MODE;
   
   const [formData, setFormData] = useState({
     name: '',
@@ -80,20 +81,18 @@ const Contact = () => {
                       <Phone className="h-5 w-5 text-mudra-primary mt-1 mr-4 flex-shrink-0" />
                       <div>
                         <p className="font-medium">Phone</p>
-                        <p className="text-gray-600">Dental Metrix: <a href="tel:+919152951573" className="text-mudra-primary">91529 51573</a></p>
-                        <p className="text-gray-600">Meditouch: <a href="tel:+919112957369" className="text-mudra-primary">91129 57369</a></p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start">
-                      <Mail className="h-5 w-5 text-mudra-primary mt-1 mr-4 flex-shrink-0" />
-                      <div>
-                        <p className="font-medium">Email</p>
-                        <p className="text-gray-600">
-                          <a href="mailto:info@mudraclinicpune.com" className="text-mudra-primary">
-                            info@mudraclinicpune.com
-                          </a>
-                        </p>
+                        {brandMode !== 'meditouch' && (
+                          <p className="text-gray-600">Dental Metrix: <a href="tel:+919152951573" className="text-mudra-primary">91529 51573</a></p>
+                        )}
+                        {brandMode !== 'dental' && (
+                          <p className="text-gray-600">Meditouch: <a href="tel:+919112957369" className="text-mudra-primary">91129 57369</a></p>
+                        )}
+                        {!brandMode && (
+                          <>
+                            <p className="text-gray-600">Dental Metrix: <a href="tel:+919152951573" className="text-mudra-primary">91529 51573</a></p>
+                            <p className="text-gray-600">Meditouch: <a href="tel:+919112957369" className="text-mudra-primary">91129 57369</a></p>
+                          </>
+                        )}
                       </div>
                     </div>
                     
@@ -177,8 +176,14 @@ const Contact = () => {
                       required
                     >
                       <option value="">Select a division</option>
-                      <option value="dental">Dental Metrix</option>
-                      <option value="aesthetic">Meditouch</option>
+                      {brandMode !== 'meditouch' && <option value="dental">Dental Metrix</option>}
+                      {brandMode !== 'dental' && <option value="aesthetic">Meditouch</option>}
+                      {!brandMode && (
+                        <>
+                          <option value="dental">Dental Metrix</option>
+                          <option value="aesthetic">Meditouch</option>
+                        </>
+                      )}
                       <option value="general">General Inquiry</option>
                     </select>
                   </div>
@@ -209,7 +214,8 @@ const Contact = () => {
               </div>
             </div>
             
-            <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className={`mt-12 grid gap-6 ${brandMode ? 'grid-cols-1 max-w-md mx-auto' : 'grid-cols-1 md:grid-cols-2'}`}>
+              {brandMode !== 'meditouch' && (
               <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
                 <div className="flex items-center mb-4">
                   <MapPin className="h-5 w-5 text-mudra-primary mr-2" />
@@ -225,7 +231,9 @@ const Contact = () => {
                   Contact Dental Metrix
                 </a>
               </div>
+              )}
               
+              {brandMode !== 'dental' && (
               <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
                 <div className="flex items-center mb-4">
                   <MapPin className="h-5 w-5 text-mudra-secondary mr-2" />
@@ -241,6 +249,7 @@ const Contact = () => {
                   Contact Meditouch
                 </a>
               </div>
+              )}
             </div>
           </div>
         </div>

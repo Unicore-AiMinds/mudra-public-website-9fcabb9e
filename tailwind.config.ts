@@ -65,26 +65,94 @@ export default {
 				},
 				mudra: {
 					primary: '#0a7490', // deep teal blue
+					'primary-light': '#0f8db8', // lighter teal
+					'primary-lighter': '#3ba5c7', // even lighter teal
+					'primary-lightest': '#b3e5f0', // very light teal
+					'primary-dark': '#085b6f', // darker teal
+					'primary-darker': '#064954', // very dark teal
 					secondary: '#134e4a', // darker teal
+					'secondary-light': '#1a625d', // lighter secondary
+					'secondary-lighter': '#4f9491', // much lighter secondary
+					'secondary-lightest': '#d1f2f0', // very light secondary
 					accent: '#d4a21b', // gold accent
+					'accent-light': '#e6b84a', // lighter gold
+					'accent-lighter': '#f5d682', // much lighter gold
+					'accent-lightest': '#fdf4e1', // very light gold
+					'accent-dark': '#b8911a', // darker gold
 					light: '#f1f5f9', // light background
+					'light-blue': '#f0f9ff', // very light blue
+					'light-teal': '#f0fdfa', // very light teal
 					dark: '#1e293b', // dark text
+					'gray-50': '#f8fafc',
+					'gray-100': '#f1f5f9',
+					'gray-200': '#e2e8f0',
+					'gray-300': '#cbd5e1',
 				},
 				meditouch: {
 					primary: '#6B2C91', // deep purple from logo
+					'primary-light': '#8B44AC', // lighter purple
+					'primary-lighter': '#B366C7', // much lighter purple
+					'primary-lightest': '#E8D5F2', // very light purple
+					'primary-dark': '#4A1E65', // darker purple
+					'primary-darker': '#331545', // very dark purple
 					secondary: '#E67E22', // vibrant orange from logo
+					'secondary-light': '#F39C12', // lighter orange
+					'secondary-lighter': '#F8B644', // much lighter orange
+					'secondary-lightest': '#FEF3E2', // very light orange
+					'secondary-dark': '#C7631B', // darker orange
 					accent: '#8B44AC', // lighter purple for accents
+					'accent-light': '#B366C7', // lighter accent
+					'accent-lighter': '#D8A2E0', // much lighter accent
+					'accent-lightest': '#F3E8F7', // very light accent
 					gradient: {
 						from: '#6B2C91', // purple start
 						via: '#8B44AC', // mid purple
 						to: '#E67E22', // orange end
 					},
 					gray: '#6C757D', // neutral gray from tagline
+					'gray-50': '#faf9fb',
+					'gray-100': '#f4f3f6',
+					'gray-200': '#e9e7ed',
+					'gray-300': '#d4d1da',
+					'warm-50': '#fefcf9',
+					'warm-100': '#fdf8f1',
 				}
 			},
 			fontFamily: {
-				sans: ['Inter', 'sans-serif'],
-				serif: ['Playfair Display', 'serif'],
+				sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+				serif: ['Playfair Display', 'Georgia', 'Times New Roman', 'serif'],
+				'display': ['Playfair Display', 'Georgia', 'serif'], // For large headings
+				'body': ['Inter', 'system-ui', 'sans-serif'], // For body text
+			},
+			fontSize: {
+				'xs': ['0.75rem', { lineHeight: '1.5' }],
+				'sm': ['0.875rem', { lineHeight: '1.6' }],
+				'base': ['1rem', { lineHeight: '1.7' }],
+				'lg': ['1.125rem', { lineHeight: '1.7' }],
+				'xl': ['1.25rem', { lineHeight: '1.6' }],
+				'2xl': ['1.5rem', { lineHeight: '1.5' }],
+				'3xl': ['1.875rem', { lineHeight: '1.4' }],
+				'4xl': ['2.25rem', { lineHeight: '1.3' }],
+				'5xl': ['3rem', { lineHeight: '1.2' }],
+				'6xl': ['3.75rem', { lineHeight: '1.1' }],
+				'7xl': ['4.5rem', { lineHeight: '1' }],
+				'8xl': ['6rem', { lineHeight: '1' }],
+			},
+			fontWeight: {
+				'light': '300',
+				'normal': '400',
+				'medium': '500',
+				'semibold': '600',
+				'bold': '700',
+				'extrabold': '800',
+			},
+			letterSpacing: {
+				'tighter': '-0.05em',
+				'tight': '-0.025em',
+				'normal': '0em',
+				'wide': '0.025em',
+				'wider': '0.05em',
+				'widest': '0.1em',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

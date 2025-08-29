@@ -1,6 +1,6 @@
 
-import { useState } from 'react';
-import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight, Quote, Star } from 'lucide-react';
 
 interface Testimonial {
   id: string;
@@ -8,6 +8,7 @@ interface Testimonial {
   text: string;
   image?: string;
   location?: string;
+  rating?: number;
 }
 
 interface TestimonialsSectionProps {
@@ -19,49 +20,66 @@ const TestimonialsSection = ({ type }: TestimonialsSectionProps) => {
     ? [
         {
           id: '1',
-          name: 'Aditya Sharma',
-          location: 'Pune',
-          text: 'Dr. Bhargavi at Dental Metrix transformed my smile with her expert implant work. The entire staff was professional and caring throughout my treatment. I can now smile with confidence!',
-          image: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+          name: 'Root Canal & Implant Patient',
+          text: 'I can\'t say enough good things about Dr. Bhargavi Kolhapure. From the painless root canal to expertly placed implants, she made each procedure comfortable and stress-free. Her genuine warmth, meticulous care, and clear communication truly set her apart.',
+          rating: 5,
         },
         {
           id: '2',
-          name: 'Priya Desai',
-          location: 'Mumbai',
-          text: 'I had severe dental anxiety, but the team at Dental Metrix made me feel so comfortable. My smile makeover exceeded all expectations, and the pain-free experience was remarkable.',
-          image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+          name: 'Root Canal Patient',
+          text: 'I recently got a root canal treatment done at Dental Matrix by Dr. Bhargavi Kolhapure and had a great experience. The clinic is very well-maintained, with excellent hygiene standards and they have all the equipment with the latest technology and filled with \'good vibes\'.',
+          rating: 5,
         },
         {
           id: '3',
-          name: 'Raj Malhotra',
-          location: 'Delhi',
-          text: 'I traveled from Delhi specifically for treatment at Dental Metrix. The full mouth rehabilitation has restored both function and aesthetics. Worth every penny and the travel!',
+          name: 'Emergency Dental Care Patient',
+          text: 'Dr. Bhargavi was super helpful to take an emergency for a broken tooth and to find a solution in no time. Highly meticulous and great quality of work. Very reassuring by giving clear and detailed explanation. Her office staff and reception were gracious and cooperative.',
+          rating: 5,
+        },
+        {
+          id: '4',
+          name: 'Family Patient',
+          text: 'My son Swaraj is taking Root canal treatment in this clinic. Mam is so much caring and giving nice treatment to my son. I strongly recommend this clinic for child as well as adults. My wife Priya already took treatment from Mam four years ago, till date she don\'t have any issue. Thank you!',
+          rating: 5,
         },
       ]
     : [
         {
           id: '1',
-          name: 'Neha Kapoor',
-          location: 'Pune',
-          text: 'The HydraFacial at Meditouch gave my skin an incredible glow. The dermatologist carefully assessed my skin concerns and suggested the perfect treatment. Impressive results!',
-          image: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+          name: 'Skin Treatment Patient',
+          text: 'Best skin treatment around sb road. I\'m very happy with the treatment and will surely complete all the sessions. Must visit best staff, doctors, ambience and value for time!',
+          rating: 5,
         },
         {
           id: '2',
-          name: 'Vikram Mehta',
-          location: 'Bengaluru',
-          text: 'I underwent hair transplant at Meditouch, and the results surpassed my expectations. The trichologist was knowledgeable and honest about what I could achieve. Very satisfied!',
-          image: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+          name: 'Skin & Hair Treatment Patient',
+          text: 'Very well trained professional staff and well equipped clinic. Must visit for best skin n hair treatment 😊',
+          rating: 5,
         },
         {
           id: '3',
-          name: 'Anjali Reddy',
-          location: 'Hyderabad',
-          text: 'The HIFU skin tightening treatment at Meditouch has taken years off my appearance. The detailed consultation and personalized approach made all the difference.',
+          name: 'Skin Treatment Patient',
+          text: 'I\'m very happy and satisfied with the results on my skin. It\'s a must visit clinic and doctors there are experienced and gave me the best possible treatment. I will surely visit again.',
+          rating: 5,
+        },
+        {
+          id: '4',
+          name: 'Aesthetic Treatment Patient',
+          text: 'The doctors were very polite and helpful. The clinic is very well maintained. I would like to visit again ☺️',
+          rating: 5,
         },
       ];
       
   const [currentIndex, setCurrentIndex] = useState(0);
+  
+  // Auto-rotate testimonials every 8 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
+    }, 8000); // 8 second interval
+
+    return () => clearInterval(interval);
+  }, [testimonials.length]);
   
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
@@ -86,29 +104,18 @@ const TestimonialsSection = ({ type }: TestimonialsSectionProps) => {
             <Quote className="absolute text-mudra-primary/10 h-24 w-24 -top-4 -left-4" />
             
             <div className="relative z-10">
-              <div className="flex flex-col md:flex-row items-center mb-6">
-                {currentTestimonial.image ? (
-                  <div className="w-16 h-16 rounded-full overflow-hidden mb-4 md:mb-0 md:mr-6 flex-shrink-0">
-                    <img 
-                      src={currentTestimonial.image} 
-                      alt={currentTestimonial.name} 
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ) : (
-                  <div className="w-16 h-16 rounded-full bg-mudra-primary/10 flex items-center justify-center mb-4 md:mb-0 md:mr-6 flex-shrink-0">
-                    <span className="text-mudra-primary font-serif text-xl">
-                      {currentTestimonial.name.charAt(0)}
-                    </span>
+              <div className="text-center mb-6">
+                <h3 className="font-serif text-lg font-medium">{currentTestimonial.name}</h3>
+                {currentTestimonial.location && (
+                  <p className="text-gray-500 text-sm">{currentTestimonial.location}</p>
+                )}
+                {currentTestimonial.rating && (
+                  <div className="flex justify-center mt-2">
+                    {[...Array(currentTestimonial.rating)].map((_, i) => (
+                      <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    ))}
                   </div>
                 )}
-                
-                <div className="text-center md:text-left">
-                  <h3 className="font-serif text-lg font-medium">{currentTestimonial.name}</h3>
-                  {currentTestimonial.location && (
-                    <p className="text-gray-500 text-sm">{currentTestimonial.location}</p>
-                  )}
-                </div>
               </div>
               
               <p className="text-gray-700 italic mb-8">{currentTestimonial.text}</p>
