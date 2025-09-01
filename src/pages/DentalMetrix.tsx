@@ -159,7 +159,7 @@ const DentalMetrix = () => {
         />
         
         
-        <section id="about" className="py-24 bg-gradient-to-br from-mudra-gray-50 via-white to-mudra-primary-lightest/30 reveal-section scroll-mt-24">
+        <section id="about" className="pt-40 pb-24 md:py-24 bg-gradient-to-br from-mudra-gray-50 via-white to-mudra-primary-lightest/30 reveal-section scroll-mt-24">
           <div className="container mx-auto px-4 md:px-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
               <div>

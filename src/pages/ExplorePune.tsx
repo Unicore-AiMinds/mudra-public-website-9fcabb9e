@@ -259,7 +259,7 @@ const ExplorePune = () => {
       <Navbar />
       
       <main className="pt-16 md:pt-20 bg-gray-50">
-        <div className="relative min-h-[95vh] md:min-h-[90vh] overflow-hidden flex items-center">
+        <div className="relative min-h-[80vh] md:min-h-[90vh] overflow-hidden flex items-center">
           <div 
             className="absolute inset-0 bg-cover bg-center"
             style={{ 

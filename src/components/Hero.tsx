@@ -30,7 +30,7 @@ const Hero = ({
   theme = 'mudra'
 }: HeroProps) => {
   return (
-    <div className={`relative min-h-[95vh] md:min-h-[90vh] flex items-center overflow-hidden ${
+    <div className={`relative min-h-[80vh] md:min-h-[100vh] flex items-center overflow-hidden ${
       theme === 'meditouch' 
         ? 'bg-gradient-to-br from-meditouch-primary via-meditouch-accent to-meditouch-secondary' 
         : 'bg-gradient-to-br from-mudra-primary via-mudra-secondary to-mudra-primary'
@@ -75,7 +75,7 @@ const Hero = ({
       }`}></div>
       
       {/* Content */}
-      <div className="container mx-auto px-4 md:px-6 py-20 relative z-10 mt-12 md:mt-0">
+      <div className="container mx-auto px-4 md:px-6 py-16 pb-24 md:py-32 md:pb-40 relative z-10 mt-12 md:mt-0">
         <div className="max-w-5xl mx-auto text-center">
           {/* Refined typography with better proportions */}
           <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-serif font-bold text-white mb-6 leading-tight animate-fade-in tracking-tight">
