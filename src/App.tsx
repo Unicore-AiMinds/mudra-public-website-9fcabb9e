@@ -20,7 +20,7 @@ const queryClient = new QueryClient();
 const brandMode = import.meta.env.VITE_BRAND_MODE;
 
 const App = () => {
-  // Update favicon based on brand mode
+  // Update favicon, title, and meta tags based on brand mode
   useEffect(() => {
     const favicon = document.getElementById('favicon') as HTMLLinkElement;
     if (favicon) {
@@ -30,7 +30,32 @@ const App = () => {
         favicon.href = '/dental-metrix-favicon.png';
       }
     }
+
+    // Update document title and meta tags based on brand mode
+    if (brandMode === 'dental') {
+      document.title = 'Dental Metrix - Advanced Dental Care in Pune';
+      updateMetaTag('description', 'Dental Metrix - Advanced dental and implant solutions in Pune, India. Specialized in precision dentistry and smile restoration.');
+      updateMetaTag('og:title', 'Dental Metrix - Advanced Dental Care in Pune');
+      updateMetaTag('og:description', 'Dental Metrix - Advanced dental and implant solutions in Pune, India. Specialized in precision dentistry and smile restoration.');
+    } else if (brandMode === 'meditouch') {
+      document.title = 'Meditouch - Aesthetic & Wellness Clinic in Pune';
+      updateMetaTag('description', 'Meditouch - Premium aesthetic and wellness treatments in Pune, India. Specialized in beauty enhancement and wellness solutions.');
+      updateMetaTag('og:title', 'Meditouch - Aesthetic & Wellness Clinic in Pune');
+      updateMetaTag('og:description', 'Meditouch - Premium aesthetic and wellness treatments in Pune, India. Specialized in beauty enhancement and wellness solutions.');
+    } else {
+      document.title = 'Mudra Dental & Aesthetic Clinic';
+      updateMetaTag('description', 'Mudra Dental & Aesthetic Clinic - Specialized dental and aesthetic services in Pune, India');
+      updateMetaTag('og:title', 'Mudra Dental & Aesthetic Clinic');
+      updateMetaTag('og:description', 'Mudra Dental & Aesthetic Clinic - Specialized dental and aesthetic services in Pune, India');
+    }
   }, []);
+
+  const updateMetaTag = (name: string, content: string) => {
+    let metaTag = document.querySelector(`meta[name="${name}"]`) || document.querySelector(`meta[property="${name}"]`);
+    if (metaTag) {
+      metaTag.setAttribute('content', content);
+    }
+  };
 
   return (
   <QueryClientProvider client={queryClient}>
