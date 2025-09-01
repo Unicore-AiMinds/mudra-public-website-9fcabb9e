@@ -1,0 +1,11 @@
+[build]
+  command = "npm run build:dental"
+  publish = "dist"
+
+[build.environment]
+  VITE_BRAND_MODE = "dental"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

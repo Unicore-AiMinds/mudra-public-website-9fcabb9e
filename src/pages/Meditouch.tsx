@@ -4,7 +4,6 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
 import ServiceCard from '@/components/ServiceCard';
-import SectionNav from '@/components/SectionNav';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import ContactForm from '@/components/ContactForm';
 import LocationMap from '@/components/LocationMap';
@@ -15,26 +14,36 @@ const Meditouch = () => {
                     'Mudra Dental & Aesthetic Clinic';
   const contactSectionRef = useRef<HTMLElement>(null);
   const [currentServiceSlide, setCurrentServiceSlide] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
   
-  const serviceSlides = [
-    // Slide 1: 3 services
-    [
-      { title: "HydraFacial Skin Rejuvenation", description: "A non-invasive facial treatment that deeply cleanses, exfoliates, extracts impurities from pores, and intensely hydrates the skin.", icon: <Sparkles size={24} />, image: "/images/hydrafacial-skin-rejuvenation.jpg" },
-      { title: "Removal of Warts, Skin Tags & Moles", description: "Safe and effective removal of benign skin growths using advanced techniques for smooth, clear skin.", icon: <Eraser size={24} />, image: "/images/warts-skin-tags-moles-removal.jpg" },
-      { title: "Chemical Peel", description: "A cosmetic procedure that uses a chemical solution to improve the appearance of the skin and treat acne, pimples and brightening.", icon: <Droplet size={24} />, image: "/images/chemical-peel.jpg" }
-    ],
-    // Slide 2: 3 services
-    [
-      { title: "Body Peel", description: "A chemical exfoliation treatment that removes dead skin cells from the body, improving skin texture and tone.", icon: <HandMetal size={24} />, image: "/images/body-peel.webp" },
-      { title: "Tattoo Removal (Laser)", description: "Uses a laser to break down and remove tattoo ink from the skin, offering a clean slate for those with unwanted tattoos.", icon: <Zap size={24} />, image: "/images/tattoo-removal-laser.jpg" },
-      { title: "Hair Transplants", description: "A surgical procedure that moves hair to treat hair loss, also known as hair restoration or hair replacement.", icon: <Scissors size={24} />, image: "/images/hair-transplants.jpg" }
-    ],
-    // Slide 3: 3 services
-    [
-      { title: "Hifu", description: "Skin lifting procedure that tightens skin, removes excess skin, or repositions it for a more youthful appearance.", icon: <Gauge size={24} />, image: "/images/hifu.jpg" },
-      { title: "Skin PRP with Microneedling", description: "Combines microneedling with platelet-rich plasma to rejuvenate the skin, reducing wrinkles and acne scars.", icon: <Building size={24} />, image: "/images/skin-prp-microneedling.webp" },
-      { title: "Semi Permanent Makeup", description: "Also known as micropigmentation, enhances facial features through the application of pigments by specialists.", icon: <Paintbrush size={24} />, image: "/images/semi-permanent-makeup.jpg" }
-    ]
+  // All services as a flat array
+  const allServices = [
+    { title: "HydraFacial Skin Rejuvenation", description: "A non-invasive facial treatment that deeply cleanses, exfoliates, extracts impurities from pores, and intensely hydrates the skin.", icon: <Sparkles size={24} />, image: "/images/hydrafacial-skin-rejuvenation.jpg" },
+    { title: "Removal of Warts, Skin Tags & Moles", description: "Safe and effective removal of benign skin growths using advanced techniques for smooth, clear skin.", icon: <Eraser size={24} />, image: "/images/warts-skin-tags-moles-removal.jpg" },
+    { title: "Chemical Peel", description: "A cosmetic procedure that uses a chemical solution to improve the appearance of the skin and treat acne, pimples and brightening.", icon: <Droplet size={24} />, image: "/images/chemical-peel.jpg" },
+    { title: "Body Peel", description: "A chemical exfoliation treatment that removes dead skin cells from the body, improving skin texture and tone.", icon: <HandMetal size={24} />, image: "/images/body-peel.webp" },
+    { title: "Tattoo Removal (Laser)", description: "Uses a laser to break down and remove tattoo ink from the skin, offering a clean slate for those with unwanted tattoos.", icon: <Zap size={24} />, image: "/images/tattoo-removal-laser.jpg" },
+    { title: "Hair Transplants", description: "A surgical procedure that moves hair to treat hair loss, also known as hair restoration or hair replacement.", icon: <Scissors size={24} />, image: "/images/hair-transplants.jpg" },
+    { title: "Hifu", description: "Skin lifting procedure that tightens skin, removes excess skin, or repositions it for a more youthful appearance.", icon: <Gauge size={24} />, image: "/images/hifu.jpg" },
+    { title: "Skin PRP with Microneedling", description: "Combines microneedling with platelet-rich plasma to rejuvenate the skin, reducing wrinkles and acne scars.", icon: <Building size={24} />, image: "/images/skin-prp-microneedling.webp" },
+    { title: "Semi Permanent Makeup", description: "Also known as micropigmentation, enhances facial features through the application of pigments by specialists.", icon: <Paintbrush size={24} />, image: "/images/semi-permanent-makeup.jpg" }
+  ];
+
+  // Desktop layout (original 3 slides)
+  const desktopServiceSlides = [
+    [allServices[0], allServices[1], allServices[2]], // 3 services
+    [allServices[3], allServices[4], allServices[5]], // 3 services  
+    [allServices[6], allServices[7], allServices[8]] // 3 services
+  ];
+
+  // Mobile layout (5 slides with 2 services each, except last slide has 1)
+  const mobileServiceSlides = [
+    [allServices[0], allServices[1]], // Slide 1: HydraFacial, Warts/Tags/Moles Removal
+    [allServices[2], allServices[3]], // Slide 2: Chemical Peel, Body Peel
+    [allServices[4], allServices[5]], // Slide 3: Tattoo Removal, Hair Transplants
+    [allServices[6], allServices[7]], // Slide 4: Hifu, Skin PRP with Microneedling
+    [allServices[8]]                  // Slide 5: Semi Permanent Makeup
   ];
 
   // This effect handles scroll reveal animations
@@ -73,18 +82,49 @@ const Meditouch = () => {
   // Auto-rotate services carousel every 10 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentServiceSlide((prev) => (prev === serviceSlides.length - 1 ? 0 : prev + 1));
+      const maxSlides = window.innerWidth < 768 ? mobileServiceSlides.length : desktopServiceSlides.length;
+      setCurrentServiceSlide((prev) => (prev === maxSlides - 1 ? 0 : prev + 1));
     }, 10000);
 
     return () => clearInterval(interval);
-  }, [serviceSlides.length]);
+  }, [mobileServiceSlides.length, desktopServiceSlides.length]);
 
   const handleServicePrev = () => {
-    setCurrentServiceSlide((prev) => (prev === 0 ? serviceSlides.length - 1 : prev - 1));
+    const maxSlides = window.innerWidth < 768 ? mobileServiceSlides.length : desktopServiceSlides.length;
+    setCurrentServiceSlide((prev) => (prev === 0 ? maxSlides - 1 : prev - 1));
   };
 
   const handleServiceNext = () => {
-    setCurrentServiceSlide((prev) => (prev === serviceSlides.length - 1 ? 0 : prev + 1));
+    const maxSlides = window.innerWidth < 768 ? mobileServiceSlides.length : desktopServiceSlides.length;
+    setCurrentServiceSlide((prev) => (prev === maxSlides - 1 ? 0 : prev + 1));
+  };
+
+  // Mobile swipe handlers (only on mobile view)
+  const onTouchStart = (e: React.TouchEvent) => {
+    if (window.innerWidth >= 768) return; // Only on mobile
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (window.innerWidth >= 768) return; // Only on mobile
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (window.innerWidth >= 768) return; // Only on mobile
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      handleServiceNext();
+    }
+    if (isRightSwipe) {
+      handleServicePrev();
+    }
   };
   const scrollToContact = () => {
     if (contactSectionRef.current) {
@@ -203,26 +243,57 @@ const Meditouch = () => {
             {/* Services Carousel */}
             <div className="relative">
               <div className="overflow-hidden rounded-lg">
-                <div 
-                  className="flex transition-transform duration-500 ease-in-out"
-                  style={{ transform: `translateX(-${currentServiceSlide * 100}%)` }}
-                >
-                  {serviceSlides.map((slide, slideIndex) => (
-                    <div key={slideIndex} className="w-full flex-shrink-0">
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {slide.map((service, serviceIndex) => (
-                          <ServiceCard 
-                            key={`${slideIndex}-${serviceIndex}`}
-                            title={service.title}
-                            description={service.description}
-                            icon={service.icon}
-                            image={service.image}
-                            theme="meditouch"
-                          />
-                        ))}
+                {/* Mobile Layout - Single Column with 2 services per slide */}
+                <div className="md:hidden">
+                  <div 
+                    className="flex transition-transform duration-500 ease-in-out"
+                    style={{ transform: `translateX(-${currentServiceSlide * 100}%)` }}
+                    onTouchStart={onTouchStart}
+                    onTouchMove={onTouchMove}
+                    onTouchEnd={onTouchEnd}
+                  >
+                    {mobileServiceSlides.map((slide, slideIndex) => (
+                      <div key={`mobile-${slideIndex}`} className="w-full flex-shrink-0">
+                        <div className="grid grid-cols-1 gap-6">
+                          {slide.map((service, serviceIndex) => (
+                            <ServiceCard 
+                              key={`mobile-${slideIndex}-${serviceIndex}`}
+                              title={service.title}
+                              description={service.description}
+                              icon={service.icon}
+                              image={service.image}
+                              theme="meditouch"
+                            />
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
+                </div>
+
+                {/* Desktop Layout - Original multi-column grid */}
+                <div className="hidden md:block">
+                  <div 
+                    className="flex transition-transform duration-500 ease-in-out"
+                    style={{ transform: `translateX(-${currentServiceSlide * 100}%)` }}
+                  >
+                    {desktopServiceSlides.map((slide, slideIndex) => (
+                      <div key={`desktop-${slideIndex}`} className="w-full flex-shrink-0">
+                        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
+                          {slide.map((service, serviceIndex) => (
+                            <ServiceCard 
+                              key={`desktop-${slideIndex}-${serviceIndex}`}
+                              title={service.title}
+                              description={service.description}
+                              icon={service.icon}
+                              image={service.image}
+                              theme="meditouch"
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
               
@@ -236,8 +307,23 @@ const Meditouch = () => {
                   <ChevronLeft className="h-5 w-5 text-meditouch-primary" />
                 </button>
                 
-                <div className="flex space-x-2">
-                  {serviceSlides.map((_, index) => (
+                {/* Mobile Pagination */}
+                <div className="flex space-x-2 md:hidden">
+                  {mobileServiceSlides.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentServiceSlide(index)}
+                      className={`w-3 h-3 rounded-full transition-colors ${
+                        index === currentServiceSlide ? 'bg-meditouch-primary' : 'bg-meditouch-primary/20'
+                      }`}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
+                </div>
+
+                {/* Desktop Pagination */}
+                <div className="hidden md:flex space-x-2">
+                  {desktopServiceSlides.map((_, index) => (
                     <button
                       key={index}
                       onClick={() => setCurrentServiceSlide(index)}
@@ -258,9 +344,17 @@ const Meditouch = () => {
                 </button>
               </div>
               
-              <div className="text-center mt-4">
+              {/* Mobile Counter */}
+              <div className="text-center mt-4 md:hidden">
                 <p className="text-sm text-gray-500">
-                  {currentServiceSlide + 1} of {serviceSlides.length}
+                  {currentServiceSlide + 1} of {mobileServiceSlides.length}
+                </p>
+              </div>
+
+              {/* Desktop Counter */}
+              <div className="hidden md:block text-center mt-4">
+                <p className="text-sm text-gray-500">
+                  {currentServiceSlide + 1} of {desktopServiceSlides.length}
                 </p>
               </div>
             </div>

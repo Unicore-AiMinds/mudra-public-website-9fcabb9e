@@ -1,0 +1,11 @@
+[build]
+  command = "npm run build:meditouch"
+  publish = "dist"
+
+[build.environment]
+  VITE_BRAND_MODE = "meditouch"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

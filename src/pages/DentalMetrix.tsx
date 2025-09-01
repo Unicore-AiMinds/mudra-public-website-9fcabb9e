@@ -4,7 +4,6 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
 import ServiceCard from '@/components/ServiceCard';
-import SectionNav from '@/components/SectionNav';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import ContactForm from '@/components/ContactForm';
 import LocationMap from '@/components/LocationMap';
@@ -16,27 +15,37 @@ const DentalMetrix = () => {
                     'Mudra Dental & Aesthetic Clinic';
   const contactSectionRef = useRef<HTMLElement>(null);
   const [currentServiceSlide, setCurrentServiceSlide] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
   
-  const serviceSlides = [
-    // Slide 1: 4 services
-    [
-      { title: "Dental Implants", description: "A medical device that replaces a missing tooth's root and supports restorations like crowns and bridges.", icon: <Stethoscope size={24} />, image: "/images/dental-implants.jpg" },
-      { title: "RCT & Crown", description: "Root canal treatment treats infected pulp and crowns restore teeth structure and function.", icon: <Crown size={24} />, image: "/images/root-canal-treatment.jpg" },
-      { title: "Wisdom Tooth Extraction", description: "A surgical procedure to remove one or more wisdom teeth that may be impacted or causing discomfort.", icon: <Scissors size={24} />, image: "/images/wisdom-tooth-extraction.jpg" },
-      { title: "Aligners", description: "A type of orthodontic device that straightens teeth and corrects alignment without traditional braces.", icon: <Shield size={24} />, image: "/images/aligners.jpg" }
-    ],
-    // Slide 2: 3 services
-    [
-      { title: "Teeth Whitening", description: "A cosmetic procedure that lightens tooth color, removes stains and improves appearance.", icon: <Sparkles size={24} />, image: "/images/teeth-whitening.jpg" },
-      { title: "Scaling & Polishing", description: "A professional cleaning procedure where plaque and tartar are removed using specialized instruments.", icon: <Building size={24} />, image: "/images/scaling-polishing.jpg" },
-      { title: "Pediatric Dentistry", description: "Specialized dental care for children focusing on prevention and early intervention.", icon: <Baby size={24} />, image: "/images/pediatric-dentistry.jpg" }
-    ],
-    // Slide 3: 3 services
-    [
-      { title: "Smile Redesign", description: "A cosmetic procedure that enhances smile appearance by addressing dental concerns and aesthetics.", icon: <Smile size={24} />, image: "/images/smile-redesign.jpg" },
-      { title: "Full Mouth Rehabilitation", description: "Comprehensive restoration of all teeth to improve function, health, and aesthetics of the entire mouth.", icon: <Heart size={24} />, image: "/images/full-mouth-rehabilitation.jpg" },
-      { title: "Maxillofacial Prosthesis", description: "Artificial replacements for facial structures lost due to trauma, surgery, or congenital conditions.", icon: <UserCheck size={24} />, image: "/images/maxillofacial-prosthesis.jpeg" }
-    ]
+  // All services as a flat array
+  const allServices = [
+    { title: "Dental Implants", description: "A medical device that replaces a missing tooth's root and supports restorations like crowns and bridges.", icon: <Stethoscope size={24} />, image: "/images/dental-implants.jpg" },
+    { title: "RCT & Crown", description: "Root canal treatment treats infected pulp and crowns restore teeth structure and function.", icon: <Crown size={24} />, image: "/images/root-canal-treatment.jpg" },
+    { title: "Wisdom Tooth Extraction", description: "A surgical procedure to remove one or more wisdom teeth that may be impacted or causing discomfort.", icon: <Scissors size={24} />, image: "/images/wisdom-tooth-extraction.jpg" },
+    { title: "Aligners", description: "A type of orthodontic device that straightens teeth and corrects alignment without traditional braces.", icon: <Shield size={24} />, image: "/images/aligners.jpg" },
+    { title: "Teeth Whitening", description: "A cosmetic procedure that lightens tooth color, removes stains and improves appearance.", icon: <Sparkles size={24} />, image: "/images/teeth-whitening.jpg" },
+    { title: "Scaling & Polishing", description: "A professional cleaning procedure where plaque and tartar are removed using specialized instruments.", icon: <Building size={24} />, image: "/images/scaling-polishing.jpg" },
+    { title: "Pediatric Dentistry", description: "Specialized dental care for children focusing on prevention and early intervention.", icon: <Baby size={24} />, image: "/images/pediatric-dentistry.jpg" },
+    { title: "Smile Redesign", description: "A cosmetic procedure that enhances smile appearance by addressing dental concerns and aesthetics.", icon: <Smile size={24} />, image: "/images/smile-redesign.jpg" },
+    { title: "Full Mouth Rehabilitation", description: "Comprehensive restoration of all teeth to improve function, health, and aesthetics of the entire mouth.", icon: <Heart size={24} />, image: "/images/full-mouth-rehabilitation.jpg" },
+    { title: "Maxillofacial Prosthesis", description: "Artificial replacements for facial structures lost due to trauma, surgery, or congenital conditions.", icon: <UserCheck size={24} />, image: "/images/maxillofacial-prosthesis.jpeg" }
+  ];
+
+  // Desktop layout (original 3 slides)
+  const desktopServiceSlides = [
+    [allServices[0], allServices[1], allServices[2], allServices[3]], // 4 services
+    [allServices[4], allServices[5], allServices[6]], // 3 services  
+    [allServices[7], allServices[8], allServices[9]] // 3 services
+  ];
+
+  // Mobile layout (5 slides with 2 services each)
+  const mobileServiceSlides = [
+    [allServices[0], allServices[1]], // Slide 1: Dental Implants, RCT & Crown
+    [allServices[2], allServices[3]], // Slide 2: Wisdom Tooth Extraction, Aligners
+    [allServices[4], allServices[5]], // Slide 3: Teeth Whitening, Scaling & Polishing
+    [allServices[6], allServices[7]], // Slide 4: Pediatric Dentistry, Smile Redesign
+    [allServices[8], allServices[9]]  // Slide 5: Full Mouth Rehabilitation, Maxillofacial Prosthesis
   ];
 
   useEffect(() => {
@@ -75,18 +84,49 @@ const DentalMetrix = () => {
   // Auto-rotate services carousel every 10 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentServiceSlide((prev) => (prev === serviceSlides.length - 1 ? 0 : prev + 1));
+      const maxSlides = window.innerWidth < 768 ? mobileServiceSlides.length : desktopServiceSlides.length;
+      setCurrentServiceSlide((prev) => (prev === maxSlides - 1 ? 0 : prev + 1));
     }, 10000);
 
     return () => clearInterval(interval);
-  }, [serviceSlides.length]);
+  }, [mobileServiceSlides.length, desktopServiceSlides.length]);
 
   const handleServicePrev = () => {
-    setCurrentServiceSlide((prev) => (prev === 0 ? serviceSlides.length - 1 : prev - 1));
+    const maxSlides = window.innerWidth < 768 ? mobileServiceSlides.length : desktopServiceSlides.length;
+    setCurrentServiceSlide((prev) => (prev === 0 ? maxSlides - 1 : prev - 1));
   };
 
   const handleServiceNext = () => {
-    setCurrentServiceSlide((prev) => (prev === serviceSlides.length - 1 ? 0 : prev + 1));
+    const maxSlides = window.innerWidth < 768 ? mobileServiceSlides.length : desktopServiceSlides.length;
+    setCurrentServiceSlide((prev) => (prev === maxSlides - 1 ? 0 : prev + 1));
+  };
+
+  // Mobile swipe handlers (only on mobile view)
+  const onTouchStart = (e: React.TouchEvent) => {
+    if (window.innerWidth >= 768) return; // Only on mobile
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (window.innerWidth >= 768) return; // Only on mobile
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (window.innerWidth >= 768) return; // Only on mobile
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      handleServiceNext();
+    }
+    if (isRightSwipe) {
+      handleServicePrev();
+    }
   };
 
   const scrollToContact = () => {
@@ -136,7 +176,7 @@ const DentalMetrix = () => {
                   
                   <div className="bg-gradient-to-br from-mudra-primary-lightest/60 to-mudra-secondary-lightest/40 p-8 rounded-2xl border-2 border-mudra-primary-lighter/30 shadow-lg shadow-mudra-primary/5">
                     <div className="flex flex-col md:flex-row gap-8">
-                      <div className="flex-shrink-0">
+                      <div className="flex-shrink-0 mx-auto md:mx-0">
                         <img 
                           src="/images/dr-bhargavi.png" 
                           alt="Dr. Bhargavi Railkar-Kolhapure" 
@@ -209,25 +249,55 @@ const DentalMetrix = () => {
             {/* Services Carousel */}
             <div className="relative">
               <div className="overflow-hidden rounded-lg">
-                <div 
-                  className="flex transition-transform duration-500 ease-in-out"
-                  style={{ transform: `translateX(-${currentServiceSlide * 100}%)` }}
-                >
-                  {serviceSlides.map((slide, slideIndex) => (
-                    <div key={slideIndex} className="w-full flex-shrink-0">
-                      <div className={`grid gap-6 ${slide.length === 4 ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
-                        {slide.map((service, serviceIndex) => (
-                          <ServiceCard 
-                            key={`${slideIndex}-${serviceIndex}`}
-                            title={service.title}
-                            description={service.description}
-                            icon={service.icon}
-                            image={service.image}
-                          />
-                        ))}
+                {/* Mobile Layout - Single Column with 2 services per slide */}
+                <div className="md:hidden">
+                  <div 
+                    className="flex transition-transform duration-500 ease-in-out"
+                    style={{ transform: `translateX(-${currentServiceSlide * 100}%)` }}
+                    onTouchStart={onTouchStart}
+                    onTouchMove={onTouchMove}
+                    onTouchEnd={onTouchEnd}
+                  >
+                    {mobileServiceSlides.map((slide, slideIndex) => (
+                      <div key={`mobile-${slideIndex}`} className="w-full flex-shrink-0">
+                        <div className="grid grid-cols-1 gap-6">
+                          {slide.map((service, serviceIndex) => (
+                            <ServiceCard 
+                              key={`mobile-${slideIndex}-${serviceIndex}`}
+                              title={service.title}
+                              description={service.description}
+                              icon={service.icon}
+                              image={service.image}
+                            />
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
+                </div>
+
+                {/* Desktop Layout - Original multi-column grid */}
+                <div className="hidden md:block">
+                  <div 
+                    className="flex transition-transform duration-500 ease-in-out"
+                    style={{ transform: `translateX(-${currentServiceSlide * 100}%)` }}
+                  >
+                    {desktopServiceSlides.map((slide, slideIndex) => (
+                      <div key={`desktop-${slideIndex}`} className="w-full flex-shrink-0">
+                        <div className={`grid gap-6 ${slide.length === 4 ? 'grid-cols-2 lg:grid-cols-4' : 'grid-cols-2 lg:grid-cols-3'}`}>
+                          {slide.map((service, serviceIndex) => (
+                            <ServiceCard 
+                              key={`desktop-${slideIndex}-${serviceIndex}`}
+                              title={service.title}
+                              description={service.description}
+                              icon={service.icon}
+                              image={service.image}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
               
@@ -241,8 +311,23 @@ const DentalMetrix = () => {
                   <ChevronLeft className="h-5 w-5 text-mudra-primary" />
                 </button>
                 
-                <div className="flex space-x-2">
-                  {serviceSlides.map((_, index) => (
+                {/* Mobile Pagination */}
+                <div className="flex space-x-2 md:hidden">
+                  {mobileServiceSlides.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentServiceSlide(index)}
+                      className={`w-3 h-3 rounded-full transition-colors ${
+                        index === currentServiceSlide ? 'bg-mudra-primary' : 'bg-mudra-primary/20'
+                      }`}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
+                </div>
+
+                {/* Desktop Pagination */}
+                <div className="hidden md:flex space-x-2">
+                  {desktopServiceSlides.map((_, index) => (
                     <button
                       key={index}
                       onClick={() => setCurrentServiceSlide(index)}
@@ -263,9 +348,17 @@ const DentalMetrix = () => {
                 </button>
               </div>
               
-              <div className="text-center mt-4">
+              {/* Mobile Counter */}
+              <div className="text-center mt-4 md:hidden">
                 <p className="text-sm text-gray-500">
-                  {currentServiceSlide + 1} of {serviceSlides.length}
+                  {currentServiceSlide + 1} of {mobileServiceSlides.length}
+                </p>
+              </div>
+
+              {/* Desktop Counter */}
+              <div className="hidden md:block text-center mt-4">
+                <p className="text-sm text-gray-500">
+                  {currentServiceSlide + 1} of {desktopServiceSlides.length}
                 </p>
               </div>
             </div>

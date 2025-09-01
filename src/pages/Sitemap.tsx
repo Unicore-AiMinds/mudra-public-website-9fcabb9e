@@ -9,39 +9,73 @@ const Sitemap = () => {
   const clinicName = brandMode === 'dental' ? 'Dental Metrix Clinic' :
                     brandMode === 'meditouch' ? 'Meditouch Clinic' :
                     'Mudra Dental & Aesthetic Clinic';
-  const pages = [
-    {
-      title: 'Main Pages',
-      links: [
-        { name: 'Home', path: '/' },
-        { name: 'Dental Metrix', path: '/dental-metrix' },
-        { name: 'Meditouch', path: '/meditouch' },
-        { name: 'Explore Pune', path: '/explore-pune' },
-        { name: 'Contact Us', path: '/contact' },
-      ],
-    },
-    {
-      title: 'Legal & Information',
-      links: [
-        { name: 'Privacy Policy', path: '/privacy-policy' },
-        { name: 'Terms of Service', path: '/terms' },
-        { name: 'Sitemap', path: '/sitemap' },
-      ],
-    },
-    {
-      title: 'Sections',
-      links: [
-        { name: 'About Dental Metrix', path: '/dental-metrix#about' },
-        { name: 'Dental Services', path: '/dental-metrix#services' },
-        { name: 'Dental Testimonials', path: '/dental-metrix#testimonials' },
-        { name: 'Dental Contact', path: '/dental-metrix#contact' },
-        { name: 'About Meditouch', path: '/meditouch#about' },
-        { name: 'Aesthetic Services', path: '/meditouch#services' },
-        { name: 'Aesthetic Testimonials', path: '/meditouch#testimonials' },
-        { name: 'Aesthetic Contact', path: '/meditouch#contact' },
-      ],
-    },
-  ];
+  const getFilteredPages = () => {
+    const basePages = [
+      {
+        title: 'Main Pages',
+        links: [
+          { name: 'Home', path: '/' },
+          ...(brandMode === 'dental' ? [{ name: 'Dental Metrix', path: '/dental-metrix' }] : []),
+          ...(brandMode === 'meditouch' ? [{ name: 'Meditouch', path: '/meditouch' }] : []),
+          ...(brandMode !== 'dental' && brandMode !== 'meditouch' ? [
+            { name: 'Dental Metrix', path: '/dental-metrix' },
+            { name: 'Meditouch', path: '/meditouch' }
+          ] : []),
+          { name: 'Explore Pune', path: '/explore-pune' },
+          { name: 'Contact Us', path: '/contact' },
+        ],
+      },
+      {
+        title: 'Legal & Information',
+        links: [
+          { name: 'Privacy Policy', path: '/privacy-policy' },
+          { name: 'Terms of Service', path: '/terms' },
+          { name: 'Sitemap', path: '/sitemap' },
+        ],
+      },
+    ];
+
+    // Add sections based on brand mode
+    if (brandMode === 'dental') {
+      basePages.push({
+        title: 'Sections',
+        links: [
+          { name: 'About Dental Metrix', path: '/dental-metrix#about' },
+          { name: 'Dental Services', path: '/dental-metrix#services' },
+          { name: 'Dental Testimonials', path: '/dental-metrix#testimonials' },
+          { name: 'Dental Contact', path: '/dental-metrix#contact' },
+        ],
+      });
+    } else if (brandMode === 'meditouch') {
+      basePages.push({
+        title: 'Sections',
+        links: [
+          { name: 'About Meditouch', path: '/meditouch#about' },
+          { name: 'Aesthetic Services', path: '/meditouch#services' },
+          { name: 'Aesthetic Testimonials', path: '/meditouch#testimonials' },
+          { name: 'Aesthetic Contact', path: '/meditouch#contact' },
+        ],
+      });
+    } else {
+      basePages.push({
+        title: 'Sections',
+        links: [
+          { name: 'About Dental Metrix', path: '/dental-metrix#about' },
+          { name: 'Dental Services', path: '/dental-metrix#services' },
+          { name: 'Dental Testimonials', path: '/dental-metrix#testimonials' },
+          { name: 'Dental Contact', path: '/dental-metrix#contact' },
+          { name: 'About Meditouch', path: '/meditouch#about' },
+          { name: 'Aesthetic Services', path: '/meditouch#services' },
+          { name: 'Aesthetic Testimonials', path: '/meditouch#testimonials' },
+          { name: 'Aesthetic Contact', path: '/meditouch#contact' },
+        ],
+      });
+    }
+
+    return basePages;
+  };
+
+  const pages = getFilteredPages();
 
   return (
     <div className="min-h-screen">

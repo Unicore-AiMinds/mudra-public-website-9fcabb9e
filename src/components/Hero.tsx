@@ -30,7 +30,7 @@ const Hero = ({
   theme = 'mudra'
 }: HeroProps) => {
   return (
-    <div className={`relative min-h-[80vh] md:min-h-[90vh] flex items-center overflow-hidden ${
+    <div className={`relative min-h-[95vh] md:min-h-[90vh] flex items-center overflow-hidden ${
       theme === 'meditouch' 
         ? 'bg-gradient-to-br from-meditouch-primary via-meditouch-accent to-meditouch-secondary' 
         : 'bg-gradient-to-br from-mudra-primary via-mudra-secondary to-mudra-primary'

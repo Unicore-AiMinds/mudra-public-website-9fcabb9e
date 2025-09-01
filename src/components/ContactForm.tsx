@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
 interface ContactFormProps {
@@ -9,6 +9,8 @@ interface ContactFormProps {
 const ContactForm = ({ formType }: ContactFormProps) => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -17,6 +19,30 @@ const ContactForm = ({ formType }: ContactFormProps) => {
     serviceInquiry: '',
     message: '',
   });
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    
+    // Close dropdown when clicking outside
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('#serviceInquiry')) {
+        setIsDropdownOpen(false);
+      }
+    };
+    
+    document.addEventListener('click', handleClickOutside);
+    
+    return () => {
+      window.removeEventListener('resize', checkIsMobile);
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -129,8 +155,14 @@ const ContactForm = ({ formType }: ContactFormProps) => {
             id="serviceInquiry"
             name="serviceInquiry"
             value={formData.serviceInquiry}
-            onChange={handleChange}
+            onChange={(e) => {
+              handleChange(e);
+              setIsDropdownOpen(false);
+            }}
+            onFocus={() => setIsDropdownOpen(true)}
+            onBlur={() => setIsDropdownOpen(false)}
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-mudra-primary"
+            size={isMobile && isDropdownOpen ? 6 : 1}
             required
           >
             <option value="">Select a service</option>
@@ -158,7 +190,7 @@ const ContactForm = ({ formType }: ContactFormProps) => {
         ></textarea>
       </div>
       
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <button
           type="submit"
           disabled={isSubmitting}
@@ -167,7 +199,7 @@ const ContactForm = ({ formType }: ContactFormProps) => {
           {isSubmitting ? 'Sending...' : 'Send Message'}
         </button>
         
-        <a href="/explore-pune" className="text-mudra-primary hover:text-mudra-secondary transition-colors">
+        <a href="/explore-pune" className="text-mudra-primary hover:text-mudra-secondary transition-colors text-center sm:text-left">
           Visiting Pune? Plan Your Trip
         </a>
       </div>

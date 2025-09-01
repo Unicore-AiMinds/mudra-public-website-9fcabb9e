@@ -41,13 +41,13 @@ const Navbar = () => {
               <img 
                 src="/images/meditouch-logo.png" 
                 alt="Meditouch Logo" 
-                className="h-20 w-auto"
+                className="h-12 md:h-20 w-auto"
               />
             ) : brandMode === 'dental' ? (
               <img 
                 src="/images/dental-metrix-logo.png" 
                 alt="Dental Metrix Logo" 
-                className="h-20 w-auto"
+                className="h-12 md:h-20 w-auto"
               />
             ) : (
               <span className="font-serif text-xl font-medium text-mudra-primary">
