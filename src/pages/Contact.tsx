@@ -82,15 +82,15 @@ const Contact = () => {
                       <div>
                         <p className="font-medium">Phone</p>
                         {brandMode !== 'meditouch' && (
-                          <p className="text-gray-600">Dental Metrix: <a href="tel:+919152951573" className="text-mudra-primary">91529 51573</a></p>
+                          <p className="text-gray-600">Dental Metrix: <a href="tel:+919152951573" className="text-mudra-primary">+919152951573</a></p>
                         )}
                         {brandMode !== 'dental' && (
-                          <p className="text-gray-600">Meditouch: <a href="tel:+919112957369" className="text-mudra-primary">91129 57369</a></p>
+                          <p className="text-gray-600">Meditouch: <a href="tel:+919371015255" className="text-mudra-primary">+919371015255</a></p>
                         )}
                         {!brandMode && (
                           <>
-                            <p className="text-gray-600">Dental Metrix: <a href="tel:+919152951573" className="text-mudra-primary">91529 51573</a></p>
-                            <p className="text-gray-600">Meditouch: <a href="tel:+919112957369" className="text-mudra-primary">91129 57369</a></p>
+                            <p className="text-gray-600">Dental Metrix: <a href="tel:+919152951573" className="text-mudra-primary">+919152951573</a></p>
+                            <p className="text-gray-600">Meditouch: <a href="tel:+919371015255" className="text-mudra-primary">+919371015255</a></p>
                           </>
                         )}
                       </div>

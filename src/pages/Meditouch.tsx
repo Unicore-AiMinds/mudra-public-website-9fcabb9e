@@ -405,7 +405,7 @@ const Meditouch = () => {
                         <CalendarClock className="h-5 w-5 text-meditouch-primary mr-3 flex-shrink-0" />
                         <div>
                           <p className="font-medium">Phone Number</p>
-                          <p className="text-gray-600 text-sm">91129 57369</p>
+                          <p className="text-gray-600 text-sm">+919371015255</p>
                         </div>
                       </div>
                     </div>

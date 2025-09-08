@@ -9,9 +9,9 @@ const Terms = () => {
                     brandMode === 'meditouch' ? 'Meditouch Clinic' :
                     'Mudra Dental & Aesthetic Clinic';
   
-  const clinicPhone = brandMode === 'dental' ? '91529 51573' :
-                      brandMode === 'meditouch' ? '91129 57369' :
-                      '91529 51573 / 91129 57369';
+  const clinicPhone = brandMode === 'dental' ? '+919152951573' :
+                      brandMode === 'meditouch' ? '+919371015255' :
+                      '+919152951573 / +919371015255';
   return (
     <div className="min-h-screen">
       <Navbar />

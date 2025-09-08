@@ -409,7 +409,7 @@ const DentalMetrix = () => {
                         <CalendarClock className="h-5 w-5 text-mudra-primary mr-3 flex-shrink-0" />
                         <div>
                           <p className="font-medium">Phone Number</p>
-                          <p className="text-gray-600 text-sm">91529 51573</p>
+                          <p className="text-gray-600 text-sm">+919152951573</p>
                         </div>
                       </div>
                     </div>

@@ -41,15 +41,15 @@ const Footer = ({ theme = 'mudra' }: FooterProps) => {
                 }`} />
                 <div>
                   {brandMode !== 'meditouch' && (
-                    <p><span className="font-medium">Dental Metrix:</span> <a href="tel:+919152951573" className="footer-link">91529 51573</a></p>
+                    <p><span className="font-medium">Dental Metrix:</span> <a href="tel:+919152951573" className="footer-link">+919152951573</a></p>
                   )}
                   {brandMode !== 'dental' && (
-                    <p><span className="font-medium">Meditouch:</span> <a href="tel:+919112957369" className="footer-link">91129 57369</a></p>
+                    <p><span className="font-medium">Meditouch:</span> <a href="tel:+919371015255" className="footer-link">+919371015255</a></p>
                   )}
                   {!brandMode && (
                     <>
-                      <p><span className="font-medium">Dental Metrix:</span> <a href="tel:+919152951573" className="footer-link">91529 51573</a></p>
-                      <p><span className="font-medium">Meditouch:</span> <a href="tel:+919112957369" className="footer-link">91129 57369</a></p>
+                      <p><span className="font-medium">Dental Metrix:</span> <a href="tel:+919152951573" className="footer-link">+919152951573</a></p>
+                      <p><span className="font-medium">Meditouch:</span> <a href="tel:+919371015255" className="footer-link">+919371015255</a></p>
                     </>
                   )}
                 </div>
