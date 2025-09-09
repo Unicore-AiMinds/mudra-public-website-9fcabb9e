@@ -71,43 +71,99 @@ const TestimonialsSection = ({ type }: TestimonialsSectionProps) => {
       ];
       
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   
   // Auto-rotate testimonials every 8 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
+      if (type === 'aesthetic') { // Only for Meditouch
+        setIsTransitioning(true);
+        setTimeout(() => {
+          setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
+          setTimeout(() => setIsTransitioning(false), 100);
+        }, 300);
+      } else {
+        setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
+      }
     }, 8000); // 8 second interval
 
     return () => clearInterval(interval);
-  }, [testimonials.length]);
+  }, [testimonials.length, type]);
   
   const handlePrev = () => {
-    setCurrentIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
+    if (type === 'aesthetic') { // Only for Meditouch
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
+        setTimeout(() => setIsTransitioning(false), 100);
+      }, 300);
+    } else {
+      setCurrentIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
+    }
   };
   
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
+    if (type === 'aesthetic') { // Only for Meditouch
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
+        setTimeout(() => setIsTransitioning(false), 50);
+      }, 200);
+    } else {
+      setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
+    }
   };
   
   const currentTestimonial = testimonials[currentIndex];
   
   return (
-    <section className="py-16 bg-gray-50">
+    <section className={`${type === 'aesthetic' ? 'py-32' : 'py-16'} ${type === 'aesthetic' ? 'bg-transparent' : 'bg-gray-50'}`}>
       <div className="container mx-auto px-4 md:px-6">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-serif font-semibold mb-4">Patient Testimonials</h2>
-            <div className="w-20 h-1 bg-mudra-accent mx-auto"></div>
+        <div className={`mx-auto ${type === 'aesthetic' ? 'max-w-4xl' : 'max-w-3xl'}`}>
+          <div className={`text-center ${type === 'aesthetic' ? 'mb-20' : 'mb-12'}`}>
+            <h2 className={`font-semibold mb-6 ${
+              type === 'aesthetic' 
+                ? 'text-4xl font-meditouch-script bg-gradient-to-r from-meditouch-primary to-meditouch-accent bg-clip-text text-transparent' 
+                : 'text-3xl mb-4 font-serif'
+            }`}>
+              Patient Testimonials
+            </h2>
+            {type === 'aesthetic' && (
+              <p className="text-lg text-meditouch-primary/80 font-meditouch-primary leading-[1.7]">
+                Real experiences from our valued patients who trusted Meditouch with their aesthetic journey
+              </p>
+            )}
+            <div className={`w-16 h-1 mx-auto rounded-full ${
+              type === 'aesthetic' 
+                ? 'bg-gradient-to-r from-meditouch-primary via-meditouch-secondary to-meditouch-accent mt-10' 
+                : 'bg-mudra-accent'
+            }`}></div>
           </div>
           
-          <div className="relative bg-white p-6 md:p-10 rounded-lg shadow-sm border border-gray-100">
-            <Quote className="absolute text-mudra-primary/10 h-24 w-24 -top-4 -left-4" />
+          <div className={`relative bg-white p-6 md:p-10 rounded-xl ${
+            type === 'aesthetic'
+              ? 'shadow-[0_4px_6px_rgba(90,44,139,0.04),0_1px_3px_rgba(90,44,139,0.08)] border border-meditouch-primary/10'
+              : 'shadow-sm border border-gray-100'
+          }`}>
+            <Quote className={`absolute h-24 w-24 -top-4 -left-4 ${
+              type === 'aesthetic' ? 'text-meditouch-primary/10' : 'text-mudra-primary/10'
+            }`} />
             
             <div className="relative z-10">
-              <div className="text-center mb-6">
-                <h3 className="font-serif text-lg font-medium">{currentTestimonial.name}</h3>
+              <div className={`text-center mb-6 transition-opacity duration-300 ${
+                type === 'aesthetic' && isTransitioning ? 'opacity-0' : 'opacity-100'
+              }`}>
+                <h3 className={`text-lg font-medium ${
+                  type === 'aesthetic' 
+                    ? 'font-meditouch-primary text-meditouch-primary' 
+                    : 'font-serif'
+                }`}>{currentTestimonial.name}</h3>
                 {currentTestimonial.location && (
-                  <p className="text-gray-500 text-sm">{currentTestimonial.location}</p>
+                  <p className={`text-sm ${
+                    type === 'aesthetic' 
+                      ? 'text-meditouch-primary/70 font-meditouch-primary' 
+                      : 'text-gray-500'
+                  }`}>{currentTestimonial.location}</p>
                 )}
                 {currentTestimonial.rating && (
                   <div className="flex justify-center mt-2">
@@ -118,27 +174,67 @@ const TestimonialsSection = ({ type }: TestimonialsSectionProps) => {
                 )}
               </div>
               
-              <p className="text-gray-700 italic mb-8">{currentTestimonial.text}</p>
+              <p className={`italic mb-8 transition-opacity duration-300 leading-[1.7] ${
+                type === 'aesthetic' 
+                  ? 'text-meditouch-primary/80 font-meditouch-primary text-lg' 
+                  : 'text-gray-700'
+              } ${type === 'aesthetic' && isTransitioning ? 'opacity-0' : 'opacity-100'}`}>{currentTestimonial.text}</p>
               
-              <div className="flex justify-center md:justify-end items-center space-x-4">
+              <div className={`flex items-center space-x-4 ${
+                type === 'aesthetic' ? 'justify-center mt-8' : 'justify-center md:justify-end'
+              }`}>
                 <button 
                   onClick={handlePrev}
-                  className="p-2 rounded-full border border-gray-200 hover:bg-mudra-primary/10 hover:border-mudra-primary/20 transition-colors"
+                  className={`${
+                    type === 'aesthetic' 
+                      ? 'group p-3 rounded-full bg-meditouch-primary/10 hover:bg-meditouch-primary hover:text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95 backdrop-blur-sm border border-meditouch-primary/20 hover:border-meditouch-primary'
+                      : 'p-2 rounded-full border border-gray-200 hover:bg-mudra-primary/10 hover:border-mudra-primary/20 transition-colors'
+                  }`}
                   aria-label="Previous testimonial"
                 >
-                  <ChevronLeft className="h-5 w-5 text-mudra-primary" />
+                  <ChevronLeft className={`h-5 w-5 ${
+                    type === 'aesthetic' 
+                      ? 'text-meditouch-primary group-hover:text-white transition-colors duration-200' 
+                      : 'text-mudra-primary'
+                  }`} />
                 </button>
                 
-                <span className="text-sm text-gray-500">
-                  {currentIndex + 1} / {testimonials.length}
-                </span>
+                {/* Pagination dots for aesthetic (Meditouch) */}
+                {type === 'aesthetic' ? (
+                  <div className="flex space-x-2">
+                    {testimonials.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentIndex(index)}
+                        className={`w-3 h-3 rounded-full transition-all duration-200 transform hover:scale-125 active:scale-110 ${
+                          index === currentIndex 
+                            ? 'bg-gradient-to-r from-meditouch-secondary to-meditouch-accent shadow-md scale-125' 
+                            : 'bg-meditouch-primary/20 hover:bg-meditouch-primary/40 hover:shadow-sm'
+                        }`}
+                        aria-label={`Go to testimonial ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <span className="text-sm text-gray-500">
+                    {currentIndex + 1} / {testimonials.length}
+                  </span>
+                )}
                 
                 <button 
                   onClick={handleNext}
-                  className="p-2 rounded-full border border-gray-200 hover:bg-mudra-primary/10 hover:border-mudra-primary/20 transition-colors"
+                  className={`${
+                    type === 'aesthetic' 
+                      ? 'group p-3 rounded-full bg-meditouch-primary/10 hover:bg-meditouch-primary hover:text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95 backdrop-blur-sm border border-meditouch-primary/20 hover:border-meditouch-primary'
+                      : 'p-2 rounded-full border border-gray-200 hover:bg-mudra-primary/10 hover:border-mudra-primary/20 transition-colors'
+                  }`}
                   aria-label="Next testimonial"
                 >
-                  <ChevronRight className="h-5 w-5 text-mudra-primary" />
+                  <ChevronRight className={`h-5 w-5 ${
+                    type === 'aesthetic' 
+                      ? 'text-meditouch-primary group-hover:text-white transition-colors duration-200' 
+                      : 'text-mudra-primary'
+                  }`} />
                 </button>
               </div>
             </div>

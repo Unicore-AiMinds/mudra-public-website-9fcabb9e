@@ -89,27 +89,32 @@ export default {
 					'gray-300': '#cbd5e1',
 				},
 				meditouch: {
-					primary: '#6B2C91', // deep purple from logo
-					'primary-light': '#8B44AC', // lighter purple
-					'primary-lighter': '#B366C7', // much lighter purple
-					'primary-lightest': '#E8D5F2', // very light purple
+					primary: '#5A2C8B', // deep purple from brand kit
+					'primary-light': '#7B4DA3', // lighter purple
+					'primary-lighter': '#B19FD9', // lavender from brand kit
+					'primary-lightest': '#E8D5F2', // very light purple/lavender
 					'primary-dark': '#4A1E65', // darker purple
 					'primary-darker': '#331545', // very dark purple
-					secondary: '#E67E22', // vibrant orange from logo
-					'secondary-light': '#F39C12', // lighter orange
-					'secondary-lighter': '#F8B644', // much lighter orange
-					'secondary-lightest': '#FEF3E2', // very light orange
-					'secondary-dark': '#C7631B', // darker orange
-					accent: '#8B44AC', // lighter purple for accents
-					'accent-light': '#B366C7', // lighter accent
-					'accent-lighter': '#D8A2E0', // much lighter accent
-					'accent-lightest': '#F3E8F7', // very light accent
+					secondary: '#F4D03F', // bright yellow/gold from brand kit
+					'secondary-light': '#F7DC6F', // lighter yellow
+					'secondary-lighter': '#FCF3CF', // very light yellow
+					'secondary-lightest': '#FEFEFE', // nearly white with yellow tint
+					'secondary-dark': '#D4AC0D', // darker gold
+					accent: '#FF6B35', // coral/orange from brand kit
+					'accent-light': '#FF8C69', // lighter coral
+					'accent-lighter': '#FFB6A3', // much lighter coral
+					'accent-lightest': '#FFF2F0', // very light coral
+					'accent-dark': '#E55722', // darker coral
+					neutral: '#F5F2E8', // beige/cream from brand kit
+					'neutral-light': '#FAF8F4', // lighter beige
+					'neutral-dark': '#E8E0D1', // darker beige
 					gradient: {
-						from: '#6B2C91', // purple start
-						via: '#8B44AC', // mid purple
-						to: '#E67E22', // orange end
+						from: '#5A2C8B', // deep purple
+						via: '#B19FD9', // lavender
+						to: '#F4D03F', // bright yellow
+						accent: '#FF6B35', // coral
 					},
-					gray: '#6C757D', // neutral gray from tagline
+					gray: '#6C757D', // neutral gray
 					'gray-50': '#faf9fb',
 					'gray-100': '#f4f3f6',
 					'gray-200': '#e9e7ed',
@@ -123,6 +128,10 @@ export default {
 				serif: ['Playfair Display', 'Georgia', 'Times New Roman', 'serif'],
 				'display': ['Playfair Display', 'Georgia', 'serif'], // For large headings
 				'body': ['Inter', 'system-ui', 'sans-serif'], // For body text
+				'avenir': ['Avenir Next', 'Avenir', 'system-ui', 'sans-serif'], // Meditouch primary font
+				'handsome': ['Handsome', 'cursive', 'serif'], // Meditouch script font
+				'meditouch-primary': ['Avenir Next', 'Avenir', 'system-ui', 'sans-serif'], // For Meditouch body text
+				'meditouch-script': ['Handsome', 'cursive', 'serif'], // For Meditouch brand elements
 			},
 			fontSize: {
 				'xs': ['0.75rem', { lineHeight: '1.5' }],
@@ -203,6 +212,46 @@ export default {
 				'slide-out-right': {
 					'0%': { transform: 'translateX(0)' },
 					'100%': { transform: 'translateX(100%)' }
+				},
+				'slide-up-fade': {
+					'0%': { 
+						opacity: '0',
+						transform: 'translateY(30px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
+				},
+				'stagger-fade': {
+					'0%': { 
+						opacity: '0',
+						transform: 'translateY(20px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
+				},
+				'slide-in-left': {
+					'0%': { 
+						opacity: '0',
+						transform: 'translateX(-40px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateX(0)'
+					}
+				},
+				'slide-in-up': {
+					'0%': { 
+						opacity: '0',
+						transform: 'translateY(40px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
 				}
 			},
 			animation: {
@@ -212,6 +261,10 @@ export default {
 				'fade-out': 'fade-out 0.3s ease-out',
 				'slide-in-right': 'slide-in-right 0.3s ease-out',
 				'slide-out-right': 'slide-out-right 0.3s ease-out',
+				'slide-up-fade': 'slide-up-fade 0.6s ease-out',
+				'stagger-fade': 'stagger-fade 0.5s ease-out',
+				'slide-in-left': 'slide-in-left 0.6s ease-out',
+				'slide-in-up': 'slide-in-up 0.5s ease-out',
 			}
 		}
 	},

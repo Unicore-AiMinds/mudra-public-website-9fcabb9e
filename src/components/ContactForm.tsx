@@ -110,7 +110,11 @@ const ContactForm = ({ formType }: ContactFormProps) => {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-mudra-primary"
+            className={`w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 transition-all duration-200 ${
+              formType === 'aesthetic' 
+                ? 'focus:ring-meditouch-primary focus:border-meditouch-primary focus:shadow-[0_0_0_3px_rgba(90,44,139,0.1)]'
+                : 'focus:ring-mudra-primary focus:border-mudra-primary'
+            }`}
             required
           />
         </div>
@@ -125,7 +129,11 @@ const ContactForm = ({ formType }: ContactFormProps) => {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-mudra-primary"
+            className={`w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 transition-all duration-200 ${
+              formType === 'aesthetic' 
+                ? 'focus:ring-meditouch-primary focus:border-meditouch-primary focus:shadow-[0_0_0_3px_rgba(90,44,139,0.1)]'
+                : 'focus:ring-mudra-primary focus:border-mudra-primary'
+            }`}
             required
           />
         </div>
@@ -142,7 +150,11 @@ const ContactForm = ({ formType }: ContactFormProps) => {
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-mudra-primary"
+            className={`w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 transition-all duration-200 ${
+              formType === 'aesthetic' 
+                ? 'focus:ring-meditouch-primary focus:border-meditouch-primary focus:shadow-[0_0_0_3px_rgba(90,44,139,0.1)]'
+                : 'focus:ring-mudra-primary focus:border-mudra-primary'
+            }`}
             required
           />
         </div>
@@ -161,7 +173,11 @@ const ContactForm = ({ formType }: ContactFormProps) => {
             }}
             onFocus={() => setIsDropdownOpen(true)}
             onBlur={() => setIsDropdownOpen(false)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-mudra-primary"
+            className={`w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 transition-all duration-200 ${
+              formType === 'aesthetic' 
+                ? 'focus:ring-meditouch-primary focus:border-meditouch-primary focus:shadow-[0_0_0_3px_rgba(90,44,139,0.1)]'
+                : 'focus:ring-mudra-primary focus:border-mudra-primary'
+            }`}
             size={isMobile && isDropdownOpen ? 6 : 1}
             required
           >
@@ -194,12 +210,20 @@ const ContactForm = ({ formType }: ContactFormProps) => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="px-6 py-3 bg-mudra-primary text-white rounded-md hover:bg-mudra-secondary transition-colors disabled:opacity-70"
+          className={`px-6 py-3 text-white rounded-xl transition-all duration-200 disabled:opacity-70 transform hover:scale-105 active:scale-95 ${
+            formType === 'aesthetic'
+              ? 'bg-gradient-to-r from-meditouch-secondary to-meditouch-accent hover:from-meditouch-accent hover:to-meditouch-secondary hover:shadow-md font-meditouch-primary'
+              : 'bg-mudra-primary hover:bg-mudra-secondary'
+          }`}
         >
           {isSubmitting ? 'Sending...' : 'Send Message'}
         </button>
         
-        <a href="/explore-pune" className="text-mudra-primary hover:text-mudra-secondary transition-colors text-center sm:text-left">
+        <a href="/explore-pune" className={`transition-colors text-center sm:text-left ${
+          formType === 'aesthetic'
+            ? 'text-meditouch-primary hover:text-meditouch-accent font-meditouch-primary'
+            : 'text-mudra-primary hover:text-mudra-secondary'
+        }`}>
           Visiting Pune? Plan Your Trip
         </a>
       </div>

@@ -8,18 +8,19 @@ interface ServiceCardProps {
   icon?: React.ReactNode;
   image?: string;
   theme?: 'mudra' | 'meditouch';
+  animationDelay?: number;
 }
 
-const ServiceCard = ({ title, description, icon, image, theme = 'mudra' }: ServiceCardProps) => {
+const ServiceCard = ({ title, description, icon, image, theme = 'mudra', animationDelay = 0 }: ServiceCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   
   return (
     <div 
-      className={`relative h-full bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 border border-gray-100 hover:shadow-md ${
+      className={`relative h-full bg-white rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.03] ${
         theme === 'meditouch' 
-          ? 'hover:border-meditouch-primary/30 hover:shadow-meditouch-primary/10' 
-          : 'hover:border-mudra-primary/20'
-      } image-card`}
+          ? 'shadow-[0_4px_6px_rgba(90,44,139,0.04),0_1px_3px_rgba(90,44,139,0.08)] hover:shadow-[0_8px_16px_rgba(90,44,139,0.12),0_4px_8px_rgba(90,44,139,0.08)] border border-meditouch-primary/10 hover:border-meditouch-primary/20' 
+          : 'shadow-[0_4px_6px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_16px_rgba(0,0,0,0.12),0_4px_8px_rgba(0,0,0,0.08)] border border-gray-100 hover:border-mudra-primary/20'
+      }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -48,12 +49,16 @@ const ServiceCard = ({ title, description, icon, image, theme = 'mudra' }: Servi
         <div className="flex items-start mb-3">
           {icon && <div className={`mr-3 ${
             theme === 'meditouch' 
-              ? 'text-meditouch-secondary' 
+              ? 'text-meditouch-accent' 
               : 'text-mudra-primary'
           }`}>{icon}</div>}
-          <h3 className={`font-display text-lg font-semibold tracking-tight leading-snug ${icon ? '' : 'mb-3'}`}>{title}</h3>
+          <h3 className={`font-bold tracking-tight leading-snug ${icon ? '' : 'mb-3'} ${
+            theme === 'meditouch' ? 'text-xl font-meditouch-primary text-meditouch-primary' : 'text-lg font-display'
+          }`}>{title}</h3>
         </div>
-        <p className="text-gray-600 body-sm leading-relaxed">{description}</p>
+        <p className={`text-sm leading-relaxed ${
+          theme === 'meditouch' ? 'font-meditouch-primary text-meditouch-primary/80 leading-[1.7]' : 'text-gray-600 leading-6'
+        }`}>{description}</p>
       </div>
     </div>
   );

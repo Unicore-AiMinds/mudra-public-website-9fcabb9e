@@ -55,6 +55,35 @@ const Meditouch = () => {
         const viewportHeight = window.innerHeight;
         if (elementTop < viewportHeight - 100) {
           element.classList.add('visible');
+          
+          // Trigger various reveal animations when sections come into view
+          const animationSelectors = [
+            '.photo-reveal',
+            '.section-heading-reveal', 
+            '.section-text-reveal',
+            '.section-underline-reveal',
+            '.service-card-reveal',
+            '.contact-form-reveal',
+            '.contact-info-reveal'
+          ];
+          
+          animationSelectors.forEach(selector => {
+            const elements = element.querySelectorAll(selector);
+            elements.forEach((el) => {
+              const delay = parseInt(el.getAttribute('data-delay') || '0');
+              setTimeout(() => {
+                el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+                el.style.opacity = '1';
+                
+                // Different transform resets for different animation types
+                if (selector === '.section-underline-reveal') {
+                  el.style.transform = 'scaleX(1)';
+                } else {
+                  el.style.transform = 'translate(0, 0)';
+                }
+              }, delay);
+            });
+          });
         }
       });
     };
@@ -146,7 +175,7 @@ const Meditouch = () => {
     id: 'contact',
     label: 'Contact'
   }];
-  return <div className="min-h-screen">
+  return <div className="min-h-screen bg-gradient-to-b from-meditouch-neutral-light via-white via-[85%] to-meditouch-primary-lightest/30">
       <Navbar />
       
       <main className="scroll-smooth pt-16 md:pt-20">
@@ -163,62 +192,62 @@ const Meditouch = () => {
         />
         
         
-        <section id="about" className="py-24 bg-gradient-to-br from-meditouch-warm-50 via-white to-meditouch-primary-lightest/40 reveal-section scroll-mt-24">
+        <section id="about" className="py-32 reveal-section scroll-mt-24">
           <div className="container mx-auto px-4 md:px-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
               <div className="grid grid-cols-2 gap-6 order-2 md:order-1">
-                <div className="hover:ring-2 hover:ring-meditouch-primary/40 transition-all duration-300 rounded-lg overflow-hidden h-48">
+                <div className="photo-reveal photo-reveal-left transition-all duration-300 rounded-xl overflow-hidden h-48 shadow-[0_1px_3px_rgba(90,44,139,0.06),0_4px_6px_rgba(90,44,139,0.03)] border border-meditouch-primary/8 opacity-0 transform translate-x-[-40px]" data-delay="0">
                   <img alt="Meditouch Clinic Interior" src="/images/hero-image-1.webp" className="w-full h-full object-cover" loading="lazy" />
                 </div>
-                <div className="mt-8 rounded-lg overflow-hidden h-48">
+                <div className="photo-reveal photo-reveal-up mt-8 rounded-xl overflow-hidden h-48 shadow-[0_1px_3px_rgba(90,44,139,0.06),0_4px_6px_rgba(90,44,139,0.03)] border border-meditouch-primary/8 opacity-0 transform translate-y-[40px]" data-delay="200">
                   <img alt="Aesthetic Treatment Room" src="/images/hero-image-4.webp" className="w-full h-full object-cover" loading="lazy" />
                 </div>
-                <div className="hover:ring-2 hover:ring-meditouch-primary/40 transition-all duration-300 rounded-lg overflow-hidden h-48">
+                <div className="photo-reveal photo-reveal-left transition-all duration-300 rounded-xl overflow-hidden h-48 shadow-[0_1px_3px_rgba(90,44,139,0.06),0_4px_6px_rgba(90,44,139,0.03)] border border-meditouch-primary/8 opacity-0 transform translate-x-[-40px]" data-delay="400">
                   <img src="/images/hero-image-3.jpeg" alt="Meditouch Facility" className="w-full h-full object-cover" loading="lazy" />
                 </div>
-                <div className="mt-8 rounded-lg overflow-hidden h-48">
+                <div className="photo-reveal photo-reveal-up mt-8 rounded-xl overflow-hidden h-48 shadow-[0_1px_3px_rgba(90,44,139,0.06),0_4px_6px_rgba(90,44,139,0.03)] border border-meditouch-primary/8 opacity-0 transform translate-y-[40px]" data-delay="600">
                   <img alt="Skin Care Treatment" src="/images/hero-image-2.jpeg" className="w-full h-full object-cover" loading="lazy" />
                 </div>
               </div>
               
               <div className="order-1 md:order-2">
-                <h2 className="text-3xl font-serif font-semibold mb-8 bg-gradient-to-r from-meditouch-primary-dark to-meditouch-secondary-dark bg-clip-text text-transparent">About Meditouch</h2>
+                <h2 className="section-heading-reveal text-3xl font-meditouch-script font-semibold mb-8 bg-gradient-to-r from-meditouch-primary to-meditouch-accent bg-clip-text text-transparent opacity-0 transform translate-y-[20px]" data-delay="0">About Meditouch</h2>
                 
-                <div className="w-24 h-1.5 bg-gradient-to-r from-meditouch-primary via-meditouch-accent to-meditouch-secondary mb-10 rounded-full"></div>
+                <div className="section-underline-reveal w-16 h-1 bg-gradient-to-r from-meditouch-primary via-meditouch-secondary to-meditouch-accent mb-10 rounded-full opacity-0 transform scale-x-0" data-delay="300"></div>
                 
                 <div className="space-y-8">
-                  <p className="text-lg text-meditouch-gray leading-relaxed">
+                  <p className="text-lg text-meditouch-primary font-meditouch-primary leading-[1.7]">
                     Meditouch is Pune's premier destination for advanced aesthetic treatments, 
                     bringing together a multidisciplinary team of specialists to deliver 
                     comprehensive hair, skin, and body solutions.
                   </p>
                   
-                  <div className="bg-gradient-to-br from-meditouch-primary-lightest/70 to-meditouch-secondary-lightest/50 p-8 rounded-2xl border-2 border-meditouch-primary-lighter/30 shadow-lg shadow-meditouch-primary/5">
-                    <h3 className="font-serif text-lg font-medium mb-4 text-meditouch-primary-dark">Our Multidisciplinary Team</h3>
-                    <p className="text-meditouch-gray/90 mb-4 text-sm leading-relaxed">
+                  <div className="bg-meditouch-primary-lighter/30 p-8 rounded-xl shadow-[0_1px_3px_rgba(90,44,139,0.06),0_4px_6px_rgba(90,44,139,0.03)] border border-meditouch-primary/12">
+                    <h3 className="font-meditouch-primary text-xl font-extrabold mb-4 text-meditouch-primary">Our Multidisciplinary Team</h3>
+                    <p className="text-meditouch-primary/80 mb-4 font-meditouch-primary leading-[1.7]">
                       Meditouch brings together a collaborative team of aesthetic specialists:
                     </p>
                     <ul className="space-y-2">
                       <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-gradient-to-r from-meditouch-primary to-meditouch-accent rounded-full mr-2 mt-1.5"></span>
-                        <span className="text-meditouch-gray text-sm">Experienced Dermatologists</span>
+                        <span className="w-2 h-2 bg-gradient-to-r from-meditouch-primary to-meditouch-secondary rounded-full mr-2 mt-1.5"></span>
+                        <span className="text-meditouch-primary text-sm font-meditouch-primary">Experienced Dermatologists</span>
                       </li>
                       <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-gradient-to-r from-meditouch-primary to-meditouch-accent rounded-full mr-2 mt-1.5"></span>
-                        <span className="text-meditouch-gray text-sm">Specialized Trichologists</span>
+                        <span className="w-2 h-2 bg-gradient-to-r from-meditouch-primary to-meditouch-secondary rounded-full mr-2 mt-1.5"></span>
+                        <span className="text-meditouch-primary text-sm font-meditouch-primary">Specialized Trichologists</span>
                       </li>
                       <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-gradient-to-r from-meditouch-primary to-meditouch-accent rounded-full mr-2 mt-1.5"></span>
-                        <span className="text-meditouch-gray text-sm">Skilled Plastic Surgeons</span>
+                        <span className="w-2 h-2 bg-gradient-to-r from-meditouch-primary to-meditouch-secondary rounded-full mr-2 mt-1.5"></span>
+                        <span className="text-meditouch-primary text-sm font-meditouch-primary">Skilled Plastic Surgeons</span>
                       </li>
                       <li className="flex items-baseline">
-                        <span className="w-2 h-2 bg-gradient-to-r from-meditouch-primary to-meditouch-accent rounded-full mr-2 mt-1.5"></span>
-                        <span className="text-meditouch-gray text-sm">Qualified Cosmetologists</span>
+                        <span className="w-2 h-2 bg-gradient-to-r from-meditouch-primary to-meditouch-secondary rounded-full mr-2 mt-1.5"></span>
+                        <span className="text-meditouch-primary text-sm font-meditouch-primary">Qualified Cosmetologists</span>
                       </li>
                     </ul>
                   </div>
                   
-                  <p className="text-gray-700">
+                  <p className="text-meditouch-primary font-meditouch-primary leading-[1.7]">
                     Our approach combines clinical expertise with cutting-edge technologies like HIFU, 
                     advanced lasers, and specialized treatment protocols. We prioritize natural-looking, 
                     sustainable results through personalized treatment plans tailored to each patient's 
@@ -230,14 +259,14 @@ const Meditouch = () => {
           </div>
         </section>
         
-        <section id="services" className="py-28 bg-gradient-to-br from-meditouch-gray-50 via-white to-meditouch-warm-100 reveal-section scroll-mt-24">
+        <section id="services" className="py-32 reveal-section scroll-mt-24">
           <div className="container mx-auto px-4 md:px-6">
             <div className="max-w-4xl mx-auto text-center mb-20">
-              <h2 className="text-4xl font-serif font-semibold mb-6 bg-gradient-to-r from-meditouch-primary-dark to-meditouch-secondary-dark bg-clip-text text-transparent">Our Comprehensive Beauty & Wellness Services</h2>
-              <p className="text-lg text-meditouch-gray leading-relaxed">
+              <h2 className="text-4xl font-meditouch-script font-semibold mb-6 bg-gradient-to-r from-meditouch-primary to-meditouch-accent bg-clip-text text-transparent">Our Comprehensive Beauty & Wellness Services</h2>
+              <p className="text-lg text-meditouch-primary/80 font-meditouch-primary leading-[1.7]">
                 Advanced treatments for skin, hair and aesthetic care by Meditouch specialists
               </p>
-              <div className="w-24 h-1.5 bg-gradient-to-r from-meditouch-primary via-meditouch-accent to-meditouch-secondary mx-auto mt-10 rounded-full"></div>
+              <div className="w-16 h-1 bg-gradient-to-r from-meditouch-primary via-meditouch-secondary to-meditouch-accent mx-auto mt-10 rounded-full"></div>
             </div>
             
             {/* Services Carousel */}
@@ -263,6 +292,7 @@ const Meditouch = () => {
                               icon={service.icon}
                               image={service.image}
                               theme="meditouch"
+                              animationDelay={serviceIndex * 150}
                             />
                           ))}
                         </div>
@@ -288,6 +318,7 @@ const Meditouch = () => {
                               icon={service.icon}
                               image={service.image}
                               theme="meditouch"
+                              animationDelay={serviceIndex * 100}
                             />
                           ))}
                         </div>
@@ -301,10 +332,10 @@ const Meditouch = () => {
               <div className="flex items-center justify-center mt-8 space-x-4">
                 <button 
                   onClick={handleServicePrev}
-                  className="p-2 rounded-full border border-meditouch-primary/20 hover:bg-meditouch-primary/10 hover:border-meditouch-primary/40 transition-colors"
+                  className="group p-3 rounded-full bg-meditouch-primary/10 hover:bg-meditouch-primary hover:text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95 backdrop-blur-sm border border-meditouch-primary/20 hover:border-meditouch-primary"
                   aria-label="Previous services"
                 >
-                  <ChevronLeft className="h-5 w-5 text-meditouch-primary" />
+                  <ChevronLeft className="h-5 w-5 text-meditouch-primary group-hover:text-white transition-colors duration-200" />
                 </button>
                 
                 {/* Mobile Pagination */}
@@ -313,8 +344,10 @@ const Meditouch = () => {
                     <button
                       key={index}
                       onClick={() => setCurrentServiceSlide(index)}
-                      className={`w-3 h-3 rounded-full transition-colors ${
-                        index === currentServiceSlide ? 'bg-meditouch-primary' : 'bg-meditouch-primary/20'
+                      className={`w-3 h-3 rounded-full transition-all duration-200 transform hover:scale-125 active:scale-110 ${
+                        index === currentServiceSlide 
+                          ? 'bg-gradient-to-r from-meditouch-secondary to-meditouch-accent shadow-md scale-125' 
+                          : 'bg-meditouch-primary/20 hover:bg-meditouch-primary/40 hover:shadow-sm'
                       }`}
                       aria-label={`Go to slide ${index + 1}`}
                     />
@@ -327,8 +360,10 @@ const Meditouch = () => {
                     <button
                       key={index}
                       onClick={() => setCurrentServiceSlide(index)}
-                      className={`w-3 h-3 rounded-full transition-colors ${
-                        index === currentServiceSlide ? 'bg-meditouch-primary' : 'bg-meditouch-primary/20'
+                      className={`w-3 h-3 rounded-full transition-all duration-200 transform hover:scale-125 active:scale-110 ${
+                        index === currentServiceSlide 
+                          ? 'bg-gradient-to-r from-meditouch-secondary to-meditouch-accent shadow-md scale-125' 
+                          : 'bg-meditouch-primary/20 hover:bg-meditouch-primary/40 hover:shadow-sm'
                       }`}
                       aria-label={`Go to slide ${index + 1}`}
                     />
@@ -337,10 +372,10 @@ const Meditouch = () => {
                 
                 <button 
                   onClick={handleServiceNext}
-                  className="p-2 rounded-full border border-meditouch-primary/20 hover:bg-meditouch-primary/10 hover:border-meditouch-primary/40 transition-colors"
+                  className="group p-3 rounded-full bg-meditouch-primary/10 hover:bg-meditouch-primary hover:text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95 backdrop-blur-sm border border-meditouch-primary/20 hover:border-meditouch-primary"
                   aria-label="Next services"
                 >
-                  <ChevronRight className="h-5 w-5 text-meditouch-primary" />
+                  <ChevronRight className="h-5 w-5 text-meditouch-primary group-hover:text-white transition-colors duration-200" />
                 </button>
               </div>
               
@@ -365,12 +400,12 @@ const Meditouch = () => {
           <TestimonialsSection type="aesthetic" />
         </div>
         
-        <section id="contact" ref={contactSectionRef} className="py-20 bg-gradient-to-t from-meditouch-primary/5 to-white reveal-section scroll-mt-24">
+        <section id="contact" ref={contactSectionRef} className="py-32 reveal-section scroll-mt-24">
           <div className="container mx-auto px-4 md:px-6">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
-                <h2 className="text-3xl font-serif font-semibold mb-4 bg-gradient-to-r from-meditouch-primary to-meditouch-secondary bg-clip-text text-transparent">Contact Meditouch</h2>
-                <div className="w-20 h-1 bg-gradient-to-r from-meditouch-primary to-meditouch-secondary mx-auto"></div>
+                <h2 className="text-3xl font-meditouch-script font-semibold mb-4 bg-gradient-to-r from-meditouch-primary to-meditouch-accent bg-clip-text text-transparent">Contact Meditouch</h2>
+                <div className="w-16 h-1 bg-gradient-to-r from-meditouch-primary to-meditouch-accent mx-auto rounded-full"></div>
               </div>
               
               <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-12">
@@ -379,15 +414,15 @@ const Meditouch = () => {
                 </div>
                 
                 <div className="lg:col-span-2">
-                  <div className="bg-gradient-to-br from-white to-meditouch-primary/5 p-6 rounded-lg shadow-lg border border-meditouch-primary/20">
-                    <h3 className="font-serif text-xl font-medium mb-4 text-meditouch-primary">Clinic Information</h3>
+                  <div className="bg-meditouch-primary-lighter/30 p-6 rounded-xl shadow-[0_1px_3px_rgba(90,44,139,0.06),0_4px_6px_rgba(90,44,139,0.03)] border border-meditouch-primary/12">
+                    <h3 className="font-meditouch-script text-xl font-medium mb-4 text-meditouch-primary">Clinic Information</h3>
                     
                     <div className="space-y-4">
                       <div className="flex items-start">
                         <Building className="h-5 w-5 text-meditouch-primary mt-1 mr-3 flex-shrink-0" />
                         <div>
-                          <p className="font-medium">{clinicName}</p>
-                          <p className="text-gray-600 text-sm">
+                          <p className="font-medium font-meditouch-primary">{clinicName}</p>
+                          <p className="text-meditouch-primary text-sm font-meditouch-primary">
                             Manas Apartment, 1st Floor, Lakaki Road, Opp. Hotel Ambience, Model Colony, Shivajinagar, Pune 411 016
                           </p>
                         </div>
@@ -396,16 +431,16 @@ const Meditouch = () => {
                       <div className="flex items-center">
                         <Clock className="h-5 w-5 text-meditouch-primary mr-3 flex-shrink-0" />
                         <div>
-                          <p className="font-medium">Clinic Hours</p>
-                          <p className="text-gray-600 text-sm">Mon - Sat: 10:00 am - 7:00 pm</p>
+                          <p className="font-medium font-meditouch-primary">Clinic Hours</p>
+                          <p className="text-meditouch-primary text-sm font-meditouch-primary">Mon - Sat: 10:00 am - 7:00 pm</p>
                         </div>
                       </div>
                       
                       <div className="flex items-center">
                         <CalendarClock className="h-5 w-5 text-meditouch-primary mr-3 flex-shrink-0" />
                         <div>
-                          <p className="font-medium">Phone Number</p>
-                          <p className="text-gray-600 text-sm">+919371015255</p>
+                          <p className="font-medium font-meditouch-primary">Phone Number</p>
+                          <p className="text-meditouch-primary text-sm font-meditouch-primary">+919371015255</p>
                         </div>
                       </div>
                     </div>
@@ -416,9 +451,9 @@ const Meditouch = () => {
               {/* Location Map - Full Width Below Contact Form */}
               <div className="max-w-4xl mx-auto">
                 <div className="text-center mb-8">
-                  <h3 className="text-2xl font-serif font-semibold mb-2 bg-gradient-to-r from-meditouch-primary to-meditouch-secondary bg-clip-text text-transparent">Visit Our Clinic</h3>
-                  <p className="text-gray-600">Find us easily with our interactive map</p>
-                  <div className="w-16 h-1 bg-gradient-to-r from-meditouch-primary to-meditouch-secondary mx-auto mt-4"></div>
+                  <h3 className="text-2xl font-meditouch-script font-semibold mb-2 bg-gradient-to-r from-meditouch-primary to-meditouch-accent bg-clip-text text-transparent">Visit Our Clinic</h3>
+                  <p className="text-meditouch-primary font-meditouch-primary">Find us easily with our interactive map</p>
+                  <div className="w-16 h-1 bg-gradient-to-r from-meditouch-primary to-meditouch-accent mx-auto mt-4 rounded-full"></div>
                 </div>
                 <LocationMap />
               </div>
@@ -426,6 +461,17 @@ const Meditouch = () => {
           </div>
         </section>
       </main>
+      
+      {/* Elegant curved wave transition to footer */}
+      <div className="relative">
+        <svg 
+          className="w-full h-16 md:h-20 fill-current text-meditouch-primary" 
+          preserveAspectRatio="none" 
+          viewBox="0 0 1200 120"
+        >
+          <path d="M0,0 C150,120 350,120 600,60 C850,0 1050,0 1200,60 L1200,120 L0,120 Z" />
+        </svg>
+      </div>
       
       <Footer theme="meditouch" />
     </div>;
