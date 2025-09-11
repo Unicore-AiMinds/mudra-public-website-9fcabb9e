@@ -156,7 +156,11 @@ const Navbar = () => {
         <div className="md:hidden bg-white border-t">
           <div className="container mx-auto px-4 py-4">
             <nav className="flex flex-col space-y-3">
-              <Link to="/" className="py-2 px-4 rounded-md hover:bg-gray-100 text-mudra-dark">
+              <Link to="/" className={`py-2 px-4 rounded-md transition-colors ${
+                brandMode === 'meditouch' 
+                  ? 'hover:bg-meditouch-neutral text-meditouch-primary font-meditouch-primary font-medium tracking-wide'
+                  : 'hover:bg-gray-100 text-mudra-dark'
+              }`}>
                 {brandMode === 'dental' ? 'Dental Metrix' : brandMode === 'meditouch' ? 'Meditouch' : 'Home'}
               </Link>
               <button onClick={() => {
@@ -167,7 +171,11 @@ const Navbar = () => {
                 } else {
                   document.getElementById('about')?.scrollIntoView({behavior: 'smooth'});
                 }
-              }} className="py-2 px-4 rounded-md hover:bg-gray-100 text-mudra-dark text-left">
+              }} className={`py-2 px-4 rounded-md transition-colors text-left ${
+                brandMode === 'meditouch' 
+                  ? 'hover:bg-meditouch-neutral text-meditouch-primary font-meditouch-primary font-medium tracking-wide'
+                  : 'hover:bg-gray-100 text-mudra-dark'
+              }`}>
                 About
               </button>
               <button onClick={() => {
@@ -183,7 +191,11 @@ const Navbar = () => {
                     window.scrollTo({ top: y, behavior: 'smooth' });
                   }
                 }
-              }} className="py-2 px-4 rounded-md hover:bg-gray-100 text-mudra-dark text-left">
+              }} className={`py-2 px-4 rounded-md transition-colors text-left ${
+                brandMode === 'meditouch' 
+                  ? 'hover:bg-meditouch-neutral text-meditouch-primary font-meditouch-primary font-medium tracking-wide'
+                  : 'hover:bg-gray-100 text-mudra-dark'
+              }`}>
                 Services
               </button>
               <button onClick={() => {
@@ -199,10 +211,18 @@ const Navbar = () => {
                     window.scrollTo({ top: y, behavior: 'smooth' });
                   }
                 }
-              }} className="py-2 px-4 rounded-md hover:bg-gray-100 text-mudra-dark text-left">
+              }} className={`py-2 px-4 rounded-md transition-colors text-left ${
+                brandMode === 'meditouch' 
+                  ? 'hover:bg-meditouch-neutral text-meditouch-primary font-meditouch-primary font-medium tracking-wide'
+                  : 'hover:bg-gray-100 text-mudra-dark'
+              }`}>
                 Testimonials
               </button>
-              <Link to="/explore-pune" className="py-2 px-4 rounded-md hover:bg-gray-100 text-mudra-dark">
+              <Link to="/explore-pune" className={`py-2 px-4 rounded-md transition-colors ${
+                brandMode === 'meditouch' 
+                  ? 'hover:bg-meditouch-neutral text-meditouch-primary font-meditouch-primary font-medium tracking-wide'
+                  : 'hover:bg-gray-100 text-mudra-dark'
+              }`}>
                 Explore Pune
               </Link>
               <button 
@@ -220,7 +240,11 @@ const Navbar = () => {
                     }
                   }
                 }}
-                className="py-2 px-4 bg-mudra-primary text-white rounded-md hover:bg-mudra-secondary transition-colors text-left"
+                className={`py-2 px-4 text-white rounded-md transition-colors text-left ${
+                  brandMode === 'meditouch' 
+                    ? 'bg-gradient-to-r from-meditouch-secondary to-meditouch-accent hover:from-meditouch-accent hover:to-meditouch-secondary font-meditouch-primary font-medium'
+                    : 'bg-mudra-primary hover:bg-mudra-secondary'
+                }`}
               >
                 Contact Us
               </button>

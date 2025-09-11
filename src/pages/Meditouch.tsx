@@ -16,6 +16,7 @@ const Meditouch = () => {
   const [currentServiceSlide, setCurrentServiceSlide] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
   
   // All services as a flat array
   const allServices = [
@@ -46,8 +47,15 @@ const Meditouch = () => {
     [allServices[8]]                  // Slide 5: Semi Permanent Makeup
   ];
 
-  // This effect handles scroll reveal animations
+  // This effect handles scroll reveal animations and screen size detection
   useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+
     const handleScroll = () => {
       const revealElements = document.querySelectorAll('.reveal-section');
       revealElements.forEach(element => {
@@ -105,43 +113,49 @@ const Meditouch = () => {
     }
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', checkScreenSize);
     };
   }, []);
 
   // Auto-rotate services carousel every 10 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      const maxSlides = window.innerWidth < 768 ? mobileServiceSlides.length : desktopServiceSlides.length;
+      const maxSlides = isMobile ? mobileServiceSlides.length : desktopServiceSlides.length;
       setCurrentServiceSlide((prev) => (prev === maxSlides - 1 ? 0 : prev + 1));
     }, 10000);
 
     return () => clearInterval(interval);
-  }, [mobileServiceSlides.length, desktopServiceSlides.length]);
+  }, [isMobile, mobileServiceSlides.length, desktopServiceSlides.length]);
+
+  // Reset slide when screen size changes
+  useEffect(() => {
+    setCurrentServiceSlide(0);
+  }, [isMobile]);
 
   const handleServicePrev = () => {
-    const maxSlides = window.innerWidth < 768 ? mobileServiceSlides.length : desktopServiceSlides.length;
+    const maxSlides = isMobile ? mobileServiceSlides.length : desktopServiceSlides.length;
     setCurrentServiceSlide((prev) => (prev === 0 ? maxSlides - 1 : prev - 1));
   };
 
   const handleServiceNext = () => {
-    const maxSlides = window.innerWidth < 768 ? mobileServiceSlides.length : desktopServiceSlides.length;
+    const maxSlides = isMobile ? mobileServiceSlides.length : desktopServiceSlides.length;
     setCurrentServiceSlide((prev) => (prev === maxSlides - 1 ? 0 : prev + 1));
   };
 
   // Mobile swipe handlers (only on mobile view)
   const onTouchStart = (e: React.TouchEvent) => {
-    if (window.innerWidth >= 768) return; // Only on mobile
+    if (!isMobile) return; // Only on mobile
     setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientX);
   };
 
   const onTouchMove = (e: React.TouchEvent) => {
-    if (window.innerWidth >= 768) return; // Only on mobile
+    if (!isMobile) return; // Only on mobile
     setTouchEnd(e.targetTouches[0].clientX);
   };
 
   const onTouchEnd = () => {
-    if (window.innerWidth >= 768) return; // Only on mobile
+    if (!isMobile) return; // Only on mobile
     if (!touchStart || !touchEnd) return;
     
     const distance = touchStart - touchEnd;
@@ -379,17 +393,10 @@ const Meditouch = () => {
                 </button>
               </div>
               
-              {/* Mobile Counter */}
-              <div className="text-center mt-4 md:hidden">
+              {/* Counter */}
+              <div className="text-center mt-4">
                 <p className="text-sm text-gray-500">
-                  {currentServiceSlide + 1} of {mobileServiceSlides.length}
-                </p>
-              </div>
-
-              {/* Desktop Counter */}
-              <div className="hidden md:block text-center mt-4">
-                <p className="text-sm text-gray-500">
-                  {currentServiceSlide + 1} of {desktopServiceSlides.length}
+                  {currentServiceSlide + 1} of {isMobile ? mobileServiceSlides.length : desktopServiceSlides.length}
                 </p>
               </div>
             </div>
