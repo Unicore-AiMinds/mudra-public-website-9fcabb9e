@@ -32,9 +32,10 @@ const DentalMetrix = () => {
     { title: "Maxillofacial Prosthesis", description: "Artificial replacements for facial structures lost due to trauma, surgery, or congenital conditions.", icon: <UserCheck size={24} />, image: "/images/maxillofacial-prosthesis.jpeg" }
   ];
 
-  // Desktop layout (original 3 slides)
+  // Desktop layout (4 slides: 2, 2, 3, 3)
   const desktopServiceSlides = [
-    [allServices[0], allServices[1], allServices[2], allServices[3]], // 4 services
+    [allServices[0], allServices[1]], // 2 services
+    [allServices[2], allServices[3]], // 2 services
     [allServices[4], allServices[5], allServices[6]], // 3 services  
     [allServices[7], allServices[8], allServices[9]] // 3 services
   ];
@@ -268,6 +269,7 @@ const DentalMetrix = () => {
                               description={service.description}
                               icon={service.icon}
                               image={service.image}
+                              theme="dental"
                             />
                           ))}
                         </div>
@@ -284,7 +286,7 @@ const DentalMetrix = () => {
                   >
                     {desktopServiceSlides.map((slide, slideIndex) => (
                       <div key={`desktop-${slideIndex}`} className="w-full flex-shrink-0">
-                        <div className={`grid gap-6 ${slide.length === 4 ? 'grid-cols-2 lg:grid-cols-4' : 'grid-cols-2 lg:grid-cols-3'}`}>
+                        <div className={`grid gap-6 ${slide.length === 2 ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-2 lg:grid-cols-3'}`}>
                           {slide.map((service, serviceIndex) => (
                             <ServiceCard 
                               key={`desktop-${slideIndex}-${serviceIndex}`}
@@ -292,6 +294,7 @@ const DentalMetrix = () => {
                               description={service.description}
                               icon={service.icon}
                               image={service.image}
+                              theme="dental"
                             />
                           ))}
                         </div>

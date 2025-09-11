@@ -7,7 +7,7 @@ interface ServiceCardProps {
   description: string;
   icon?: React.ReactNode;
   image?: string;
-  theme?: 'mudra' | 'meditouch';
+  theme?: 'mudra' | 'meditouch' | 'dental';
   animationDelay?: number;
 }
 
@@ -25,22 +25,30 @@ const ServiceCard = ({ title, description, icon, image, theme = 'mudra', animati
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Horizontal Layout for Meditouch */}
-      {theme === 'meditouch' ? (
-        <div className="flex flex-col h-full">
+      {/* Horizontal Layout for Meditouch and Dental */}
+      {theme === 'meditouch' || theme === 'dental' ? (
+        <div className="flex flex-col h-full min-h-[280px]">
           {/* Top - Title Section */}
-          <div className="p-4 text-center border-b border-meditouch-primary/10">
+          <div className={`p-4 text-center border-b ${
+            theme === 'meditouch' ? 'border-meditouch-primary/10' : 'border-mudra-primary/10'
+          }`}>
             <div className="flex items-center justify-center mb-2">
-              {icon && <div className="text-meditouch-accent mr-3">{icon}</div>}
-              <h3 className="text-xl font-bold font-meditouch-primary text-meditouch-primary tracking-tight leading-snug">{title}</h3>
+              {icon && <div className={`mr-3 ${
+                theme === 'meditouch' ? 'text-meditouch-accent' : 'text-mudra-accent'
+              }`}>{icon}</div>}
+              <h3 className={`text-xl font-bold tracking-tight leading-snug ${
+                theme === 'meditouch' 
+                  ? 'font-meditouch-primary text-meditouch-primary' 
+                  : 'text-mudra-primary'
+              }`}>{title}</h3>
             </div>
           </div>
           
           {/* Bottom - Image Left, Description Right */}
-          <div className="flex">
+          <div className="flex flex-1">
             {/* Left Side - Image Container */}
             {image && (
-              <div className="w-1/2 bg-gray-100 overflow-hidden">
+              <div className="w-1/2 bg-gray-100 overflow-hidden min-h-[200px]">
                 <img 
                   src={image} 
                   alt={title}
@@ -62,7 +70,11 @@ const ServiceCard = ({ title, description, icon, image, theme = 'mudra', animati
             
             {/* Right Side - Description Only */}
             <div className="w-1/2 p-4 flex flex-col justify-center">
-              <p className="font-meditouch-primary text-meditouch-primary/80 leading-[1.7] text-sm">{description}</p>
+              <p className={`leading-[1.7] text-sm ${
+                theme === 'meditouch' 
+                  ? 'font-meditouch-primary text-meditouch-primary/80' 
+                  : 'text-mudra-dark/80'
+              }`}>{description}</p>
             </div>
           </div>
         </div>
