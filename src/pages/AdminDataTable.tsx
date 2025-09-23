@@ -1,9 +1,9 @@
-import { useState, useMemo } from 'react';
-import { 
-  Search, 
-  Filter, 
-  Download, 
-  Eye, 
+import { useState, useMemo, useEffect } from 'react';
+import {
+  Search,
+  Filter,
+  Download,
+  Eye,
   Calendar,
   ChevronLeft,
   ChevronRight,
@@ -11,11 +11,11 @@ import {
   ChevronsRight,
   ArrowUpDown,
   ArrowUp,
-  ArrowDown
+  ArrowDown,
+  Trash2
 } from 'lucide-react';
-import { FormSubmission, getSubmissionsByType, mockFormSubmissions } from '@/lib/mockData';
+import { apiClient, ContactSubmission } from '@/lib/api';
 import { exportToExcel } from '@/lib/exportUtils';
-import { StatusService } from '@/lib/statusService';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
@@ -28,10 +28,12 @@ interface AdminDataTableProps {
 
 const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTableProps) => {
   const { toast } = useToast();
-  
+
   // Data and filtering
-  const allData = useMemo(() => getSubmissionsByType(clinicType), [clinicType]);
-  const [filteredData, setFilteredData] = useState<FormSubmission[]>(allData);
+  const [allData, setAllData] = useState<ContactSubmission[]>([]);
+  const [filteredData, setFilteredData] = useState<ContactSubmission[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [dateFilter, setDateFilter] = useState<string>('all');
@@ -39,16 +41,21 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
   
   // Sorting
-  const [sortField, setSortField] = useState<keyof FormSubmission>('submittedAt');
+  const [sortField, setSortField] = useState<keyof ContactSubmission>('submitted_at');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
-  
+
   // Selected submission for details
-  const [selectedSubmission, setSelectedSubmission] = useState<FormSubmission | null>(null);
+  const [selectedSubmission, setSelectedSubmission] = useState<ContactSubmission | null>(null);
   
   // Status update loading
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
+
+  // Delete loading
+  const [deletingSubmission, setDeletingSubmission] = useState<string | null>(null);
   
   // Confirmation dialog state
   const [confirmDialog, setConfirmDialog] = useState<{
@@ -58,76 +65,83 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
     onConfirm: () => void;
   }>({ isOpen: false, title: '', message: '', onConfirm: () => {} });
 
-  // Apply filters
+  // Fetch data from API
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const clinic = clinicType === 'dental' ? 'dental_metrix' : 'meditouch';
+
+        const response = await apiClient.getSubmissions({
+          clinic,
+          page: currentPage,
+          limit: itemsPerPage,
+          search: searchTerm,
+          status: statusFilter !== 'all' ? statusFilter : undefined,
+          sortBy: sortField,
+          sortOrder: sortDirection
+        });
+
+        if (response.success && response.data) {
+          setAllData(response.data);
+          setFilteredData(response.data);
+          setTotalCount(response.total || 0);
+          setTotalPages(response.totalPages || 1);
+        } else {
+          setError('Failed to fetch submissions');
+        }
+      } catch (err) {
+        setError('Failed to fetch submissions');
+        console.error('Data fetch error:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [clinicType, currentPage, itemsPerPage, searchTerm, statusFilter, sortField, sortDirection]);
+
+  // Since API handles filtering, this is mainly for local date filtering if needed
   useMemo(() => {
     let filtered = [...allData];
-    
-    // Search filter
-    if (searchTerm) {
-      filtered = filtered.filter(item =>
-        item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.phone.includes(searchTerm) ||
-        item.serviceInquiry.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.message.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-    
-    // Status filter
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter(item => item.status === statusFilter);
-    }
-    
-    // Date filter
+
+    // Date filter (local filtering for real-time updates)
     if (dateFilter !== 'all') {
       const now = new Date();
       let filterDate = new Date();
-      
+
       switch (dateFilter) {
         case 'today':
           filterDate.setHours(0, 0, 0, 0);
-          filtered = filtered.filter(item => item.submittedAt >= filterDate);
+          filtered = filtered.filter(item => {
+            const submittedDate = new Date(item.submitted_at || '');
+            return submittedDate >= filterDate;
+          });
           break;
         case 'week':
           filterDate.setDate(now.getDate() - 7);
-          filtered = filtered.filter(item => item.submittedAt >= filterDate);
+          filtered = filtered.filter(item => {
+            const submittedDate = new Date(item.submitted_at || '');
+            return submittedDate >= filterDate;
+          });
           break;
         case 'month':
           filterDate.setMonth(now.getMonth() - 1);
-          filtered = filtered.filter(item => item.submittedAt >= filterDate);
+          filtered = filtered.filter(item => {
+            const submittedDate = new Date(item.submitted_at || '');
+            return submittedDate >= filterDate;
+          });
           break;
       }
     }
-    
-    // Sort
-    filtered.sort((a, b) => {
-      let aVal = a[sortField];
-      let bVal = b[sortField];
-      
-      if (aVal instanceof Date) {
-        aVal = aVal.getTime();
-      }
-      if (bVal instanceof Date) {
-        bVal = bVal.getTime();
-      }
-      
-      if (sortDirection === 'asc') {
-        return aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
-      } else {
-        return aVal > bVal ? -1 : aVal < bVal ? 1 : 0;
-      }
-    });
-    
+
     setFilteredData(filtered);
-    setCurrentPage(1); // Reset to first page when filtering
-  }, [allData, searchTerm, statusFilter, dateFilter, sortField, sortDirection]);
+  }, [allData, dateFilter]);
 
-  // Pagination calculations
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
+  // Pagination is handled by API, so we use the data as-is
+  const paginatedData = filteredData;
 
-  const handleSort = (field: keyof FormSubmission) => {
+  const handleSort = (field: keyof ContactSubmission) => {
     if (field === sortField) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     } else {
@@ -161,35 +175,49 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
       : <ArrowDown className="h-4 w-4 text-slate-600" />;
   };
 
-  const handleStatusUpdate = async (submissionId: string, newStatus: FormSubmission['status'], currentStatus: FormSubmission['status']) => {
+  const handleStatusUpdate = async (submissionId: number, newStatus: ContactSubmission['status'], currentStatus: ContactSubmission['status']) => {
     // Get submission details for confirmation
     const submission = allData.find(s => s.id === submissionId);
     if (!submission) return;
 
-    const statusConfig = StatusService.getStatusConfig(newStatus);
-    const currentStatusConfig = StatusService.getStatusConfig(currentStatus);
-    
+    const statusLabels: Record<string, string> = {
+      'new': 'New',
+      'contacted': 'Contacted',
+      'follow-up': 'Follow-up',
+      'scheduled': 'Scheduled',
+      'closed': 'Closed'
+    };
+
     // Show confirmation dialog
     setConfirmDialog({
       isOpen: true,
       title: 'Update Status',
-      message: `Are you sure you want to change the status for "${submission.name}" from "${currentStatusConfig.label}" to "${statusConfig.label}"?\n\nService: ${submission.serviceInquiry}`,
+      message: `Are you sure you want to change the status for "${submission.name}" from "${statusLabels[currentStatus]}" to "${statusLabels[newStatus]}"?\n\nService: ${submission.service_inquiry}`,
       onConfirm: async () => {
-        setUpdatingStatus(submissionId);
+        setUpdatingStatus(submissionId.toString());
         try {
-          await StatusService.updateSubmissionStatus(submissionId, newStatus);
-          
-          // Update the local data (in a real app, you'd refetch from the server)
-          const updatedData = allData.map(submission => 
-            submission.id === submissionId 
-              ? { ...submission, status: newStatus }
-              : submission
-          );
-          
-          toast({
-            title: "Status Updated Successfully",
-            description: `${submission.name}'s status changed to ${statusConfig.label}`,
-          });
+          const response = await apiClient.updateSubmissionStatus(submissionId, newStatus);
+
+          if (response.success) {
+            // Update the local data
+            const updatedData = allData.map(submission =>
+              submission.id === submissionId
+                ? { ...submission, status: newStatus }
+                : submission
+            );
+            setAllData(updatedData);
+
+            toast({
+              title: "Status Updated Successfully",
+              description: `${submission.name}'s status changed to ${statusLabels[newStatus]}`,
+            });
+          } else {
+            toast({
+              title: "Update Failed",
+              description: response.error || "Failed to update status",
+              variant: "destructive",
+            });
+          }
           
           // Trigger re-filter
           setFilteredData(prev => prev.map(submission => 
@@ -211,16 +239,70 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
     });
   };
 
-  const getStatusSelect = (submission: FormSubmission) => {
-    const statusOptions = StatusService.getStatusOptions();
-    const currentStatus = StatusService.getStatusConfig(submission.status);
-    const isUpdating = updatingStatus === submission.id;
+  const handleDeleteSubmission = async (submissionId: number) => {
+    const submission = allData.find(s => s.id === submissionId);
+    if (!submission) return;
+
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Delete Submission',
+      message: `Are you sure you want to permanently delete the submission from "${submission.name}"?\n\nService: ${submission.service_inquiry}\n\nThis action cannot be undone.`,
+      onConfirm: async () => {
+        setDeletingSubmission(submissionId.toString());
+        try {
+          const response = await apiClient.deleteSubmission(submissionId);
+
+          if (response.success) {
+            // Remove from local data
+            const updatedData = allData.filter(s => s.id !== submissionId);
+            setAllData(updatedData);
+            setFilteredData(prevFiltered => prevFiltered.filter(s => s.id !== submissionId));
+
+            toast({
+              title: "Submission Deleted",
+              description: `${submission.name}'s submission has been permanently deleted.`,
+            });
+
+            // Refresh data to update pagination and analytics
+            window.location.reload();
+          } else {
+            toast({
+              title: "Delete Failed",
+              description: response.error || "Failed to delete submission",
+              variant: "destructive",
+            });
+          }
+        } catch (error) {
+          console.error('Delete submission error:', error);
+          toast({
+            title: "Delete Failed",
+            description: "Could not delete submission. Please try again.",
+            variant: "destructive",
+          });
+        } finally {
+          setDeletingSubmission(null);
+        }
+      }
+    });
+  };
+
+  const getStatusSelect = (submission: ContactSubmission) => {
+    const statusOptions = [
+      { value: 'new', label: 'New', color: 'bg-red-100 text-red-700 border-red-200' },
+      { value: 'contacted', label: 'Contacted', color: 'bg-blue-100 text-blue-700 border-blue-200' },
+      { value: 'follow-up', label: 'Follow-up', color: 'bg-yellow-100 text-yellow-700 border-yellow-200' },
+      { value: 'scheduled', label: 'Scheduled', color: 'bg-green-100 text-green-700 border-green-200' },
+      { value: 'closed', label: 'Closed', color: 'bg-gray-100 text-gray-700 border-gray-200' }
+    ];
+
+    const currentStatus = statusOptions.find(opt => opt.value === submission.status) || statusOptions[0];
+    const isUpdating = updatingStatus === submission.id?.toString();
     
     return (
       <div className="relative">
         <select
           value={submission.status}
-          onChange={(e) => handleStatusUpdate(submission.id, e.target.value as FormSubmission['status'], submission.status)}
+          onChange={(e) => handleStatusUpdate(submission.id!, e.target.value as ContactSubmission['status'], submission.status)}
           disabled={isUpdating}
           className={`text-xs font-medium px-2 py-1 rounded-full border cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${currentStatus.color}`}
         >
@@ -327,11 +409,11 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
               <tr>
                 <th 
                   className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider cursor-pointer hover:bg-slate-100"
-                  onClick={() => handleSort('submittedAt')}
+                  onClick={() => handleSort('submitted_at')}
                 >
                   <div className="flex items-center space-x-1">
                     <span>Date</span>
-                    {getSortIcon('submittedAt')}
+                    {getSortIcon('submitted_at')}
                   </div>
                 </th>
                 <th 
@@ -348,11 +430,11 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
                 </th>
                 <th 
                   className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider cursor-pointer hover:bg-slate-100"
-                  onClick={() => handleSort('serviceInquiry')}
+                  onClick={() => handleSort('service_inquiry')}
                 >
                   <div className="flex items-center space-x-1">
                     <span>Service</span>
-                    {getSortIcon('serviceInquiry')}
+                    {getSortIcon('service_inquiry')}
                   </div>
                 </th>
                 <th 
@@ -374,32 +456,49 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
                 <tr key={submission.id} className="hover:bg-slate-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">
                     <div>
-                      <div className="font-medium">{format(submission.submittedAt, 'MMM dd, yyyy')}</div>
-                      <div className="text-slate-500">{format(submission.submittedAt, 'HH:mm')}</div>
+                      <div className="font-medium">
+                        {submission.submitted_at ? format(new Date(submission.submitted_at), 'MMM dd, yyyy') : 'N/A'}
+                      </div>
+                      <div className="text-slate-500">
+                        {submission.submitted_at ? format(new Date(submission.submitted_at), 'HH:mm') : 'N/A'}
+                      </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-slate-900">{submission.name}</div>
-                    <div className="text-sm text-slate-500">{submission.id}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
                     <div>{submission.email}</div>
                     <div>{submission.phone}</div>
                   </td>
                   <td className="px-6 py-4 text-sm text-slate-900">
-                    <div className="max-w-xs truncate">{submission.serviceInquiry}</div>
+                    <div className="max-w-xs truncate">{submission.service_inquiry}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {getStatusSelect(submission)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button
-                      onClick={() => setSelectedSubmission(submission)}
-                      className="text-indigo-600 hover:text-indigo-900 inline-flex items-center"
-                    >
-                      <Eye className="h-4 w-4 mr-1" />
-                      View
-                    </button>
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => setSelectedSubmission(submission)}
+                        className="text-indigo-600 hover:text-indigo-900 inline-flex items-center"
+                      >
+                        <Eye className="h-4 w-4 mr-1" />
+                        View
+                      </button>
+                      <button
+                        onClick={() => handleDeleteSubmission(submission.id!)}
+                        disabled={deletingSubmission === submission.id?.toString()}
+                        className="text-red-600 hover:text-red-900 inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {deletingSubmission === submission.id?.toString() ? (
+                          <div className="w-4 h-4 mr-1 border border-red-400 border-t-transparent rounded-full animate-spin"></div>
+                        ) : (
+                          <Trash2 className="h-4 w-4 mr-1" />
+                        )}
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -490,11 +589,7 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
               </div>
               
               <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700">Submission ID</label>
-                    <p className="text-sm text-slate-900 mt-1">{selectedSubmission.id}</p>
-                  </div>
+                <div className="grid grid-cols-1 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-slate-700">Status</label>
                     <div className="mt-1">{getStatusSelect(selectedSubmission)}</div>
@@ -509,7 +604,7 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
                   <div>
                     <label className="block text-sm font-medium text-slate-700">Submitted</label>
                     <p className="text-sm text-slate-900 mt-1">
-                      {format(selectedSubmission.submittedAt, 'MMM dd, yyyy HH:mm')}
+                      {selectedSubmission.submitted_at ? format(new Date(selectedSubmission.submitted_at), 'MMM dd, yyyy HH:mm') : 'N/A'}
                     </p>
                   </div>
                 </div>
@@ -527,7 +622,7 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
                 
                 <div>
                   <label className="block text-sm font-medium text-slate-700">Service Inquiry</label>
-                  <p className="text-sm text-slate-900 mt-1">{selectedSubmission.serviceInquiry}</p>
+                  <p className="text-sm text-slate-900 mt-1">{selectedSubmission.service_inquiry}</p>
                 </div>
                 
                 <div>

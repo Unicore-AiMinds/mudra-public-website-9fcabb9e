@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Database files
+*.db
+mudra_clinic.db
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

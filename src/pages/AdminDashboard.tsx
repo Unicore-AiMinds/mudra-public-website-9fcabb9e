@@ -20,16 +20,51 @@ import {
   Pie,
   Cell
 } from 'recharts';
-import { getAnalytics, mockFormSubmissions, FormSubmission } from '@/lib/mockData';
+import { apiClient, ContactSubmission, AnalyticsData } from '@/lib/api';
 import { format } from 'date-fns';
 
 const AdminDashboard = () => {
-  const [analytics, setAnalytics] = useState(getAnalytics());
-  const [recentSubmissions, setRecentSubmissions] = useState<FormSubmission[]>([]);
+  const [analytics, setAnalytics] = useState<AnalyticsData>({
+    total: 0,
+    dental: 0,
+    aesthetic: 0,
+    byStatus: { new: 0, contacted: 0, 'follow-up': 0, scheduled: 0, closed: 0 }
+  });
+  const [recentSubmissions, setRecentSubmissions] = useState<ContactSubmission[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setAnalytics(getAnalytics());
-    setRecentSubmissions(mockFormSubmissions.slice(0, 8));
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+
+        // Fetch analytics
+        const analyticsResponse = await apiClient.getAnalytics();
+        if (analyticsResponse.success && analyticsResponse.data) {
+          setAnalytics(analyticsResponse.data);
+        }
+
+        // Fetch recent submissions
+        const submissionsResponse = await apiClient.getSubmissions({
+          page: 1,
+          limit: 8,
+          sortBy: 'submitted_at',
+          sortOrder: 'desc'
+        });
+
+        if (submissionsResponse.success && submissionsResponse.data) {
+          setRecentSubmissions(submissionsResponse.data);
+        }
+      } catch (err) {
+        setError('Failed to load dashboard data');
+        console.error('Dashboard data error:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   // Simple conversion rate calculation
@@ -77,13 +112,44 @@ const AdminDashboard = () => {
     </div>
   );
 
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-mudra-primary mx-auto"></div>
+            <p className="mt-2 text-slate-600">Loading dashboard data...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <p className="text-red-600 font-medium">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="mt-2 px-4 py-2 bg-mudra-primary text-white rounded-lg hover:bg-mudra-secondary"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Dashboard Overview</h1>
-          <p className="text-slate-600 mt-1">Simple analytics for your clinic</p>
+          <p className="text-slate-600 mt-1">Monitor and manage your contact submissions</p>
         </div>
         <div className="mt-4 sm:mt-0">
           <div className="bg-white rounded-lg px-4 py-2 shadow-sm border border-slate-200">
@@ -93,7 +159,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* Basic Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <StatCard
           title="Total Submissions"
           value={analytics.total}
@@ -107,13 +173,6 @@ const AdminDashboard = () => {
           icon={TrendingUp}
           color="from-green-500 to-green-600"
           description="New → Scheduled"
-        />
-        <StatCard
-          title="Need Follow-up"
-          value={analytics.byStatus['follow-up']}
-          icon={Phone}
-          color="from-orange-500 to-orange-600"
-          description="Waiting for callback"
         />
         <StatCard
           title="Scheduled Today"
@@ -229,7 +288,7 @@ const AdminDashboard = () => {
                     {submission.status === 'follow-up' ? 'Follow-up' : submission.status}
                   </div>
                   <p className="text-xs text-slate-500 mt-1">
-                    {format(submission.submittedAt, 'MMM dd, HH:mm')}
+                    {submission.submitted_at ? format(new Date(submission.submitted_at), 'MMM dd, HH:mm') : 'N/A'}
                   </p>
                 </div>
               </div>
@@ -242,23 +301,23 @@ const AdminDashboard = () => {
           <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center">
             Needs Follow-up
             <span className="ml-2 bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded-full">
-              {mockFormSubmissions.filter(s => s.status === 'contacted' || s.status === 'follow-up').length}
+              {analytics.byStatus.contacted || 0}
             </span>
           </h3>
           <div className="space-y-3">
-            {mockFormSubmissions
-              .filter(s => s.status === 'contacted' || s.status === 'follow-up')
-              .sort((a, b) => a.submittedAt.getTime() - b.submittedAt.getTime()) // Oldest first
+            {recentSubmissions
+              .filter(s => s.status === 'contacted')
+              .sort((a, b) => new Date(a.submitted_at || '').getTime() - new Date(b.submitted_at || '').getTime()) // Oldest first
               .slice(0, 6)
               .map((submission) => (
               <div key={submission.id} className="flex items-center justify-between p-3 bg-orange-50 rounded-lg border border-orange-100">
                 <div className="flex items-center space-x-3">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    submission.formType === 'dental' 
+                    submission.clinic === 'dental_metrix'
                       ? 'bg-mudra-primary/10 text-mudra-primary'
                       : 'bg-meditouch-primary/10 text-meditouch-primary'
                   }`}>
-                    {submission.formType === 'dental' ? (
+                    {submission.clinic === 'dental_metrix' ? (
                       <Stethoscope className="h-5 w-5" />
                     ) : (
                       <Sparkles className="h-5 w-5" />
@@ -266,20 +325,22 @@ const AdminDashboard = () => {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-slate-900">{submission.name}</p>
-                    <p className="text-xs text-slate-600 truncate max-w-[180px]">{submission.serviceInquiry}</p>
+                    <p className="text-xs text-slate-600 truncate max-w-[180px]">{submission.service_inquiry}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${
-                    submission.status === 'contacted' ? 'bg-blue-100 text-blue-700' : 'bg-yellow-100 text-yellow-700'
-                  }`}>
-                    {submission.status === 'follow-up' ? 'Follow-up' : submission.status}
+                  <div className="inline-flex px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+                    contacted
                   </div>
                   <p className="text-xs text-slate-500 mt-1">
-                    {format(submission.submittedAt, 'MMM dd')} 
-                    <span className="ml-1 text-orange-600">
-                      ({Math.floor((Date.now() - submission.submittedAt.getTime()) / (1000 * 60 * 60 * 24))}d ago)
-                    </span>
+                    {submission.submitted_at ? (
+                      <>
+                        {format(new Date(submission.submitted_at), 'MMM dd')}
+                        <span className="ml-1 text-orange-600">
+                          ({Math.floor((Date.now() - new Date(submission.submitted_at).getTime()) / (1000 * 60 * 60 * 24))}d ago)
+                        </span>
+                      </>
+                    ) : 'N/A'}
                   </p>
                 </div>
               </div>

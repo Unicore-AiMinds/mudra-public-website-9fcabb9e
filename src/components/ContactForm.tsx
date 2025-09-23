@@ -49,25 +49,57 @@ const ContactForm = ({ formType }: ContactFormProps) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate form submission
-    setTimeout(() => {
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          serviceInquiry: formData.serviceInquiry,
+          message: formData.message,
+          formType: formType, // 'dental' or 'aesthetic'
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        toast({
+          title: "Form submitted successfully",
+          description: "We'll get back to you as soon as possible.",
+        });
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          serviceInquiry: '',
+          message: '',
+        });
+      } else {
+        toast({
+          title: "Submission failed",
+          description: result.error || "Please try again later.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
       toast({
-        title: "Form submitted successfully",
-        description: "We'll get back to you as soon as possible.",
+        title: "Submission failed",
+        description: "Please check your connection and try again.",
+        variant: "destructive",
       });
+    } finally {
       setIsSubmitting(false);
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        serviceInquiry: '',
-        message: '',
-      });
-    }, 1000);
+    }
   };
 
   const services = formType === 'dental' 
