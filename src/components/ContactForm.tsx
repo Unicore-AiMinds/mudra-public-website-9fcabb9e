@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { apiClient } from '@/lib/api';
 
 interface ContactFormProps {
   formType: 'dental' | 'aesthetic';
@@ -54,22 +55,15 @@ const ContactForm = ({ formType }: ContactFormProps) => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          serviceInquiry: formData.serviceInquiry,
-          message: formData.message,
-          formType: formType, // 'dental' or 'aesthetic'
-        }),
+      // Use apiClient instead of direct fetch - it talks to Supabase directly
+      const result = await apiClient.submitContact({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        serviceInquiry: formData.serviceInquiry,
+        message: formData.message,
+        formType: formType, // 'dental' or 'aesthetic'
       });
-
-      const result = await response.json();
 
       if (result.success) {
         toast({

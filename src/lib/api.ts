@@ -1,4 +1,5 @@
-// API client for database operations
+// API client using Supabase (no backend server needed!)
+import { supabase } from './supabase';
 
 export interface ContactSubmission {
   id?: number;
@@ -39,27 +40,7 @@ export interface AnalyticsData {
   byStatus: Record<string, number>;
 }
 
-const API_BASE = '/api';
-
 class ApiClient {
-  private async request<T>(endpoint: string, options?: RequestInit): Promise<ApiResponse<T>> {
-    try {
-      const response = await fetch(`${API_BASE}${endpoint}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          ...options?.headers,
-        },
-        ...options,
-      });
-
-      const result = await response.json();
-      return result;
-    } catch (error) {
-      console.error('API request error:', error);
-      throw new Error('Network error occurred');
-    }
-  }
-
   // Submit contact form
   async submitContact(data: {
     name: string;
@@ -69,56 +50,222 @@ class ApiClient {
     message: string;
     formType: 'dental' | 'aesthetic';
   }): Promise<ApiResponse<ContactSubmission>> {
-    return this.request<ContactSubmission>('/contact', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+    try {
+      // Map formType to clinic
+      const clinic = data.formType === 'dental' ? 'dental_metrix' : 'meditouch';
+
+      const submission = {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        service_inquiry: data.serviceInquiry,
+        message: data.message,
+        clinic,
+        status: 'new' as const
+      };
+
+      const result = await supabase.from<ContactSubmission>('contact_submissions').insert(submission);
+
+      return {
+        success: true,
+        data: result
+      };
+    } catch (error) {
+      console.error('Error submitting contact:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to submit contact'
+      };
+    }
   }
 
   // Get submissions with filtering
   async getSubmissions(filters: SubmissionFilters = {}): Promise<ApiResponse<ContactSubmission[]>> {
-    const params = new URLSearchParams();
+    try {
+      const {
+        clinic,
+        status,
+        search,
+        page = 1,
+        limit = 10,
+        sortBy = 'submitted_at',
+        sortOrder = 'desc'
+      } = filters;
 
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== '') {
-        params.append(key, value.toString());
+      // Build filters object
+      const supabaseFilters: Record<string, unknown> = {};
+
+      if (clinic) {
+        supabaseFilters.clinic = clinic;
       }
-    });
 
-    const queryString = params.toString();
-    const endpoint = queryString ? `/admin/submissions?${queryString}` : '/admin/submissions';
+      if (status && status !== 'all') {
+        supabaseFilters.status = status;
+      }
 
-    return this.request<ContactSubmission[]>(endpoint);
+      // Fetch all data first (Supabase filtering is limited)
+      const allData = await supabase.from<ContactSubmission>('contact_submissions').getAll({
+        order: { column: sortBy, ascending: sortOrder === 'asc' },
+        filters: supabaseFilters
+      });
+
+      // Apply search filter in JavaScript (if needed)
+      let filteredData = allData;
+      if (search) {
+        const searchLower = search.toLowerCase();
+        filteredData = allData.filter(item =>
+          item.name.toLowerCase().includes(searchLower) ||
+          item.email.toLowerCase().includes(searchLower) ||
+          item.phone.includes(search) ||
+          item.service_inquiry.toLowerCase().includes(searchLower)
+        );
+      }
+
+      // Apply pagination
+      const total = filteredData.length;
+      const totalPages = Math.ceil(total / limit);
+      const offset = (page - 1) * limit;
+      const paginatedData = filteredData.slice(offset, offset + limit);
+
+      return {
+        success: true,
+        data: paginatedData,
+        total,
+        page,
+        totalPages
+      };
+    } catch (error) {
+      console.error('Error fetching submissions:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch submissions',
+        data: []
+      };
+    }
   }
 
   // Update submission status
   async updateSubmissionStatus(id: number, status: ContactSubmission['status']): Promise<ApiResponse<ContactSubmission>> {
-    return this.request<ContactSubmission>(`/admin/submissions/${id}/status`, {
-      method: 'PUT',
-      body: JSON.stringify({ status }),
-    });
+    try {
+      const result = await supabase.from<ContactSubmission>('contact_submissions').update(id, { status });
+
+      return {
+        success: true,
+        data: result
+      };
+    } catch (error) {
+      console.error('Error updating submission status:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to update submission status'
+      };
+    }
   }
 
   // Get analytics data
   async getAnalytics(): Promise<ApiResponse<AnalyticsData>> {
-    return this.request<AnalyticsData>('/admin/analytics');
+    try {
+      // Fetch all submissions
+      const allSubmissions = await supabase.from<ContactSubmission>('contact_submissions').getAll();
+
+      // Calculate analytics
+      const total = allSubmissions.length;
+      const dental = allSubmissions.filter(s => s.clinic === 'dental_metrix').length;
+      const aesthetic = allSubmissions.filter(s => s.clinic === 'meditouch').length;
+
+      const byStatus: Record<string, number> = {
+        new: 0,
+        contacted: 0,
+        'follow-up': 0,
+        scheduled: 0,
+        closed: 0
+      };
+
+      allSubmissions.forEach(submission => {
+        byStatus[submission.status] = (byStatus[submission.status] || 0) + 1;
+      });
+
+      return {
+        success: true,
+        data: {
+          total,
+          dental,
+          aesthetic,
+          byStatus
+        }
+      };
+    } catch (error) {
+      console.error('Error fetching analytics:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch analytics'
+      };
+    }
   }
 
   // Get submission by ID
   async getSubmissionById(id: number): Promise<ApiResponse<ContactSubmission>> {
-    return this.request<ContactSubmission>(`/admin/submissions/${id}`);
+    try {
+      const result = await supabase.from<ContactSubmission>('contact_submissions').getById(id);
+
+      if (!result) {
+        return {
+          success: false,
+          error: 'Submission not found'
+        };
+      }
+
+      return {
+        success: true,
+        data: result
+      };
+    } catch (error) {
+      console.error('Error fetching submission:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch submission'
+      };
+    }
   }
 
   // Delete submission
   async deleteSubmission(id: number): Promise<ApiResponse<{ message: string }>> {
-    return this.request<{ message: string }>(`/admin/submissions/${id}`, {
-      method: 'DELETE',
-    });
+    try {
+      await supabase.from<ContactSubmission>('contact_submissions').delete(id);
+
+      return {
+        success: true,
+        data: { message: 'Submission deleted successfully' }
+      };
+    } catch (error) {
+      console.error('Error deleting submission:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to delete submission'
+      };
+    }
   }
 
   // Health check
   async healthCheck(): Promise<ApiResponse<{ message: string; timestamp: string }>> {
-    return this.request<{ message: string; timestamp: string }>('/health');
+    try {
+      // Simple health check - try to fetch from Supabase
+      await supabase.from<ContactSubmission>('contact_submissions').getAll({ limit: 1 });
+
+      return {
+        success: true,
+        data: {
+          message: 'Supabase connection healthy',
+          timestamp: new Date().toISOString()
+        }
+      };
+    } catch (error) {
+      console.error('Health check failed:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Health check failed'
+      };
+    }
   }
 }
 

@@ -7,13 +7,7 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3001',
-        changeOrigin: true,
-        secure: false,
-      },
-    },
+    // Proxy removed - now using Supabase directly (no backend server needed)
   },
   plugins: [
     react(),
