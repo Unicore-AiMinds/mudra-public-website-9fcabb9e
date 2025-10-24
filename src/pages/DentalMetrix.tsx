@@ -54,7 +54,7 @@ const DentalMetrix = () => {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     checkScreenSize();
     window.addEventListener('resize', checkScreenSize);
 
@@ -174,77 +174,111 @@ const DentalMetrix = () => {
         />
         
         
-        <section id="about" className="pt-40 pb-24 md:py-24 bg-gradient-to-br from-mudra-gray-50 via-white to-mudra-primary-lightest/30 reveal-section scroll-mt-24">
-          <div className="container mx-auto px-4 md:px-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-              <div>
-                <h2 className="text-3xl font-serif font-semibold mb-8 text-mudra-primary-dark">About Dental Metrix</h2>
-                
-                <div className="w-24 h-1.5 bg-gradient-to-r from-mudra-accent via-mudra-accent-light to-mudra-accent-lighter mb-10 rounded-full"></div>
-                
-                <div className="space-y-8">
-                  <p className="text-lg text-mudra-dark/90 leading-relaxed">
-                    Dental Metrix represents the pinnacle of advanced esthetic and implant dentistry in Pune. 
-                    We combine cutting-edge technology with meticulous attention to detail, 
+        <section id="about" className="py-16 md:py-20 bg-gradient-to-br from-mudra-gray-50 via-white to-mudra-primary-lightest/30 reveal-section scroll-mt-24">
+          <div className="container mx-auto px-6 md:px-10 lg:px-16">
+
+            {/* Section Header */}
+            <div className="mb-10">
+              <h2 className="text-3xl md:text-4xl font-serif font-bold text-mudra-primary-dark mb-4">
+                About Dental Metrix
+              </h2>
+              <div className="w-20 h-1 bg-gradient-to-r from-mudra-accent via-mudra-accent-light to-mudra-accent"></div>
+            </div>
+
+            {/* Two Column Layout */}
+            <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-12 items-start">
+
+              {/* Left Column: Content & Photos */}
+              <div className="space-y-6">
+
+                {/* Content Card */}
+                <div className="bg-white rounded-lg p-6 shadow-lg border border-slate-100 border-l-4 border-l-mudra-accent">
+                  <p className="text-base text-mudra-dark/90 leading-relaxed">
+                    Dental Metrix represents the pinnacle of advanced esthetic and implant dentistry in Pune.
+                    We combine cutting-edge technology with meticulous attention to detail,
                     ensuring exceptional results for every patient.
                   </p>
-                  
-                  <div className="bg-gradient-to-br from-mudra-primary-lightest/60 to-mudra-secondary-lightest/40 p-8 rounded-2xl border-2 border-mudra-primary-lighter/30 shadow-lg shadow-mudra-primary/5">
-                    <div className="flex flex-col md:flex-row gap-8">
-                      <div className="flex-shrink-0 mx-auto md:mx-0">
-                        <img 
-                          src="/images/dr-bhargavi.png" 
-                          alt="Dr. Bhargavi Railkar-Kolhapure" 
-                          className="w-48 h-56 object-cover rounded-lg shadow-lg"
-                        />
+                </div>
+
+                {/* Photo Gallery */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <img
+                      src="/images/dental-reception.jpeg"
+                      alt="Dental Metrix Reception Area"
+                      className="w-full h-auto rounded-lg"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  <div className="mt-8">
+                    <img
+                      src="/images/dental-waiting-area.jpeg"
+                      alt="Dental Metrix Waiting Area"
+                      className="w-full h-auto rounded-lg"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  <div>
+                    <img
+                      src="/images/dental-smile-wall.jpeg"
+                      alt="Dental Metrix Smile Wall"
+                      className="w-full h-auto rounded-lg"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  <div className="mt-8">
+                    <img
+                      src="/images/dental-treatment-room-2.jpg"
+                      alt="Dental Metrix Treatment Room"
+                      className="w-full h-auto rounded-lg"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Doctor Card */}
+              <div className="flex justify-end">
+                <div className="bg-white rounded-lg shadow-lg border border-slate-200 overflow-hidden w-96">
+                  {/* Doctor Photo */}
+                  <img
+                    src="/images/dr-bhargavi.png"
+                    alt="Dr. Bhargavi Railkar-Kolhapure"
+                    className="w-full h-[350px] object-cover object-top"
+                  />
+
+                  {/* Doctor Info */}
+                  <div className="p-8">
+                    <h3 className="font-serif text-xl font-bold text-mudra-primary-dark mb-4 text-center">
+                      Dr. Bhargavi Railkar-Kolhapure
+                    </h3>
+                    <p className="text-sm text-slate-600 mb-6 text-center">
+                      Lead Prosthodontist specializing in advanced dental procedures.
+                    </p>
+
+                    {/* Credentials */}
+                    <div className="space-y-4 pt-5 border-t border-slate-200">
+                      <div className="flex items-start">
+                        <span className="w-2 h-2 bg-mudra-accent rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
+                        <span className="text-sm text-slate-700">MDS Prosthodontics & Implantology</span>
                       </div>
-                      <div className="flex-1">
-                        <h3 className="font-serif text-lg font-medium mb-4 text-mudra-primary-dark">Meet Dr. Bhargavi Railkar-Kolhapure</h3>
-                        <p className="text-mudra-dark/80 mb-4 text-sm leading-relaxed">
-                          Lead Prosthodontist specializing in advanced dental procedures.
-                        </p>
-                        <ul className="space-y-2">
-                          <li className="flex items-baseline">
-                            <span className="w-2 h-2 bg-gradient-to-r from-mudra-accent to-mudra-accent-light rounded-full mr-2 mt-1.5 flex-shrink-0"></span>
-                            <span className="text-mudra-dark/90 text-sm">MDS Prosthodontics & Implantology</span>
-                          </li>
-                          <li className="flex items-baseline">
-                            <span className="w-2 h-2 bg-gradient-to-r from-mudra-accent to-mudra-accent-light rounded-full mr-2 mt-1.5 flex-shrink-0"></span>
-                            <span className="text-mudra-dark/90 text-sm">Maxillofacial Prosthodontics Certification</span>
-                          </li>
-                          <li className="flex items-baseline">
-                            <span className="w-2 h-2 bg-gradient-to-r from-mudra-accent to-mudra-accent-light rounded-full mr-2 mt-1.5 flex-shrink-0"></span>
-                            <span className="text-mudra-dark/90 text-sm">Full Mouth Rehabilitation Expert</span>
-                          </li>
-                          <li className="flex items-baseline">
-                            <span className="w-2 h-2 bg-gradient-to-r from-mudra-accent to-mudra-accent-light rounded-full mr-2 mt-1.5 flex-shrink-0"></span>
-                            <span className="text-mudra-dark/90 text-sm">Complex Implant Specialist</span>
-                          </li>
-                        </ul>
+                      <div className="flex items-start">
+                        <span className="w-2 h-2 bg-mudra-accent rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
+                        <span className="text-sm text-slate-700">Maxillofacial Prosthodontics Certification</span>
+                      </div>
+                      <div className="flex items-start">
+                        <span className="w-2 h-2 bg-mudra-accent rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
+                        <span className="text-sm text-slate-700">Full Mouth Rehabilitation Expert</span>
+                      </div>
+                      <div className="flex items-start">
+                        <span className="w-2 h-2 bg-mudra-accent rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
+                        <span className="text-sm text-slate-700">Complex Implant Specialist</span>
                       </div>
                     </div>
                   </div>
-                  
-                  <p className="text-gray-700">
-                    Our clinic philosophy centers on comprehensive, personalized care that prioritizes 
-                    both function and aesthetics. We believe in creating natural-looking smiles that 
-                    enhance your overall appearance while supporting optimal oral health.
-                  </p>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div className="hover:ring-2 hover:ring-mudra-accent/40 transition-all duration-300 rounded-lg overflow-hidden">
-                  <img src="/images/dental-reception.jpeg" alt="Dental Metrix Reception Area" className="w-full h-auto rounded-lg" loading="lazy" />
-                </div>
-                <div className="mt-8 rounded-lg overflow-hidden">
-                  <img alt="Dental Metrix Waiting Area" src="/images/dental-waiting-area.jpeg" className="w-full h-auto rounded-lg" loading="lazy" />
-                </div>
-                <div className="hover:ring-2 hover:ring-mudra-accent/40 transition-all duration-300 rounded-lg overflow-hidden">
-                  <img src="/images/dental-smile-wall.jpeg" alt="Dental Metrix Smile Wall" className="w-full h-auto rounded-lg" loading="lazy" />
-                </div>
-                <div className="mt-8 rounded-lg overflow-hidden">
-                  <img src="/images/dental-treatment-room-2.jpg" alt="Dental Metrix Treatment Room" className="w-full h-auto rounded-lg" loading="lazy" />
                 </div>
               </div>
             </div>
