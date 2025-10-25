@@ -185,72 +185,145 @@ const DentalMetrix = () => {
               <div className="w-20 h-1 bg-gradient-to-r from-mudra-accent via-mudra-accent-light to-mudra-accent"></div>
             </div>
 
-            {/* Two Column Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-12 items-start">
+            {/* MOBILE VIEW - Option A: Story-Driven Vertical Flow */}
+            <div className="md:hidden space-y-6">
 
-              {/* Left Column: Content & Photos */}
-              <div className="space-y-6">
+              {/* 1. Hero Intro Card with Gradient Background */}
+              <div className="bg-gradient-to-br from-white via-mudra-primary-lightest/20 to-mudra-accent/5 rounded-lg p-6 shadow-lg border-l-4 border-l-mudra-accent">
+                <p className="text-base text-mudra-dark/90 leading-relaxed">
+                  Dental Metrix represents the pinnacle of advanced esthetic and implant dentistry in Pune.
+                  We combine cutting-edge technology with meticulous attention to detail,
+                  ensuring exceptional results for every patient.
+                </p>
+              </div>
 
-                {/* Content Card */}
-                <div className="bg-white rounded-lg p-6 shadow-lg border border-slate-100 border-l-4 border-l-mudra-accent">
-                  <p className="text-base text-mudra-dark/90 leading-relaxed">
-                    Dental Metrix represents the pinnacle of advanced esthetic and implant dentistry in Pune.
-                    We combine cutting-edge technology with meticulous attention to detail,
-                    ensuring exceptional results for every patient.
+              {/* 2. Doctor Card - Complete Profile (Like Desktop) */}
+              <div className="bg-white rounded-lg shadow-lg border border-slate-200 overflow-hidden">
+                <img
+                  src="/images/dr-bhargavi.png"
+                  alt="Dr. Bhargavi Railkar-Kolhapure"
+                  className="w-full h-64 object-cover object-top"
+                />
+                <div className="p-6">
+                  <h3 className="font-serif text-2xl font-bold text-mudra-primary-dark mb-4 text-center">
+                    Dr. Bhargavi Railkar-Kolhapure
+                  </h3>
+                  <p className="text-base text-slate-600 mb-6 text-center leading-relaxed">
+                    Lead Prosthodontist specializing in advanced dental procedures.
                   </p>
-                </div>
-
-                {/* Photo Gallery */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <img
-                      src="/images/dental-reception.jpeg"
-                      alt="Dental Metrix Reception Area"
-                      className="w-full h-auto rounded-lg"
-                      loading="lazy"
-                    />
-                  </div>
-
-                  <div className="mt-8">
-                    <img
-                      src="/images/dental-waiting-area.jpeg"
-                      alt="Dental Metrix Waiting Area"
-                      className="w-full h-auto rounded-lg"
-                      loading="lazy"
-                    />
-                  </div>
-
-                  <div>
-                    <img
-                      src="/images/dental-smile-wall.jpeg"
-                      alt="Dental Metrix Smile Wall"
-                      className="w-full h-auto rounded-lg"
-                      loading="lazy"
-                    />
-                  </div>
-
-                  <div className="mt-8">
-                    <img
-                      src="/images/dental-treatment-room-2.jpg"
-                      alt="Dental Metrix Treatment Room"
-                      className="w-full h-auto rounded-lg"
-                      loading="lazy"
-                    />
+                  <div className="space-y-4 pt-5 border-t border-slate-200">
+                    <div className="flex items-start">
+                      <span className="w-2 h-2 bg-mudra-accent rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                      <span className="text-base text-slate-700 leading-relaxed">MDS Prosthodontics & Implantology</span>
+                    </div>
+                    <div className="flex items-start">
+                      <span className="w-2 h-2 bg-mudra-accent rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                      <span className="text-base text-slate-700 leading-relaxed">Maxillofacial Prosthodontics Certification</span>
+                    </div>
+                    <div className="flex items-start">
+                      <span className="w-2 h-2 bg-mudra-accent rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                      <span className="text-base text-slate-700 leading-relaxed">Full Mouth Rehabilitation Expert</span>
+                    </div>
+                    <div className="flex items-start">
+                      <span className="w-2 h-2 bg-mudra-accent rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                      <span className="text-base text-slate-700 leading-relaxed">Complex Implant Specialist</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Right Column: Doctor Card */}
-              <div className="flex justify-end">
+              {/* 3. 3D Flip Stack - Oscar-Winning Animation */}
+              <div className="flip-container">
+                {/* Card 1 - Reception */}
+                <div className="flip-card" style={{ animationDelay: '0s', zIndex: 4 }}>
+                  <div className="flip-card-inner">
+                    <div className="flip-card-front">
+                      <img
+                        src="/images/dental-reception.jpeg"
+                        alt="Dental Metrix Reception"
+                        className="w-full h-auto rounded-lg"
+                        loading="lazy"
+                      />
+                      <div className="flip-card-shadow"></div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card 2 - Waiting Area */}
+                <div className="flip-card" style={{ animationDelay: '4s', zIndex: 3 }}>
+                  <div className="flip-card-inner">
+                    <div className="flip-card-front">
+                      <img
+                        src="/images/dental-waiting-area.jpeg"
+                        alt="Dental Metrix Waiting Area"
+                        className="w-full h-auto rounded-lg"
+                        loading="lazy"
+                      />
+                      <div className="flip-card-shadow"></div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card 3 - Smile Wall */}
+                <div className="flip-card" style={{ animationDelay: '8s', zIndex: 2 }}>
+                  <div className="flip-card-inner">
+                    <div className="flip-card-front">
+                      <img
+                        src="/images/dental-smile-wall.jpeg"
+                        alt="Dental Metrix Smile Wall"
+                        className="w-full h-auto rounded-lg"
+                        loading="lazy"
+                      />
+                      <div className="flip-card-shadow"></div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card 4 - Treatment Room */}
+                <div className="flip-card" style={{ animationDelay: '12s', zIndex: 1 }}>
+                  <div className="flip-card-inner">
+                    <div className="flip-card-front">
+                      <img
+                        src="/images/dental-treatment-room-2.jpg"
+                        alt="Dental Metrix Treatment Room"
+                        className="w-full h-auto rounded-lg"
+                        loading="lazy"
+                      />
+                      <div className="flip-card-shadow"></div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Progress Indicators */}
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-50">
+                  <div className="flip-indicator" style={{ animationDelay: '0s' }}></div>
+                  <div className="flip-indicator" style={{ animationDelay: '4s' }}></div>
+                  <div className="flip-indicator" style={{ animationDelay: '8s' }}></div>
+                  <div className="flip-indicator" style={{ animationDelay: '12s' }}></div>
+                </div>
+              </div>
+            </div>
+
+            {/* DESKTOP VIEW - Keep Original 2-Column Layout */}
+            <div className="hidden md:grid md:grid-cols-[2fr_1fr] gap-12 items-start">
+
+              {/* Content Card */}
+              <div className="bg-white rounded-lg p-6 shadow-lg border border-slate-100 border-l-4 border-l-mudra-accent">
+                <p className="text-base text-mudra-dark/90 leading-relaxed">
+                  Dental Metrix represents the pinnacle of advanced esthetic and implant dentistry in Pune.
+                  We combine cutting-edge technology with meticulous attention to detail,
+                  ensuring exceptional results for every patient.
+                </p>
+              </div>
+
+              {/* Doctor Card - Right Column */}
+              <div className="row-span-2 flex justify-end">
                 <div className="bg-white rounded-lg shadow-lg border border-slate-200 overflow-hidden w-96">
-                  {/* Doctor Photo */}
                   <img
                     src="/images/dr-bhargavi.png"
                     alt="Dr. Bhargavi Railkar-Kolhapure"
                     className="w-full h-[350px] object-cover object-top"
                   />
-
-                  {/* Doctor Info */}
                   <div className="p-8">
                     <h3 className="font-serif text-xl font-bold text-mudra-primary-dark mb-4 text-center">
                       Dr. Bhargavi Railkar-Kolhapure
@@ -258,8 +331,6 @@ const DentalMetrix = () => {
                     <p className="text-sm text-slate-600 mb-6 text-center">
                       Lead Prosthodontist specializing in advanced dental procedures.
                     </p>
-
-                    {/* Credentials */}
                     <div className="space-y-4 pt-5 border-t border-slate-200">
                       <div className="flex items-start">
                         <span className="w-2 h-2 bg-mudra-accent rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
@@ -279,6 +350,42 @@ const DentalMetrix = () => {
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+
+              {/* Photo Gallery - Left Column */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <img
+                    src="/images/dental-reception.jpeg"
+                    alt="Dental Metrix Reception Area"
+                    className="w-full h-auto rounded-lg"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="mt-8">
+                  <img
+                    src="/images/dental-waiting-area.jpeg"
+                    alt="Dental Metrix Waiting Area"
+                    className="w-full h-auto rounded-lg"
+                    loading="lazy"
+                  />
+                </div>
+                <div>
+                  <img
+                    src="/images/dental-smile-wall.jpeg"
+                    alt="Dental Metrix Smile Wall"
+                    className="w-full h-auto rounded-lg"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="mt-8">
+                  <img
+                    src="/images/dental-treatment-room-2.jpg"
+                    alt="Dental Metrix Treatment Room"
+                    className="w-full h-auto rounded-lg"
+                    loading="lazy"
+                  />
                 </div>
               </div>
             </div>
