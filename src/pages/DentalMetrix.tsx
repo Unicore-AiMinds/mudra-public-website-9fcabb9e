@@ -66,6 +66,26 @@ const DentalMetrix = () => {
         const viewportHeight = window.innerHeight;
         if (elementTop < viewportHeight - 100) {
           element.classList.add('visible');
+
+          // Trigger various reveal animations when sections come into view
+          const animationSelectors = [
+            '.photo-reveal',
+            '.section-heading-reveal',
+            '.section-text-reveal',
+            '.card-reveal'
+          ];
+
+          animationSelectors.forEach(selector => {
+            const elements = element.querySelectorAll(selector);
+            elements.forEach((el) => {
+              const delay = parseInt(el.getAttribute('data-delay') || '0');
+              setTimeout(() => {
+                el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+                el.style.opacity = '1';
+                el.style.transform = 'translate(0, 0) scale(1)';
+              }, delay);
+            });
+          });
         }
       });
     };
@@ -175,11 +195,14 @@ const DentalMetrix = () => {
         />
         
         
-        <section id="about" className="py-16 md:py-20 bg-gradient-to-br from-mudra-gray-50 via-white to-mudra-primary-lightest/30 reveal-section scroll-mt-24">
+        <section id="about" className="py-16 md:py-20 bg-gradient-to-br from-slate-50/50 via-white to-mudra-primary-lightest/15 reveal-section scroll-mt-24 relative">
+          {/* Subtle Top Accent Bar */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-mudra-accent to-transparent opacity-30"></div>
+
           <div className="container mx-auto px-6 md:px-10 lg:px-16">
 
             {/* Section Header */}
-            <div className="mb-10">
+            <div className="mb-10 section-heading-reveal opacity-0 transform translate-y-[20px]" data-delay="0">
               <h2 className="text-3xl md:text-4xl font-serif font-bold text-mudra-primary-dark mb-4">
                 About Dental Metrix
               </h2>
@@ -325,7 +348,7 @@ const DentalMetrix = () => {
             <div className="hidden md:grid md:grid-cols-[2fr_1fr] gap-12 items-start">
 
               {/* Content Card */}
-              <div className="bg-white rounded-lg p-6 shadow-lg border border-slate-100 border-l-4 border-l-mudra-accent">
+              <div className="bg-white rounded-lg p-6 shadow-lg border border-slate-100 border-l-4 border-l-mudra-accent hover:shadow-xl transition-shadow duration-300 card-reveal opacity-0 transform translate-y-[20px]" data-delay="100">
                 <p className="text-base text-mudra-dark/90 leading-relaxed">
                   Dental Metrix represents the pinnacle of advanced esthetic and implant dentistry in Pune.
                   We combine cutting-edge technology with meticulous attention to detail,
@@ -335,7 +358,7 @@ const DentalMetrix = () => {
 
               {/* Doctor Card - Right Column */}
               <div className="row-span-2 flex justify-end">
-                <div className="bg-white rounded-lg shadow-lg border border-slate-200 overflow-hidden w-96">
+                <div className="bg-white rounded-lg shadow-lg border border-slate-200 border-t-4 border-t-mudra-accent overflow-hidden w-96 hover:shadow-xl transition-shadow duration-300 card-reveal opacity-0 transform translate-y-[20px]" data-delay="200">
                   <img
                     src="/images/dr-bhargavi.png"
                     alt="Dr. Bhargavi Railkar-Kolhapure"
@@ -372,7 +395,7 @@ const DentalMetrix = () => {
 
               {/* Photo Gallery - Left Column */}
               <div className="grid grid-cols-2 gap-3">
-                <div className="mt-16">
+                <div className="mt-16 photo-reveal opacity-0 transform scale-95" data-delay="400">
                   <img
                     src="/images/dental-reception.jpeg"
                     alt="Dental Metrix Reception Area"
@@ -380,7 +403,7 @@ const DentalMetrix = () => {
                     loading="lazy"
                   />
                 </div>
-                <div>
+                <div className="photo-reveal opacity-0 transform scale-95" data-delay="600">
                   <img
                     src="/images/dental-waiting-area.jpeg"
                     alt="Dental Metrix Waiting Area"
@@ -388,7 +411,7 @@ const DentalMetrix = () => {
                     loading="lazy"
                   />
                 </div>
-                <div className="mt-12">
+                <div className="mt-12 photo-reveal opacity-0 transform scale-95" data-delay="800">
                   <img
                     src="/images/dental-smile-wall.jpeg"
                     alt="Dental Metrix Smile Wall"
@@ -396,7 +419,7 @@ const DentalMetrix = () => {
                     loading="lazy"
                   />
                 </div>
-                <div className="-mt-8 overflow-hidden rounded-lg" style={{ maxHeight: '280px' }}>
+                <div className="-mt-8 overflow-hidden rounded-lg photo-reveal opacity-0 transform scale-95" style={{ maxHeight: '280px' }} data-delay="1000">
                   <img
                     src="/images/dental-treatment-room-2.jpg"
                     alt="Dental Metrix Treatment Room"
@@ -408,7 +431,7 @@ const DentalMetrix = () => {
             </div>
           </div>
         </section>
-        
+
         <section id="services" className="py-28 bg-gradient-to-br from-mudra-light-teal via-white to-mudra-gray-100 reveal-section scroll-mt-24">
           <div className="container mx-auto px-4 md:px-6">
             <div className="max-w-4xl mx-auto text-center mb-20">

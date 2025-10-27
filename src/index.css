@@ -335,3 +335,66 @@
     border-color: rgba(212, 162, 27, 0.3);
   }
 }
+
+/* Premium Fade & Scale Animation for About Section */
+@keyframes fadeScaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Animation Classes */
+.animate-fade-scale {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+/* Only trigger animations when parent section is visible */
+.reveal-section.visible .animate-fade-scale {
+  animation: fadeScaleIn 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-delay-0 {
+  animation-delay: 0ms;
+}
+
+.animate-delay-100 {
+  animation-delay: 100ms;
+}
+
+.animate-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animate-delay-300 {
+  animation-delay: 300ms;
+}
+
+.animate-delay-350 {
+  animation-delay: 350ms;
+}
+
+.animate-delay-400 {
+  animation-delay: 400ms;
+}
+
+.animate-delay-450 {
+  animation-delay: 450ms;
+}
+
+.animate-delay-600 {
+  animation-delay: 600ms;
+}
+
+.animate-delay-800 {
+  animation-delay: 800ms;
+}
+
+.animate-delay-1000 {
+  animation-delay: 1000ms;
+}
