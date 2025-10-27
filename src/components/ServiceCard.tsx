@@ -27,30 +27,30 @@ const ServiceCard = ({ title, description, icon, image, theme = 'mudra', animati
     >
       {/* Horizontal Layout for Meditouch and Dental */}
       {theme === 'meditouch' || theme === 'dental' ? (
-        <div className="flex flex-col h-full min-h-[280px]">
+        <div className="flex flex-col h-full min-h-[200px] md:min-h-[280px]">
           {/* Top - Title Section */}
-          <div className={`p-4 text-center border-b ${
+          <div className={`p-3 md:p-4 text-center border-b ${
             theme === 'meditouch' ? 'border-meditouch-primary/10' : 'border-mudra-primary/10'
           }`}>
-            <div className="flex items-center justify-center mb-2">
-              {icon && <div className={`mr-3 ${
+            <div className="flex items-center justify-center mb-1 md:mb-2">
+              {icon && <div className={`mr-2 md:mr-3 ${
                 theme === 'meditouch' ? 'text-meditouch-accent' : 'text-mudra-accent'
               }`}>{icon}</div>}
-              <h3 className={`text-xl font-bold tracking-tight leading-snug ${
-                theme === 'meditouch' 
-                  ? 'font-meditouch-primary text-meditouch-primary' 
+              <h3 className={`text-lg md:text-xl font-bold tracking-tight leading-snug ${
+                theme === 'meditouch'
+                  ? 'font-meditouch-primary text-meditouch-primary'
                   : 'text-mudra-primary'
               }`}>{title}</h3>
             </div>
           </div>
-          
-          {/* Bottom - Image Left, Description Right */}
-          <div className="flex flex-1">
-            {/* Left Side - Image Container */}
+
+          {/* Bottom - Image & Description (Vertical on Mobile, Horizontal on Desktop) */}
+          <div className="flex flex-col md:flex-row flex-1">
+            {/* Image Container - Full width on mobile, half width on desktop */}
             {image && (
-              <div className="w-1/2 bg-gray-100 overflow-hidden min-h-[200px]">
-                <img 
-                  src={image} 
+              <div className="w-full md:w-1/2 bg-gray-100 overflow-hidden h-[130px] md:h-auto md:min-h-[200px]">
+                <img
+                  src={image}
                   alt={title}
                   className="w-full h-full object-cover transition-transform duration-500"
                   style={{
@@ -67,13 +67,13 @@ const ServiceCard = ({ title, description, icon, image, theme = 'mudra', animati
                 />
               </div>
             )}
-            
-            {/* Right Side - Description Only */}
-            <div className="w-1/2 p-4 flex flex-col justify-center">
+
+            {/* Description - Full width on mobile, half width on desktop */}
+            <div className="w-full md:w-1/2 p-3 md:p-4 flex flex-col justify-center">
               <p className={`leading-[1.7] text-sm ${
-                theme === 'meditouch' 
-                  ? 'font-meditouch-primary text-meditouch-primary/80' 
-                  : 'text-mudra-dark/80'
+                theme === 'meditouch'
+                  ? 'font-meditouch-primary text-meditouch-primary/85'
+                  : 'text-mudra-dark/85'
               }`}>{description}</p>
             </div>
           </div>
