@@ -236,7 +236,7 @@ const DentalMetrix = () => {
               {/* 3. 3D Flip Stack - Oscar-Winning Animation */}
               <div className="flip-container">
                 {/* Card 1 - Reception */}
-                <div className="flip-card" style={{ animationDelay: '0s', zIndex: 4 }}>
+                <div className="flip-card" style={{ animationDelay: '0s', zIndex: 5 }}>
                   <div className="flip-card-inner">
                     <div className="flip-card-front">
                       <img
@@ -251,7 +251,7 @@ const DentalMetrix = () => {
                 </div>
 
                 {/* Card 2 - Waiting Area */}
-                <div className="flip-card" style={{ animationDelay: '4s', zIndex: 3 }}>
+                <div className="flip-card" style={{ animationDelay: '4s', zIndex: 4 }}>
                   <div className="flip-card-inner">
                     <div className="flip-card-front">
                       <img
@@ -266,7 +266,7 @@ const DentalMetrix = () => {
                 </div>
 
                 {/* Card 3 - Smile Wall */}
-                <div className="flip-card" style={{ animationDelay: '8s', zIndex: 2 }}>
+                <div className="flip-card" style={{ animationDelay: '8s', zIndex: 3 }}>
                   <div className="flip-card-inner">
                     <div className="flip-card-front">
                       <img
@@ -283,15 +283,13 @@ const DentalMetrix = () => {
                 {/* Card 4 - Treatment Room */}
                 <div className="flip-card" style={{ animationDelay: '12s', zIndex: 2 }}>
                   <div className="flip-card-inner">
-                    <div className="flip-card-front overflow-hidden">
-                      <div style={{ maxHeight: '250px', overflow: 'hidden' }}>
-                        <img
-                          src="/images/dental-treatment-room-2.jpg"
-                          alt="Dental Metrix Treatment Room"
-                          className="w-full h-auto rounded-lg"
-                          loading="lazy"
-                        />
-                      </div>
+                    <div className="flip-card-front">
+                      <img
+                        src="/images/dental-treatment-room-2.jpg"
+                        alt="Dental Metrix Treatment Room"
+                        className="w-full h-auto rounded-lg"
+                        loading="lazy"
+                      />
                       <div className="flip-card-shadow"></div>
                     </div>
                   </div>
