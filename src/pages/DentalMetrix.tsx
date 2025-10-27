@@ -33,12 +33,13 @@ const DentalMetrix = () => {
     { title: "Maxillofacial Prosthesis", description: "Artificial replacements for facial structures lost due to trauma, surgery, or congenital conditions.", icon: <UserCheck size={24} />, image: "/images/maxillofacial-prosthesis.jpeg" }
   ];
 
-  // Desktop layout (4 slides: 2, 2, 3, 3)
+  // Desktop layout (5 slides: 2 services each)
   const desktopServiceSlides = [
-    [allServices[0], allServices[1]], // 2 services
-    [allServices[2], allServices[3]], // 2 services
-    [allServices[4], allServices[5], allServices[6]], // 3 services  
-    [allServices[7], allServices[8], allServices[9]] // 3 services
+    [allServices[0], allServices[1]], // Slide 1: Dental Implants, RCT & Crown
+    [allServices[2], allServices[3]], // Slide 2: Wisdom Tooth Extraction, Aligners
+    [allServices[4], allServices[5]], // Slide 3: Teeth Whitening, Scaling & Polishing
+    [allServices[6], allServices[7]], // Slide 4: Pediatric Dentistry, Smile Redesign
+    [allServices[8], allServices[9]]  // Slide 5: Full Mouth Rehabilitation, Maxillofacial Prosthesis
   ];
 
   // Mobile layout (5 slides with 2 services each)
@@ -91,12 +92,12 @@ const DentalMetrix = () => {
     };
   }, []);
 
-  // Auto-rotate services carousel every 10 seconds
+  // Auto-rotate services carousel every 6 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       const maxSlides = isMobile ? mobileServiceSlides.length : desktopServiceSlides.length;
       setCurrentServiceSlide((prev) => (prev === maxSlides - 1 ? 0 : prev + 1));
-    }, 10000);
+    }, 6000);
 
     return () => clearInterval(interval);
   }, [isMobile, mobileServiceSlides.length, desktopServiceSlides.length]);
@@ -280,11 +281,28 @@ const DentalMetrix = () => {
                 </div>
 
                 {/* Card 4 - Treatment Room */}
-                <div className="flip-card" style={{ animationDelay: '12s', zIndex: 1 }}>
+                <div className="flip-card" style={{ animationDelay: '12s', zIndex: 2 }}>
+                  <div className="flip-card-inner">
+                    <div className="flip-card-front overflow-hidden">
+                      <div style={{ maxHeight: '250px', overflow: 'hidden' }}>
+                        <img
+                          src="/images/dental-treatment-room-2.jpg"
+                          alt="Dental Metrix Treatment Room"
+                          className="w-full h-auto rounded-lg"
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="flip-card-shadow"></div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card 5 - Treatment Room 2 */}
+                <div className="flip-card" style={{ animationDelay: '16s', zIndex: 1 }}>
                   <div className="flip-card-inner">
                     <div className="flip-card-front">
                       <img
-                        src="/images/dental-treatment-room-2.jpg"
+                        src="/images/dental-treatment-room-3.jpg"
                         alt="Dental Metrix Treatment Room"
                         className="w-full h-auto rounded-lg"
                         loading="lazy"
@@ -300,6 +318,7 @@ const DentalMetrix = () => {
                   <div className="flip-indicator" style={{ animationDelay: '4s' }}></div>
                   <div className="flip-indicator" style={{ animationDelay: '8s' }}></div>
                   <div className="flip-indicator" style={{ animationDelay: '12s' }}></div>
+                  <div className="flip-indicator" style={{ animationDelay: '16s' }}></div>
                 </div>
               </div>
             </div>
@@ -355,7 +374,7 @@ const DentalMetrix = () => {
 
               {/* Photo Gallery - Left Column */}
               <div className="grid grid-cols-2 gap-3">
-                <div>
+                <div className="mt-16">
                   <img
                     src="/images/dental-reception.jpeg"
                     alt="Dental Metrix Reception Area"
@@ -363,7 +382,7 @@ const DentalMetrix = () => {
                     loading="lazy"
                   />
                 </div>
-                <div className="mt-8">
+                <div>
                   <img
                     src="/images/dental-waiting-area.jpeg"
                     alt="Dental Metrix Waiting Area"
@@ -371,7 +390,7 @@ const DentalMetrix = () => {
                     loading="lazy"
                   />
                 </div>
-                <div>
+                <div className="mt-12">
                   <img
                     src="/images/dental-smile-wall.jpeg"
                     alt="Dental Metrix Smile Wall"
@@ -379,7 +398,7 @@ const DentalMetrix = () => {
                     loading="lazy"
                   />
                 </div>
-                <div className="mt-8">
+                <div className="-mt-8 overflow-hidden rounded-lg" style={{ maxHeight: '280px' }}>
                   <img
                     src="/images/dental-treatment-room-2.jpg"
                     alt="Dental Metrix Treatment Room"
@@ -441,9 +460,9 @@ const DentalMetrix = () => {
                   >
                     {desktopServiceSlides.map((slide, slideIndex) => (
                       <div key={`desktop-${slideIndex}`} className="w-full flex-shrink-0">
-                        <div className={`grid gap-6 ${slide.length === 2 ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-2 lg:grid-cols-3'}`}>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                           {slide.map((service, serviceIndex) => (
-                            <ServiceCard 
+                            <ServiceCard
                               key={`desktop-${slideIndex}-${serviceIndex}`}
                               title={service.title}
                               description={service.description}
