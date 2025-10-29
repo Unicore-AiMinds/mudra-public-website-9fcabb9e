@@ -7,6 +7,7 @@ import ServiceCard from '@/components/ServiceCard';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import ContactForm from '@/components/ContactForm';
 import LocationMap from '@/components/LocationMap';
+import ScrollToTopButton from '@/components/ScrollToTopButton';
 
 const DentalMetrix = () => {
   const brandMode = import.meta.env.VITE_BRAND_MODE;
@@ -628,8 +629,9 @@ const DentalMetrix = () => {
           </div>
         </section>
       </main>
-      
+
       <Footer />
+      <ScrollToTopButton theme="dental" />
     </div>
   );
 };
