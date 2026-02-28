@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import { databaseService, ContactSubmission, ContactSubmissionFilters } from '../src/lib/database.js';
@@ -11,16 +12,54 @@ app.use(express.json());
 
 // API Routes
 
+// Verify reCAPTCHA token with Google
+async function verifyCaptcha(token: string): Promise<boolean> {
+  const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+  if (!secretKey) {
+    console.error('RECAPTCHA_SECRET_KEY not set in environment');
+    return false;
+  }
+
+  try {
+    const response = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `secret=${encodeURIComponent(secretKey)}&response=${encodeURIComponent(token)}`,
+    });
+    const data = await response.json();
+    return data.success === true;
+  } catch (error) {
+    console.error('CAPTCHA verification error:', error);
+    return false;
+  }
+}
+
 // Submit new contact form
 app.post('/api/contact', async (req, res) => {
   try {
-    const { name, email, phone, serviceInquiry, message, formType } = req.body;
+    const { name, email, phone, serviceInquiry, message, formType, captchaToken } = req.body;
 
     // Validate required fields
     if (!name || !email || !phone || !serviceInquiry || !message || !formType) {
       return res.status(400).json({
         success: false,
         error: 'Missing required fields'
+      });
+    }
+
+    // Verify CAPTCHA
+    if (!captchaToken) {
+      return res.status(400).json({
+        success: false,
+        error: 'CAPTCHA verification required'
+      });
+    }
+
+    const captchaValid = await verifyCaptcha(captchaToken);
+    if (!captchaValid) {
+      return res.status(400).json({
+        success: false,
+        error: 'CAPTCHA verification failed. Please try again.'
       });
     }
 
