@@ -1,5 +1,8 @@
 // API client using Supabase (no backend server needed!)
 import { supabase } from './supabase';
+import { localStorageService } from './localStorage';
+
+const isDev = import.meta.env.DEV;
 
 export interface ContactSubmission {
   id?: number;
@@ -64,7 +67,10 @@ class ApiClient {
         status: 'new' as const
       };
 
-      const result = await supabase.from<ContactSubmission>('contact_submissions').insert(submission);
+      // Use localStorage in development, Supabase in production
+      const result = isDev
+        ? localStorageService.insert(submission)
+        : await supabase.from<ContactSubmission>('contact_submissions').insert(submission);
 
       return {
         success: true,
@@ -92,34 +98,49 @@ class ApiClient {
         sortOrder = 'desc'
       } = filters;
 
-      // Build filters object
-      const supabaseFilters: Record<string, unknown> = {};
+      // Fetch all data from localStorage (dev) or Supabase (prod)
+      let allData: ContactSubmission[];
+
+      if (isDev) {
+        allData = localStorageService.getAll();
+      } else {
+        const supabaseFilters: Record<string, unknown> = {};
+        if (clinic) supabaseFilters.clinic = clinic;
+        if (status && status !== 'all') supabaseFilters.status = status;
+
+        allData = await supabase.from<ContactSubmission>('contact_submissions').getAll({
+          order: { column: sortBy, ascending: sortOrder === 'asc' },
+          filters: supabaseFilters
+        });
+      }
+
+      // Apply filters
+      let filteredData = allData;
 
       if (clinic) {
-        supabaseFilters.clinic = clinic;
+        filteredData = filteredData.filter(item => item.clinic === clinic);
       }
 
       if (status && status !== 'all') {
-        supabaseFilters.status = status;
+        filteredData = filteredData.filter(item => item.status === status);
       }
 
-      // Fetch all data first (Supabase filtering is limited)
-      const allData = await supabase.from<ContactSubmission>('contact_submissions').getAll({
-        order: { column: sortBy, ascending: sortOrder === 'asc' },
-        filters: supabaseFilters
-      });
-
-      // Apply search filter in JavaScript (if needed)
-      let filteredData = allData;
       if (search) {
         const searchLower = search.toLowerCase();
-        filteredData = allData.filter(item =>
+        filteredData = filteredData.filter(item =>
           item.name.toLowerCase().includes(searchLower) ||
           item.email.toLowerCase().includes(searchLower) ||
           item.phone.includes(search) ||
           item.service_inquiry.toLowerCase().includes(searchLower)
         );
       }
+
+      // Sort
+      filteredData.sort((a, b) => {
+        const aVal = (a as any)[sortBy] || '';
+        const bVal = (b as any)[sortBy] || '';
+        return sortOrder === 'asc' ? (aVal > bVal ? 1 : -1) : (aVal < bVal ? 1 : -1);
+      });
 
       // Apply pagination
       const total = filteredData.length;
@@ -147,12 +168,14 @@ class ApiClient {
   // Update submission status
   async updateSubmissionStatus(id: number, status: ContactSubmission['status']): Promise<ApiResponse<ContactSubmission>> {
     try {
-      const result = await supabase.from<ContactSubmission>('contact_submissions').update(id, { status });
+      if (isDev) {
+        localStorageService.updateStatus(id, status);
+        const updated = localStorageService.getById(id);
+        return { success: true, data: updated };
+      }
 
-      return {
-        success: true,
-        data: result
-      };
+      const result = await supabase.from<ContactSubmission>('contact_submissions').update(id, { status });
+      return { success: true, data: result };
     } catch (error) {
       console.error('Error updating submission status:', error);
       return {
@@ -166,7 +189,9 @@ class ApiClient {
   async getAnalytics(): Promise<ApiResponse<AnalyticsData>> {
     try {
       // Fetch all submissions
-      const allSubmissions = await supabase.from<ContactSubmission>('contact_submissions').getAll();
+      const allSubmissions = isDev
+        ? localStorageService.getAll()
+        : await supabase.from<ContactSubmission>('contact_submissions').getAll();
 
       // Calculate analytics
       const total = allSubmissions.length;
@@ -206,19 +231,15 @@ class ApiClient {
   // Get submission by ID
   async getSubmissionById(id: number): Promise<ApiResponse<ContactSubmission>> {
     try {
-      const result = await supabase.from<ContactSubmission>('contact_submissions').getById(id);
+      const result = isDev
+        ? localStorageService.getById(id)
+        : await supabase.from<ContactSubmission>('contact_submissions').getById(id);
 
       if (!result) {
-        return {
-          success: false,
-          error: 'Submission not found'
-        };
+        return { success: false, error: 'Submission not found' };
       }
 
-      return {
-        success: true,
-        data: result
-      };
+      return { success: true, data: result };
     } catch (error) {
       console.error('Error fetching submission:', error);
       return {
@@ -231,7 +252,11 @@ class ApiClient {
   // Delete submission
   async deleteSubmission(id: number): Promise<ApiResponse<{ message: string }>> {
     try {
-      await supabase.from<ContactSubmission>('contact_submissions').delete(id);
+      if (isDev) {
+        localStorageService.delete(id);
+      } else {
+        await supabase.from<ContactSubmission>('contact_submissions').delete(id);
+      }
 
       return {
         success: true,
