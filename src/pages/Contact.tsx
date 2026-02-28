@@ -1,5 +1,6 @@
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { Building, Phone, Mail, Clock, MapPin } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -9,7 +10,18 @@ import { useToast } from '@/hooks/use-toast';
 const Contact = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [attempted, setAttempted] = useState(false);
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
   const brandMode = import.meta.env.VITE_BRAND_MODE;
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setTouched((prev) => ({ ...prev, [e.target.name]: true }));
+  };
+
+  const isFieldInvalid = (fieldName: string, fieldValue: string) =>
+    (attempted || touched[fieldName]) && !fieldValue.trim();
   
   const [formData, setFormData] = useState({
     name: '',
@@ -24,25 +36,70 @@ const Contact = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setAttempted(true);
+
+    if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim() || !formData.division.trim()) {
+      return;
+    }
+
+    if (!captchaToken) {
+      return;
+    }
+
     setIsSubmitting(true);
-    
-    // Simulate form submission
-    setTimeout(() => {
+
+    try {
+      const response = await fetch('http://localhost:3001/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          serviceInquiry: formData.division,
+          message: formData.message,
+          formType: formData.division === 'aesthetic' ? 'aesthetic' : 'dental',
+          captchaToken,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        toast({
+          title: "Message sent successfully",
+          description: "We'll get back to you as soon as possible.",
+        });
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          division: '',
+          message: '',
+        });
+        setAttempted(false);
+        setTouched({});
+      } else {
+        toast({
+          title: "Submission failed",
+          description: result.error || "Please try again later.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
       toast({
-        title: "Message sent successfully",
-        description: "We'll get back to you as soon as possible.",
+        title: "Submission failed",
+        description: "Please check your connection and try again.",
+        variant: "destructive",
       });
+    } finally {
       setIsSubmitting(false);
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        division: '',
-        message: '',
-      });
-    }, 1000);
+      setCaptchaToken(null);
+      recaptchaRef.current?.reset();
+    }
   };
   
   return (
@@ -115,7 +172,7 @@ const Contact = () => {
               <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-100">
                 <h2 className="text-2xl font-serif font-semibold mb-6">Send Us a Message</h2>
                 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} noValidate className="space-y-6">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
                       Full Name
@@ -126,9 +183,14 @@ const Contact = () => {
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-mudra-primary"
-                      required
+                      onBlur={handleBlur}
+                      className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+                        isFieldInvalid('name', formData.name)
+                          ? 'border-red-500 focus:ring-red-500'
+                          : 'border-gray-300 focus:ring-mudra-primary'
+                      }`}
                     />
+                    {isFieldInvalid('name', formData.name) && <p className="text-red-500 text-xs mt-1">Full Name is required</p>}
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -142,9 +204,14 @@ const Contact = () => {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-mudra-primary"
-                        required
+                        onBlur={handleBlur}
+                        className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+                          isFieldInvalid('email', formData.email)
+                            ? 'border-red-500 focus:ring-red-500'
+                            : 'border-gray-300 focus:ring-mudra-primary'
+                        }`}
                       />
+                      {isFieldInvalid('email', formData.email) && <p className="text-red-500 text-xs mt-1">Email Address is required</p>}
                     </div>
                     
                     <div>
@@ -157,9 +224,14 @@ const Contact = () => {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-mudra-primary"
-                        required
+                        onBlur={handleBlur}
+                        className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+                          isFieldInvalid('phone', formData.phone)
+                            ? 'border-red-500 focus:ring-red-500'
+                            : 'border-gray-300 focus:ring-mudra-primary'
+                        }`}
                       />
+                      {isFieldInvalid('phone', formData.phone) && <p className="text-red-500 text-xs mt-1">Phone Number is required</p>}
                     </div>
                   </div>
                   
@@ -172,8 +244,12 @@ const Contact = () => {
                       name="division"
                       value={formData.division}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-mudra-primary"
-                      required
+                      onBlur={handleBlur}
+                      className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+                        isFieldInvalid('division', formData.division)
+                          ? 'border-red-500 focus:ring-red-500'
+                          : 'border-gray-300 focus:ring-mudra-primary'
+                      }`}
                     >
                       <option value="">Select a division</option>
                       {brandMode !== 'meditouch' && <option value="dental">Dental Metrix</option>}
@@ -186,6 +262,7 @@ const Contact = () => {
                       )}
                       <option value="general">General Inquiry</option>
                     </select>
+                    {isFieldInvalid('division', formData.division) && <p className="text-red-500 text-xs mt-1">Division is required</p>}
                   </div>
                   
                   <div>
@@ -199,16 +276,25 @@ const Contact = () => {
                       onChange={handleChange}
                       rows={5}
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-mudra-primary"
-                      required
                     ></textarea>
                   </div>
                   
+                  <div className="flex flex-col items-center">
+                    <ReCAPTCHA
+                      ref={recaptchaRef}
+                      sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+                      onChange={(token) => setCaptchaToken(token)}
+                      onExpired={() => setCaptchaToken(null)}
+                    />
+                    {attempted && !captchaToken && <p className="text-red-500 text-xs mt-2">Please complete the CAPTCHA</p>}
+                  </div>
+
                   <button
                     type="submit"
                     disabled={isSubmitting}
                     className="px-6 py-3 bg-mudra-primary text-white rounded-md hover:bg-mudra-secondary transition-colors disabled:opacity-70 w-full"
                   >
-                    {isSubmitting ? 'Sending...' : 'Send Message'}
+                    {isSubmitting ? 'Submitting...' : 'Submit'}
                   </button>
                 </form>
               </div>

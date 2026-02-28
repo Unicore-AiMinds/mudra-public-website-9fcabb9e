@@ -1,5 +1,6 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { useToast } from '@/hooks/use-toast';
 import { apiClient } from '@/lib/api';
 
@@ -12,7 +13,11 @@ const ContactForm = ({ formType }: ContactFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [attempted, setAttempted] = useState(false);
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -50,8 +55,25 @@ const ContactForm = ({ formType }: ContactFormProps) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setTouched((prev) => ({ ...prev, [e.target.name]: true }));
+  };
+
+  const isFieldInvalid = (fieldName: string, fieldValue: string) =>
+    (attempted || touched[fieldName]) && !fieldValue.trim();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setAttempted(true);
+
+    if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim() || !formData.serviceInquiry.trim()) {
+      return;
+    }
+
+    if (!captchaToken) {
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -77,6 +99,8 @@ const ContactForm = ({ formType }: ContactFormProps) => {
           serviceInquiry: '',
           message: '',
         });
+        setAttempted(false);
+        setTouched({});
       } else {
         toast({
           title: "Submission failed",
@@ -93,6 +117,8 @@ const ContactForm = ({ formType }: ContactFormProps) => {
       });
     } finally {
       setIsSubmitting(false);
+      setCaptchaToken(null);
+      recaptchaRef.current?.reset();
     }
   };
 
@@ -124,7 +150,7 @@ const ContactForm = ({ formType }: ContactFormProps) => {
       ];
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} noValidate className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
@@ -136,13 +162,16 @@ const ContactForm = ({ formType }: ContactFormProps) => {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            className={`w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 transition-all duration-200 ${
-              formType === 'aesthetic' 
-                ? 'focus:ring-meditouch-primary focus:border-meditouch-primary focus:shadow-[0_0_0_3px_rgba(90,44,139,0.1)]'
-                : 'focus:ring-mudra-primary focus:border-mudra-primary'
+            onBlur={handleBlur}
+            className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-200 ${
+              isFieldInvalid('name', formData.name)
+                ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
+                : formType === 'aesthetic'
+                  ? 'border-gray-300 focus:ring-meditouch-primary focus:border-meditouch-primary focus:shadow-[0_0_0_3px_rgba(90,44,139,0.1)]'
+                  : 'border-gray-300 focus:ring-mudra-primary focus:border-mudra-primary'
             }`}
-            required
           />
+          {isFieldInvalid('name', formData.name) && <p className="text-red-500 text-xs mt-1">Full Name is required</p>}
         </div>
         
         <div>
@@ -155,13 +184,16 @@ const ContactForm = ({ formType }: ContactFormProps) => {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className={`w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 transition-all duration-200 ${
-              formType === 'aesthetic' 
-                ? 'focus:ring-meditouch-primary focus:border-meditouch-primary focus:shadow-[0_0_0_3px_rgba(90,44,139,0.1)]'
-                : 'focus:ring-mudra-primary focus:border-mudra-primary'
+            onBlur={handleBlur}
+            className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-200 ${
+              isFieldInvalid('email', formData.email)
+                ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
+                : formType === 'aesthetic'
+                  ? 'border-gray-300 focus:ring-meditouch-primary focus:border-meditouch-primary focus:shadow-[0_0_0_3px_rgba(90,44,139,0.1)]'
+                  : 'border-gray-300 focus:ring-mudra-primary focus:border-mudra-primary'
             }`}
-            required
           />
+          {isFieldInvalid('email', formData.email) && <p className="text-red-500 text-xs mt-1">Email Address is required</p>}
         </div>
       </div>
       
@@ -176,13 +208,16 @@ const ContactForm = ({ formType }: ContactFormProps) => {
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            className={`w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 transition-all duration-200 ${
-              formType === 'aesthetic' 
-                ? 'focus:ring-meditouch-primary focus:border-meditouch-primary focus:shadow-[0_0_0_3px_rgba(90,44,139,0.1)]'
-                : 'focus:ring-mudra-primary focus:border-mudra-primary'
+            onBlur={handleBlur}
+            className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-200 ${
+              isFieldInvalid('phone', formData.phone)
+                ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
+                : formType === 'aesthetic'
+                  ? 'border-gray-300 focus:ring-meditouch-primary focus:border-meditouch-primary focus:shadow-[0_0_0_3px_rgba(90,44,139,0.1)]'
+                  : 'border-gray-300 focus:ring-mudra-primary focus:border-mudra-primary'
             }`}
-            required
           />
+          {isFieldInvalid('phone', formData.phone) && <p className="text-red-500 text-xs mt-1">Phone Number is required</p>}
         </div>
         
         <div>
@@ -198,14 +233,15 @@ const ContactForm = ({ formType }: ContactFormProps) => {
               setIsDropdownOpen(false);
             }}
             onFocus={() => setIsDropdownOpen(true)}
-            onBlur={() => setIsDropdownOpen(false)}
-            className={`w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 transition-all duration-200 ${
-              formType === 'aesthetic' 
-                ? 'focus:ring-meditouch-primary focus:border-meditouch-primary focus:shadow-[0_0_0_3px_rgba(90,44,139,0.1)]'
-                : 'focus:ring-mudra-primary focus:border-mudra-primary'
+            onBlur={(e) => { setIsDropdownOpen(false); handleBlur(e); }}
+            className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-200 ${
+              isFieldInvalid('serviceInquiry', formData.serviceInquiry)
+                ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
+                : formType === 'aesthetic'
+                  ? 'border-gray-300 focus:ring-meditouch-primary focus:border-meditouch-primary focus:shadow-[0_0_0_3px_rgba(90,44,139,0.1)]'
+                  : 'border-gray-300 focus:ring-mudra-primary focus:border-mudra-primary'
             }`}
             size={isMobile && isDropdownOpen ? 6 : 1}
-            required
           >
             <option value="">Select a service</option>
             {services.map((service) => (
@@ -214,6 +250,7 @@ const ContactForm = ({ formType }: ContactFormProps) => {
               </option>
             ))}
           </select>
+          {isFieldInvalid('serviceInquiry', formData.serviceInquiry) && <p className="text-red-500 text-xs mt-1">Service Inquiry is required</p>}
         </div>
       </div>
       
@@ -228,10 +265,19 @@ const ContactForm = ({ formType }: ContactFormProps) => {
           onChange={handleChange}
           rows={4}
           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-mudra-primary"
-          required
         ></textarea>
       </div>
       
+      <div className="flex flex-col items-center">
+        <ReCAPTCHA
+          ref={recaptchaRef}
+          sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+          onChange={(token) => setCaptchaToken(token)}
+          onExpired={() => setCaptchaToken(null)}
+        />
+        {attempted && !captchaToken && <p className="text-red-500 text-xs mt-2">Please complete the CAPTCHA</p>}
+      </div>
+
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <button
           type="submit"
@@ -242,7 +288,7 @@ const ContactForm = ({ formType }: ContactFormProps) => {
               : 'bg-mudra-primary hover:bg-mudra-secondary'
           }`}
         >
-          {isSubmitting ? 'Sending...' : 'Send Message'}
+          {isSubmitting ? 'Submitting...' : 'Submit'}
         </button>
         
         <a href="/explore-pune" className={`transition-colors text-center sm:text-left ${
