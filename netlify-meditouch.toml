@@ -1,6 +1,7 @@
 [build]
   command = "npm run build:meditouch"
   publish = "dist"
+  functions = "netlify/functions"
 
 [build.environment]
   VITE_BRAND_MODE = "meditouch"

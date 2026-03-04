@@ -4,8 +4,8 @@
  */
 
 // Supabase configuration
-const SUPABASE_URL = 'https://ufoarhvwtswsjumfnuwr.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmb2FyaHZ3dHN3c2p1bWZudXdyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAyMTYyMzMsImV4cCI6MjA3NTc5MjIzM30.lJRiYJ4t14GZAkRSRMjRaVXXAuV71pMlxUh15-nzCMQ';
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 /**
  * Generic function to make a request to the Supabase REST API
@@ -38,8 +38,6 @@ async function supabaseRequest<T>(
   };
 
   try {
-    console.log(`[SUPABASE] Making ${method} request to ${url.toString()}`);
-
     const response = await fetch(url.toString(), {
       method,
       headers,
@@ -163,15 +161,8 @@ export const supabase = {
      * Insert a new record
      */
     insert: async (data: Partial<T>): Promise<T> => {
-      // Add timestamps if they don't exist
-      const dataWithTimestamps = {
-        ...data,
-        submitted_at: (data as Record<string, unknown>).submitted_at || new Date().toISOString(),
-        updated_at: (data as Record<string, unknown>).updated_at || new Date().toISOString()
-      };
-
       try {
-        const result = await supabaseRequest<T[]>(table, 'POST', dataWithTimestamps, {
+        const result = await supabaseRequest<T[]>(table, 'POST', data as Record<string, unknown>, {
           headers: { 'Prefer': 'return=representation' }
         });
 
