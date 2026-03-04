@@ -1,8 +1,5 @@
 // API client using Supabase (no backend server needed!)
 import { supabase } from './supabase';
-import { localStorageService } from './localStorage';
-
-const isDev = import.meta.env.DEV;
 
 export interface ContactSubmission {
   id?: number;
@@ -52,30 +49,25 @@ class ApiClient {
     serviceInquiry: string;
     message: string;
     formType: 'dental' | 'aesthetic';
+    captchaToken: string;
   }): Promise<ApiResponse<ContactSubmission>> {
     try {
-      // Map formType to clinic
-      const clinic = data.formType === 'dental' ? 'dental_metrix' : 'meditouch';
+      const response = await fetch('/.netlify/functions/submit-contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          serviceInquiry: data.serviceInquiry,
+          message: data.message,
+          formType: data.formType,
+          captchaToken: data.captchaToken,
+        }),
+      });
 
-      const submission = {
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        service_inquiry: data.serviceInquiry,
-        message: data.message,
-        clinic,
-        status: 'new' as const
-      };
-
-      // Use localStorage in development, Supabase in production
-      const result = isDev
-        ? localStorageService.insert(submission)
-        : await supabase.from<ContactSubmission>('contact_submissions').insert(submission);
-
-      return {
-        success: true,
-        data: result
-      };
+      const result = await response.json();
+      return result;
     } catch (error) {
       console.error('Error submitting contact:', error);
       return {
@@ -98,23 +90,16 @@ class ApiClient {
         sortOrder = 'desc'
       } = filters;
 
-      // Fetch all data from localStorage (dev) or Supabase (prod)
-      let allData: ContactSubmission[];
+      const supabaseFilters: Record<string, unknown> = {};
+      if (clinic) supabaseFilters.clinic = clinic;
+      if (status && status !== 'all') supabaseFilters.status = status;
 
-      if (isDev) {
-        allData = localStorageService.getAll();
-      } else {
-        const supabaseFilters: Record<string, unknown> = {};
-        if (clinic) supabaseFilters.clinic = clinic;
-        if (status && status !== 'all') supabaseFilters.status = status;
+      let allData = await supabase.from<ContactSubmission>('contact_submissions').getAll({
+        order: { column: sortBy, ascending: sortOrder === 'asc' },
+        filters: supabaseFilters
+      });
 
-        allData = await supabase.from<ContactSubmission>('contact_submissions').getAll({
-          order: { column: sortBy, ascending: sortOrder === 'asc' },
-          filters: supabaseFilters
-        });
-      }
-
-      // Apply filters
+      // Apply client-side filters
       let filteredData = allData;
 
       if (clinic) {
@@ -168,12 +153,6 @@ class ApiClient {
   // Update submission status
   async updateSubmissionStatus(id: number, status: ContactSubmission['status']): Promise<ApiResponse<ContactSubmission>> {
     try {
-      if (isDev) {
-        localStorageService.updateStatus(id, status);
-        const updated = localStorageService.getById(id);
-        return { success: true, data: updated };
-      }
-
       const result = await supabase.from<ContactSubmission>('contact_submissions').update(id, { status });
       return { success: true, data: result };
     } catch (error) {
@@ -188,12 +167,8 @@ class ApiClient {
   // Get analytics data
   async getAnalytics(): Promise<ApiResponse<AnalyticsData>> {
     try {
-      // Fetch all submissions
-      const allSubmissions = isDev
-        ? localStorageService.getAll()
-        : await supabase.from<ContactSubmission>('contact_submissions').getAll();
+      const allSubmissions = await supabase.from<ContactSubmission>('contact_submissions').getAll();
 
-      // Calculate analytics
       const total = allSubmissions.length;
       const dental = allSubmissions.filter(s => s.clinic === 'dental_metrix').length;
       const aesthetic = allSubmissions.filter(s => s.clinic === 'meditouch').length;
@@ -231,9 +206,7 @@ class ApiClient {
   // Get submission by ID
   async getSubmissionById(id: number): Promise<ApiResponse<ContactSubmission>> {
     try {
-      const result = isDev
-        ? localStorageService.getById(id)
-        : await supabase.from<ContactSubmission>('contact_submissions').getById(id);
+      const result = await supabase.from<ContactSubmission>('contact_submissions').getById(id);
 
       if (!result) {
         return { success: false, error: 'Submission not found' };
@@ -252,11 +225,7 @@ class ApiClient {
   // Delete submission
   async deleteSubmission(id: number): Promise<ApiResponse<{ message: string }>> {
     try {
-      if (isDev) {
-        localStorageService.delete(id);
-      } else {
-        await supabase.from<ContactSubmission>('contact_submissions').delete(id);
-      }
+      await supabase.from<ContactSubmission>('contact_submissions').delete(id);
 
       return {
         success: true,
@@ -274,7 +243,6 @@ class ApiClient {
   // Health check
   async healthCheck(): Promise<ApiResponse<{ message: string; timestamp: string }>> {
     try {
-      // Simple health check - try to fetch from Supabase
       await supabase.from<ContactSubmission>('contact_submissions').getAll({ limit: 1 });
 
       return {
