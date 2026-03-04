@@ -1,5 +1,5 @@
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { Building, Phone, Mail, Clock, MapPin } from 'lucide-react';
 import Navbar from '@/components/Navbar';
@@ -23,6 +23,19 @@ const Contact = () => {
   const isFieldInvalid = (fieldName: string, fieldValue: string) =>
     (attempted || touched[fieldName]) && !fieldValue.trim();
   
+  const [countryCode, setCountryCode] = useState('+91');
+  const [isCountryOpen, setIsCountryOpen] = useState(false);
+  const countryRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleCountryClickOutside = (event: MouseEvent) => {
+      if (countryRef.current && !countryRef.current.contains(event.target as Node)) {
+        setIsCountryOpen(false);
+      }
+    };
+    document.addEventListener('click', handleCountryClickOutside);
+    return () => document.removeEventListener('click', handleCountryClickOutside);
+  }, []);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -40,7 +53,7 @@ const Contact = () => {
     e.preventDefault();
     setAttempted(true);
 
-    if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim() || !formData.division.trim()) {
+    if (!formData.name.trim() || !formData.phone.trim() || !formData.division.trim()) {
       return;
     }
 
@@ -51,13 +64,13 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('http://localhost:3001/api/contact', {
+      const response = await fetch('/.netlify/functions/submit-contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
-          phone: formData.phone,
+          phone: `${countryCode} ${formData.phone}`,
           serviceInquiry: formData.division,
           message: formData.message,
           formType: formData.division === 'aesthetic' ? 'aesthetic' : 'dental',
@@ -204,33 +217,76 @@ const Contact = () => {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        onBlur={handleBlur}
-                        className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
-                          isFieldInvalid('email', formData.email)
-                            ? 'border-red-500 focus:ring-red-500'
-                            : 'border-gray-300 focus:ring-mudra-primary'
-                        }`}
+                        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 border-gray-300 focus:ring-mudra-primary"
                       />
-                      {isFieldInvalid('email', formData.email) && <p className="text-red-500 text-xs mt-1">Email Address is required</p>}
                     </div>
                     
                     <div>
                       <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
                         Phone Number
                       </label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
-                          isFieldInvalid('phone', formData.phone)
-                            ? 'border-red-500 focus:ring-red-500'
-                            : 'border-gray-300 focus:ring-mudra-primary'
-                        }`}
-                      />
+                      <div className={`flex border rounded-md focus-within:ring-2 ${
+                        isFieldInvalid('phone', formData.phone)
+                          ? 'border-red-500 focus-within:ring-red-500'
+                          : 'border-gray-300 focus-within:ring-mudra-primary'
+                      }`}>
+                        <div ref={countryRef} className="relative shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => setIsCountryOpen(!isCountryOpen)}
+                            className="flex items-center gap-1 pl-3 pr-2 py-2 bg-gray-50 border-r border-gray-300 text-sm cursor-pointer hover:bg-gray-100 h-full rounded-l-md"
+                          >
+                            <span>{countryCode}</span>
+                            <svg className="w-3 h-3 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M6 9l6 6 6-6" />
+                            </svg>
+                          </button>
+                          {isCountryOpen && (
+                            <ul className="absolute top-full left-0 mt-1 w-56 max-h-60 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                              {[
+                                { code: '+91', name: 'India' },
+                                { code: '+1', name: 'United States' },
+                                { code: '+44', name: 'United Kingdom' },
+                                { code: '+61', name: 'Australia' },
+                                { code: '+971', name: 'UAE' },
+                                { code: '+65', name: 'Singapore' },
+                                { code: '+60', name: 'Malaysia' },
+                                { code: '+974', name: 'Qatar' },
+                                { code: '+966', name: 'Saudi Arabia' },
+                                { code: '+49', name: 'Germany' },
+                                { code: '+33', name: 'France' },
+                                { code: '+81', name: 'Japan' },
+                                { code: '+86', name: 'China' },
+                                { code: '+82', name: 'South Korea' },
+                                { code: '+977', name: 'Nepal' },
+                                { code: '+94', name: 'Sri Lanka' },
+                                { code: '+880', name: 'Bangladesh' },
+                                { code: '+92', name: 'Pakistan' },
+                              ].map((country) => (
+                                <li
+                                  key={country.code}
+                                  onClick={() => { setCountryCode(country.code); setIsCountryOpen(false); }}
+                                  className={`px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 flex justify-between ${
+                                    countryCode === country.code ? 'bg-gray-50 font-medium' : ''
+                                  }`}
+                                >
+                                  <span>{country.name}</span>
+                                  <span className="text-gray-500">{country.code}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+                        <input
+                          type="tel"
+                          id="phone"
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className="flex-1 min-w-0 px-3 py-2 focus:outline-none rounded-r-md"
+                        />
+                      </div>
                       {isFieldInvalid('phone', formData.phone) && <p className="text-red-500 text-xs mt-1">Phone Number is required</p>}
                     </div>
                   </div>
