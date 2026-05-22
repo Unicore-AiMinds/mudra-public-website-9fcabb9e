@@ -22,6 +22,18 @@ const Contact = () => {
 
   const isFieldInvalid = (fieldName: string, fieldValue: string) =>
     (attempted || touched[fieldName]) && !fieldValue.trim();
+
+  const isEmailInvalid = () => {
+    if (!formData.email.trim()) return false;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return (attempted || touched['email']) && !emailRegex.test(formData.email.trim());
+  };
+
+  const isPhoneInvalid = () => {
+    if (!formData.phone.trim()) return false;
+    const phoneRegex = /^\d{10}$/;
+    return (attempted || touched['phone']) && !phoneRegex.test(formData.phone.trim());
+  };
   
   const [countryCode, setCountryCode] = useState('+91');
   const [isCountryOpen, setIsCountryOpen] = useState(false);
@@ -54,6 +66,14 @@ const Contact = () => {
     setAttempted(true);
 
     if (!formData.name.trim() || !formData.phone.trim() || !formData.division.trim()) {
+      return;
+    }
+
+    if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      return;
+    }
+
+    if (!/^\d{10}$/.test(formData.phone.trim())) {
       return;
     }
 
@@ -217,8 +237,14 @@ const Contact = () => {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 border-gray-300 focus:ring-mudra-primary"
+                        onBlur={handleBlur}
+                        className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+                          isEmailInvalid()
+                            ? 'border-red-500 focus:ring-red-500'
+                            : 'border-gray-300 focus:ring-mudra-primary'
+                        }`}
                       />
+                      {isEmailInvalid() && <p className="text-red-500 text-xs mt-1">Please enter a valid email address</p>}
                     </div>
                     
                     <div>
@@ -288,6 +314,7 @@ const Contact = () => {
                         />
                       </div>
                       {isFieldInvalid('phone', formData.phone) && <p className="text-red-500 text-xs mt-1">Phone Number is required</p>}
+                      {isPhoneInvalid() && <p className="text-red-500 text-xs mt-1">Please enter a valid 10-digit phone number</p>}
                     </div>
                   </div>
                   
