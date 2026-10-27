@@ -1,0 +1,452 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap');
+  .m-sec { margin:30px 0 6px; padding-top:10px; border-top:2px solid #94a3b8; }
+  .m-sec h2 { margin:0 0 4px; }
+  .m-grid { display:flex; flex-wrap:wrap; gap:22px; justify-content:flex-start; margin-top:12px; }
+  .m-col { width:300px; display:flex; flex-direction:column; gap:6px; }
+  .m-col h3 { margin:0; font-size:15px; }
+  .m-cap { font-size:12.5px; color:#94a3b8; line-height:1.45; }
+  .m-cap b { color:inherit; }
+  /* ---------- phone, using the app's real fonts + colours ---------- */
+  .m-ph { width:282px; height:580px; border:8px solid #111; border-radius:28px; background:#f9fafb; overflow:hidden; position:relative; font-family:Inter,sans-serif; color:#020817; font-size:11.5px; line-height:1.35; }
+  .m-ph * { box-sizing:border-box; }
+  .m-top { background:#fff; border-bottom:1px solid #e2e8f0; padding:7px 8px; display:flex; align-items:center; gap:6px; }
+  .m-seg { display:flex; background:#f1f5f9; border-radius:6px; padding:2px; flex:1; }
+  .m-seg span { flex:1; text-align:center; padding:3px 0; border-radius:4px; font-size:9.5px; color:#64748b; }
+  .m-seg span.on { background:#fff; color:#4A90E2; font-weight:600; box-shadow:0 1px 2px #0002; }
+  .m-ic { width:22px; height:22px; border-radius:50%; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; background:#fff; }
+  .m-ic svg, .m-i { width:12px; height:12px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; vertical-align:-2px; }
+  .m-newb { background:#4A90E2; color:#fff; border-radius:5px; padding:4px 6px; font-size:9.5px; font-weight:600; white-space:nowrap; }
+  .m-alert { margin:6px 7px; background:#fffbeb; border:1px solid #f59e0b; color:#92400e; border-radius:6px; padding:5px 8px; display:flex; justify-content:space-between; font-size:10.5px; }
+  .m-tabs { display:flex; gap:2px; margin:0 7px; background:#f1f5f9; border-radius:6px; padding:3px; }
+  .m-tabs span { flex:1; text-align:center; padding:4px 0; border-radius:4px; font-size:9.5px; color:#64748b; }
+  .m-tabs span.on { background:#fff; color:#020817; font-weight:600; box-shadow:0 1px 2px #0001; }
+  .m-link { margin:5px 8px 0; font-size:10.5px; color:#2563eb; text-decoration:underline; }
+  .m-nav { display:flex; gap:4px; padding:6px 7px 3px; }
+  .m-btn { border:1px solid #e2e8f0; background:#fff; border-radius:5px; padding:4px 7px; font-size:10.5px; white-space:nowrap; text-align:center; }
+  .m-btn.grow { flex:1; text-align:left; }
+  .m-flt { display:flex; gap:4px; padding:3px 7px 6px; border-bottom:1px solid #e2e8f0; }
+  .m-flt div { flex:1; background:#fff; border:1px solid #e2e8f0; border-radius:5px; padding:4px 6px; font-size:10px; color:#64748b; }
+  .m-hour { padding:4px 9px 2px; font-weight:700; font-size:10.5px; color:#334155; }
+  .m-slot { display:flex; border-bottom:1px dashed #e2e8f0; min-height:31px; background:#fff; }
+  .m-slot .t { width:44px; font-size:9.5px; color:#9ca3af; padding:8px 4px; border-right:1px solid #e2e8f0; flex-shrink:0; }
+  .m-slot .c { flex:1; padding:3px; display:flex; gap:3px; min-width:0; }
+  .m-blk { flex:1; min-width:0; color:#fff; border-radius:4px; padding:2px 5px; font-size:9.5px; position:relative; }
+  .m-blk .s { font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .m-blk .p { font-size:8.5px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .m-g { background:#27AE60; } .m-tl { background:#48C9B0; } .m-pu { background:#8E44AD; }
+  .m-av { color:#d1d5db; font-size:9.5px; display:flex; align-items:center; padding-left:3px; }
+  /* weekly / monthly */
+  .m-day { background:#fff; border:1px solid #e2e8f0; border-radius:8px; margin:5px 7px; padding:5px; }
+  .m-day.today { border-color:#0063CC; background:#f2f7fd; }
+  .m-dh { display:flex; align-items:center; gap:5px; }
+  .m-pill { background:#f1f5f9; border-radius:5px; padding:2px 7px; font-weight:500; font-size:10.5px; }
+  .m-pill.sel { background:#4A90E2; color:#fff; }
+  .m-cnt { border-radius:9px; padding:0 6px; font-size:9.5px; }
+  .m-cg { background:#dcfce7; color:#166534; } .m-cy { background:#fef9c3; color:#854d0e; } .m-cr { background:#fee2e2; color:#991b1b; }
+  .m-item { border-left:2px solid #27AE60; background:rgba(39,174,96,.15); color:#27AE60; border-radius:3px; padding:2px 5px; margin-top:3px; font-size:9.5px; }
+  .m-item.b { border-left-color:#9B59B6; background:rgba(155,89,182,.15); color:#9B59B6; }
+  .m-item b { font-weight:600; }
+  .m-mgrid { display:grid; grid-template-columns:repeat(7,1fr); gap:3px; padding:4px 7px; }
+  .m-mgrid .h { text-align:center; font-size:9px; color:#64748b; }
+  .m-mgrid .d { background:#fff; border:1px solid #e2e8f0; border-radius:5px; height:38px; padding:2px; font-size:9.5px; text-align:center; position:relative; }
+  .m-mgrid .d.e { border-style:dashed; background:#f9fafb; }
+  .m-mgrid .d.on { border:2px solid #4A90E2; }
+  .m-mgrid .d .m-cnt { position:absolute; bottom:3px; left:50%; transform:translateX(-50%); }
+  /* dialogs */
+  .m-shade { position:absolute; inset:0; background:rgba(0,0,0,.8); z-index:4; }
+  .m-dlg { position:absolute; left:10px; right:10px; background:#fff; border-radius:8px; padding:14px; z-index:5; box-shadow:0 10px 30px #0004; }
+  .m-full { position:absolute; inset:0; background:#fff; z-index:5; padding:14px 12px 60px; overflow:hidden; }
+  .m-x { position:absolute; right:12px; top:12px; color:#64748b; font-size:13px; }
+  .m-tt { font-family:Poppins,sans-serif; font-weight:600; font-size:15px; display:flex; gap:6px; align-items:center; padding-right:18px; }
+  .m-ds { color:#64748b; font-size:11px; margin:3px 0 10px; }
+  .m-lb { font-size:11px; font-weight:500; margin:7px 0 3px; }
+  .m-lb i { color:#ef4444; font-style:normal; }
+  .m-in { border:1px solid #e2e8f0; border-radius:5px; padding:6px 8px; font-size:11px; display:flex; justify-content:space-between; color:#020817; background:#fff; }
+  .m-in.ph { color:#64748b; } .m-in.dis { background:#f1f5f9; color:#94a3b8; } .m-in.ta { height:38px; align-items:flex-start; }
+  .m-two { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
+  .m-foot { position:absolute; left:0; right:0; bottom:0; background:#fff; border-top:1px solid #e2e8f0; padding:8px 12px; display:flex; flex-direction:column; gap:5px; }
+  .m-foot.row { flex-direction:row; justify-content:flex-end; }
+  .m-b { border-radius:5px; padding:7px 10px; font-size:11px; font-weight:500; text-align:center; white-space:nowrap; }
+  .m-pri { background:#4A90E2; color:#fff; } .m-def { background:#0063CC; color:#fff; } .m-out { border:1px solid #e2e8f0; background:#fff; }
+  .m-grn { border:1px solid #16a34a; color:#16a34a; background:#fff; } .m-red { background:#ef4444; color:#fff; } .m-org { background:#f97316; color:#fff; }
+  .m-gfill { background:#16a34a; color:#fff; }
+  .m-badge { display:inline-block; border:1px solid #e2e8f0; border-radius:9px; padding:1px 8px; font-size:10px; font-weight:600; }
+  .m-acard { background:#fff; border:1px solid #e2e8f0; border-radius:7px; margin-bottom:6px; overflow:hidden; }
+  .m-acard .hd { background:#eff6ff; color:#1e40af; border-bottom:1px solid #bfdbfe; font-weight:600; font-size:10.5px; padding:4px 8px; display:flex; justify-content:space-between; }
+  .m-acard .hd.amb { background:#fffbeb; color:#92400e; border-color:#fde68a; }
+  .m-acard .bd { padding:5px 8px; font-size:10.5px; line-height:1.5; }
+  .m-acard .k { color:#64748b; display:inline-block; width:50px; }
+  .m-tel { color:#2563eb; text-decoration:underline; }
+  .m-tog { display:flex; border:1px solid #e2e8f0; border-radius:5px; overflow:hidden; margin:6px 0; }
+  .m-tog span { flex:1; text-align:center; padding:5px; font-size:10.5px; font-weight:500; }
+  .m-tog span.on { background:#0063CC; color:#fff; }
+  .m-chk { display:flex; gap:5px; align-items:center; font-size:10.5px; font-weight:500; margin:5px 0; }
+  .m-box { width:12px; height:12px; border:1px solid #0063CC; border-radius:3px; flex-shrink:0; }
+  .m-box.on { background:#0063CC; }
+  .m-radio { display:inline-flex; gap:3px; align-items:center; margin-right:8px; font-size:10.5px; }
+  .m-radio span { width:11px; height:11px; border-radius:50%; border:1px solid #0063CC; display:inline-block; }
+  .m-radio span.on { background:radial-gradient(#0063CC 40%, #fff 45%); }
+
+  .m-top { flex-direction:column; align-items:stretch; gap:6px; padding:7px 8px 8px; }
+  .m-r1 { display:flex; align-items:center; gap:6px; }
+  .m-r1 .sp { flex:1; }
+  .m-top .m-seg span { font-size:10.5px; padding:4px 0; }
+  .m-menu { position:absolute; z-index:6; background:#fff; border:1px solid #e2e8f0; border-radius:6px; box-shadow:0 8px 24px #0003; font-size:11px; }
+  .m-menu::before { content:''; position:absolute; top:-5px; width:9px; height:9px; background:#fff; border-left:1px solid #e2e8f0; border-top:1px solid #e2e8f0; transform:rotate(45deg); }
+  .m-ring { box-shadow:0 0 0 2px #4A90E2; }
+  .m-col .m-menu::before { right:14px; }
+
+  .m-cal { padding:10px; font-family:Inter,sans-serif; }
+  .m-cal.bordered { border:1px solid #e2e8f0; border-radius:6px; }
+  .m-cal .cap { position:relative; display:flex; justify-content:center; align-items:center; height:26px; font-size:12.5px; font-weight:500; margin-bottom:10px; }
+  .m-cal .nb { position:absolute; top:1px; width:24px; height:24px; border:1px solid #e2e8f0; border-radius:5px; opacity:.5; display:flex; align-items:center; justify-content:center; font-size:12px; }
+  .m-cal .nb.l { left:2px; } .m-cal .nb.r { right:2px; }
+  .m-cal .row { display:flex; justify-content:space-between; margin-top:5px; }
+  .m-cal .row span { width:30px; height:30px; display:flex; align-items:center; justify-content:center; font-size:12px; border-radius:5px; }
+  .m-cal .hd span { height:18px; color:#64748b; font-size:10.5px; }
+  .m-cal .o { color:#64748b; opacity:.5; }
+  .m-cal .sel { background:#0063CC; color:#fff; }
+</style>
+
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-alarm" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M5 3 2 6M22 6l-3-3"/></symbol>
+  <symbol id="i-dl" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+  <symbol id="i-filter" viewBox="0 0 24 24"><path d="M22 3H2l8 9.5V19l4 2v-8.5z"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+  <symbol id="i-sort" viewBox="0 0 24 24"><path d="m21 16-4 4-4-4M17 20V4M3 8l4-4 4 4M7 4v16"/></symbol>
+</svg>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap');
+  .w-ph { width:282px; height:580px; border:8px solid #111; border-radius:28px; background:#f8fafc; overflow:hidden; position:relative; font-family:Inter,sans-serif; color:#0f172a; font-size:11.5px; line-height:1.35; }
+  .w-ph * { box-sizing:border-box; }
+  .w-top { height:40px; background:#fff; border-bottom:1px solid #e2e8f0; display:flex; align-items:center; justify-content:space-between; padding:0 10px; }
+  .w-top .r { text-align:right; } .w-top .r b { display:block; font-size:10px; font-weight:500; color:#334155; } .w-top .r span { font-size:8.5px; color:#64748b; }
+  .w-pg { padding:10px; }
+  .w-h1 { font-family:'Playfair Display',serif; font-weight:700; font-size:17px; }
+  .w-sub { color:#475569; font-size:10.5px; margin:2px 0 8px; }
+  .w-btn { border-radius:7px; padding:7px 10px; font-size:10.5px; font-weight:500; text-align:center; white-space:nowrap; }
+  .w-teal { background:#0a7490; color:#fff; } .w-purple { background:#5A2C8B; color:#fff; }
+  .w-out { border:1px solid #cbd5e1; background:#fff; color:#334155; }
+  .w-box { background:#fff; border:1px solid #e2e8f0; border-radius:10px; padding:9px; margin-bottom:8px; }
+  .w-in { border:1px solid #cbd5e1; border-radius:7px; padding:6px 8px; font-size:10.5px; color:#94a3b8; background:#fff; display:flex; gap:6px; align-items:center; margin-bottom:6px; }
+  .w-in.v { color:#0f172a; } .w-in .dd { margin-left:auto; color:#0f172a; }
+  .w-card { background:#fff; border:1px solid #e2e8f0; border-radius:10px; padding:8px 9px; margin-bottom:7px; font-size:10.5px; }
+  .w-card .nm { display:flex; justify-content:space-between; align-items:center; font-weight:600; font-size:11.5px; gap:6px; }
+  .w-card .ln { display:flex; gap:6px; margin-top:3px; line-height:1.3; }
+  .w-card .ln .k { color:#64748b; width:50px; flex-shrink:0; font-size:9.5px; text-transform:uppercase; letter-spacing:.03em; padding-top:1px; }
+  .w-card .ln .v { flex:1; min-width:0; overflow-wrap:anywhere; }
+  .w-card .act { display:flex; gap:5px; margin-top:7px; }
+  .w-card .act span { flex:1; }
+  .w-pill { display:inline-flex; align-items:center; gap:5px; border:1px solid; border-radius:20px; padding:1px 8px; font-size:9.5px; font-weight:500; }
+  .p-new { background:#fee2e2; color:#b91c1c; border-color:#fecaca; } .p-con { background:#dbeafe; color:#1d4ed8; border-color:#bfdbfe; }
+  .p-fu { background:#fef9c3; color:#a16207; border-color:#fef08a; } .p-sch { background:#dcfce7; color:#15803d; border-color:#bbf7d0; } .p-clo { background:#f3f4f6; color:#374151; border-color:#e5e7eb; }
+  .w-tel { color:#2563eb; text-decoration:underline; }
+  .w-view { color:#4f46e5; border:1px solid #c7d2fe; background:#fff; } .w-del { color:#dc2626; border:1px solid #fecaca; background:#fff; }
+  .w-shade { position:absolute; inset:0; background:rgba(0,0,0,.5); z-index:4; }
+  .w-dlg { position:absolute; left:10px; right:10px; background:#fff; border-radius:12px; padding:13px; z-index:5; box-shadow:0 10px 30px #0004; }
+  .w-dlg .t { font-family:'Playfair Display',serif; font-weight:700; font-size:14px; display:flex; gap:7px; align-items:center; }
+  .w-dlg .m { color:#475569; font-size:10.5px; margin:9px 0 12px; white-space:pre-line; line-height:1.45; }
+  .w-dlg .f { display:flex; justify-content:flex-end; gap:6px; }
+  .w-lbl { font-size:9.5px; font-weight:500; color:#334155; margin-top:7px; }
+  .w-val { font-size:10.5px; margin-top:2px; overflow-wrap:anywhere; }
+  .w-pager { display:flex; justify-content:space-between; align-items:center; font-size:10px; color:#334155; padding:6px 0 2px; }
+  .w-side { position:absolute; top:0; bottom:0; left:0; width:180px; background:#fff; z-index:6; box-shadow:4px 0 16px #0002; }
+  .w-nav { margin:6px 8px; padding:7px 9px; border-radius:9px; font-size:11px; font-weight:500; color:#334155; }
+  .w-nav.on { background:linear-gradient(90deg,#64748b,#475569); color:#fff; }
+  .w-dd { position:absolute; z-index:7; background:#fff; border:1px solid #e2e8f0; border-radius:6px; box-shadow:0 8px 24px #0003; padding:4px; font-size:11px; }
+  .w-dd div { padding:6px 8px 6px 22px; border-radius:4px; position:relative; }
+  .w-dd div.on { background:#f1f5f9; } .w-dd div.on::before { content:'✓'; position:absolute; left:7px; }
+  .w-toast { position:absolute; left:8px; right:8px; bottom:10px; background:#fff; border:1px solid #e2e8f0; border-radius:7px; padding:9px 10px; box-shadow:0 6px 18px #0002; z-index:8; font-size:10.5px; }
+  .w-toast b { display:block; font-size:11px; }
+  .bug { background:#fef2f2; border:1px solid #fecaca; border-radius:8px; padding:10px 12px; margin:6px 0; font-size:13px; color:inherit; }
+  .bug.crit { border-color:#ef4444; }
+  .w-list li { margin-bottom:5px; line-height:1.5; font-size:13px; }
+</style>
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="w-dl" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+  <symbol id="w-eye" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="w-trash" viewBox="0 0 24 24"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"/></symbol>
+  <symbol id="w-warn" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01"/></symbol>
+  <symbol id="w-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+</svg>
+
+<h2>Website admin (Mudra Admin) on a phone</h2>
+<p class="subtitle">This is the <b>public website's admin page</b> (/admin), not the ERP. It keeps <b>its own look</b> (Inter text, Playfair headings, slate colours, Dental teal, Meditouch purple) and <b>its own words</b>. Only the layout changes on phones; desktop (1024 px and wider) stays exactly the same, apart from the bug fixes in section D that you choose. Screens use real DEV data (Test Convert Lead / Sample Aesthetic Lead) unless marked <i>example</i>. Checked live at 384 px and 1440 px, with every save blocked.</p>
+<p class="subtitle"><b>Already fine on a phone today:</b> the login page, the side menu (☰), the dashboard boxes and charts, the search and filters, the status-change confirmation. <b>Not fine:</b> the enquiry table is 800 px wide, so <b>Status, View and Delete</b> are far off to the right (Delete at x=929 on a 384 screen); the details popup's Email runs into Phone. <b>Critical bug:</b> with more than 10 enquiries in a clinic, the data page goes <b>blank</b> on phone and desktop (section D).</p>
+
+<!-- ============ A. LOGIN / MENU / DASHBOARD ============ -->
+<div class="m-sec"><h2>A. Login, menu and Dashboard (the "report" page) &mdash; already mostly fine, small touches only</h2></div>
+<div class="m-grid">
+
+  <div class="m-col"><h3>1. Login (unchanged)</h3>
+    <div class="w-ph" style="background:linear-gradient(135deg,#f8fafc,#eff6ff,#eef2ff)">
+      <div style="padding:62px 16px 0;text-align:center">
+        <div style="width:34px;height:34px;border-radius:50%;background:#475569;margin:0 auto 8px;display:flex;align-items:center;justify-content:center"><svg class="m-i" style="color:#fff"><use href="#w-shield"/></svg></div>
+        <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:15px;color:#1e293b">Mudra Admin</div>
+        <div style="font-size:10px;color:#475569;margin-bottom:10px">Clinic management dashboard</div>
+        <div class="w-box" style="text-align:left;padding:12px">
+          <div class="w-lbl" style="margin:0 0 3px">Username</div><div class="w-in">👤 Enter username</div>
+          <div class="w-lbl" style="margin:4px 0 3px">Password</div><div class="w-in">🔒 Enter password <span class="dd" style="color:#94a3b8">👁</span></div>
+          <div class="w-btn" style="background:#475569;color:#fff;margin-top:6px">Sign In</div>
+          <div style="margin-top:8px;border:1px solid #e2e8f0;border-radius:7px;padding:7px;background:#f8fafc;font-size:9.5px"><b style="font-family:'Playfair Display',serif;font-weight:600">Demo Credentials</b><br>Username: ••••• <br>Password: •••••</div>
+        </div>
+        <div style="font-size:9.5px;color:#64748b;margin-top:8px">Mudra Dental &amp; Aesthetic Clinic</div>
+      </div>
+    </div>
+    <div class="m-cap">Already fits a phone; no layout change. ⚠️ Today this page <b>shows the real admin username and password</b> in the "Demo Credentials" box (hidden with dots here). See the security note in section D.</div>
+  </div>
+
+  <div class="m-col"><h3>2. Dashboard (unchanged layout)</h3>
+    <div class="w-ph">
+      <div class="w-top"><span>☰</span><div class="r"><b>Welcome back!</b><span>Tuesday, 27 October 2026</span></div></div>
+      <div class="w-pg">
+        <div class="w-h1">Dashboard Overview</div><div class="w-sub">Monitor and manage your contact submissions</div>
+        <div class="w-box" style="padding:6px 9px;font-size:10px;color:#475569">Last updated: Oct 27, 2026 09:42</div>
+        <div class="w-box"><div style="font-size:10px;color:#475569">Total Submissions</div><div style="font-size:20px;font-weight:700">2</div><div style="font-size:9px;color:#64748b">All form submissions</div></div>
+        <div class="w-box"><div style="font-size:10px;color:#475569">Conversion Rate</div><div style="font-size:20px;font-weight:700">0%</div><div style="font-size:9px;color:#64748b">New → Scheduled</div></div>
+        <div class="w-box" style="margin-bottom:0"><div style="font-weight:600;font-family:'Playfair Display',serif">Recent Submissions</div>
+          <div style="background:#f8fafc;border-radius:7px;padding:6px;margin-top:5px;display:flex;justify-content:space-between"><div><b style="font-weight:500">Test Convert Lead</b><div style="font-size:9px;color:#64748b">RCT &amp; Crown</div></div><span class="w-pill p-new">new</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="m-cap">The dashboard already stacks on a phone (boxes, charts, lists); no layout change. The <b>Recent Submissions</b> list currently shows the wrong clinic icon and no service line; drawn here <b>with the bug fixed</b> (section D, #3).</div>
+  </div>
+
+  <div class="m-col"><h3>2b. Dashboard: charts</h3>
+    <div class="w-ph"><div class="w-top"><span>☰</span><div class="r"><b>Welcome back!</b><span>Tuesday, 27 October 2026</span></div></div>
+      <div class="w-pg">
+        <div class="w-box"><div style="font-size:10px;color:#475569">Scheduled Today</div><div style="font-size:20px;font-weight:700">0</div><div style="font-size:9px;color:#64748b">Appointments booked</div></div>
+        <div class="w-box"><div style="font-family:'Playfair Display',serif;font-weight:700">Inquiries by Clinic</div>
+          <div style="width:110px;height:110px;border-radius:50%;margin:10px auto;background:conic-gradient(#0a7490 0 50%,#fff 50% 51%,#5A2C8B 51% 99%,#fff 99%);position:relative"><div style="position:absolute;inset:26px;border-radius:50%;background:#fff"></div></div>
+          <div style="display:flex;justify-content:center;gap:12px;font-size:9.5px;color:#475569"><span><span style="color:#0a7490">●</span> Dental Metrix: 1</span><span><span style="color:#5A2C8B">●</span> Meditouch: 1</span></div></div>
+        <div class="w-box"><div style="font-family:'Playfair Display',serif;font-weight:700">Status Overview</div>
+          <div style="display:flex;align-items:flex-end;gap:10px;height:90px;margin:8px 4px 2px;border-left:1px solid #cbd5e1;border-bottom:1px solid #cbd5e1;padding:0 6px"><div style="width:20px;height:80px;background:#ef4444;border-radius:3px 3px 0 0"></div><div style="width:20px;height:2px;background:#3b82f6"></div><div style="width:20px;height:2px;background:#f59e0b"></div><div style="width:20px;height:2px;background:#22c55e"></div><div style="width:20px;height:2px;background:#6b7280"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:7.5px;color:#64748b;padding:0 6px 0 10px"><span>New</span><span>Contacted</span><span>Follow-up</span><span>Scheduled</span><span>Closed</span></div></div>
+      </div>
+    </div>
+    <div class="m-cap">The two charts already resize to the phone width (real DEV numbers). One small touch: today the bar chart <b>drops every other label</b> on a phone (only New, Follow-up, Closed show). The phone version uses a smaller label size so <b>all 5 status names</b> show.</div>
+  </div>
+
+  <div class="m-col"><h3>2c. Dashboard: lists</h3>
+    <div class="w-ph"><div class="w-top"><span>☰</span><div class="r"><b>Welcome back!</b><span>Tuesday, 27 October 2026</span></div></div>
+      <div class="w-pg">
+        <div class="w-box"><div style="font-family:'Playfair Display',serif;font-weight:700">Recent Submissions</div>
+          <div style="background:#f8fafc;border-radius:7px;padding:6px;margin-top:5px;display:flex;justify-content:space-between;gap:6px"><div style="min-width:0"><b style="font-weight:500">Test Convert Lead</b><div style="font-size:9px;color:#64748b">RCT &amp; Crown</div></div><div style="text-align:right;flex-shrink:0"><span class="w-pill p-new">new</span><div style="font-size:8.5px;color:#64748b;margin-top:2px">Oct 05, 15:43</div></div></div>
+          <div style="background:#f8fafc;border-radius:7px;padding:6px;margin-top:5px;display:flex;justify-content:space-between;gap:6px"><div style="min-width:0"><b style="font-weight:500">Sample Aesthetic Lead</b><div style="font-size:9px;color:#64748b">HydraFacial Skin Rejuvenation</div></div><div style="text-align:right;flex-shrink:0"><span class="w-pill p-new">new</span><div style="font-size:8.5px;color:#64748b;margin-top:2px">Oct 05, 12:36</div></div></div></div>
+        <div class="w-box"><div style="font-family:'Playfair Display',serif;font-weight:700">Needs Follow-up <span style="background:#ffedd5;color:#c2410c;font-family:Inter;font-size:9px;padding:1px 6px;border-radius:9px">1</span></div>
+          <div style="background:#fff7ed;border:1px solid #ffedd5;border-radius:7px;padding:6px;margin-top:5px;display:flex;justify-content:space-between;gap:6px"><div style="min-width:0"><b style="font-weight:500">Priya Joshi</b><div style="font-size:9px;color:#475569">Teeth Whitening</div></div><div style="text-align:right;flex-shrink:0"><span class="w-pill p-con">contacted</span><div style="font-size:8.5px;color:#64748b;margin-top:2px">Oct 24 <span style="color:#ea580c">(3d ago)</span></div></div></div></div>
+      </div>
+    </div>
+    <div class="m-cap">Same two lists as today, stacked. Long names and services wrap instead of being cut, and the status and date stay on the right. ("Needs Follow-up" card is <i>example</i> data: DEV has no Contacted enquiry right now.)</div>
+  </div>
+
+  <div class="m-col"><h3>2d. Dashboard loading / error, login messages</h3>
+    <div class="w-ph"><div class="w-top"><span>☰</span><div class="r"><b>Welcome back!</b><span>Tuesday, 27 October 2026</span></div></div>
+      <div class="w-pg">
+        <div class="w-box" style="text-align:center;padding:24px 8px;color:#475569"><div style="width:20px;height:20px;border-radius:50%;border:2px solid #0a7490;border-top-color:transparent;margin:0 auto 6px"></div>Loading dashboard data...</div>
+        <div class="w-box" style="text-align:center;padding:20px 8px"><div style="color:#dc2626;font-weight:500">Failed to load dashboard data</div><span class="w-btn w-teal" style="display:inline-block;margin-top:6px">Retry</span></div>
+        <div class="w-toast" style="position:static;margin-top:6px"><b>Login Failed</b>Invalid username or password.</div>
+        <div class="w-toast" style="position:static;margin-top:6px"><b>Login Successful</b>Welcome to the admin dashboard.</div>
+      </div>
+    </div>
+    <div class="m-cap">The dashboard's own loading and error screens, and the login messages, are kept word for word; they already fit a phone.</div>
+  </div>
+
+  <div class="m-col"><h3>3. Side menu (unchanged)</h3>
+    <div class="w-ph">
+      <div class="w-top"><span>☰</span><div class="r"><b>Welcome back!</b><span>Tuesday, 27 October 2026</span></div></div>
+      <div class="w-shade" style="background:rgba(0,0,0,.5)"></div>
+      <div class="w-side">
+        <div style="padding:10px;border-bottom:1px solid #e2e8f0;display:flex;gap:7px;align-items:center"><div style="width:24px;height:24px;border-radius:6px;background:#475569"></div><div><div style="font-family:'Playfair Display',serif;font-weight:700;font-size:12px">Mudra Admin</div><div style="font-size:8.5px;color:#64748b">Clinic Management</div></div></div>
+        <div class="w-nav on">Dashboard</div><div class="w-nav">Dental Metrix</div><div class="w-nav">Meditouch</div>
+        <div style="position:absolute;bottom:0;left:0;right:0;border-top:1px solid #e2e8f0;padding:8px;font-size:10px;background:#f8fafc">admin<br><span style="color:#64748b;font-size:9px">Administrator</span></div>
+      </div>
+    </div>
+    <div class="m-cap">☰ opens the same menu as today: Dashboard, Dental Metrix, Meditouch, and Logout at the bottom. No change.</div>
+  </div>
+</div>
+
+<!-- ============ B. DATA PAGE ============ -->
+<div class="m-sec"><h2>B. Dental Metrix / Meditouch data pages (the main change)</h2></div>
+<div class="m-grid">
+
+  <div class="m-col"><h3>4. Submissions as cards (real DEV)</h3>
+    <div class="w-ph">
+      <div class="w-top"><span>☰</span><div class="r"><b>Welcome back!</b><span>Tuesday, 27 October 2026</span></div></div>
+      <div class="w-pg">
+        <div class="w-h1">Dental Metrix Data</div><div class="w-sub">1 of 1 submissions</div>
+        <div class="w-btn w-teal" style="margin-bottom:8px"><svg class="m-i"><use href="#w-dl"/></svg> Export to Excel</div>
+        <div class="w-box">
+          <div class="w-in">🔍 Search submissions...</div>
+          <div class="w-in v">⛛ All Status <span class="dd">⌄</span></div>
+          <div class="w-in v">📅 All Time <span class="dd">⌄</span></div>
+          <div class="w-in v" style="margin:0">10 per page <span class="dd">⌄</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:10.5px;margin-bottom:6px">Sort by <div class="w-in v" style="flex:1;margin:0">Date (Newest First) <span class="dd">⌄</span></div></div>
+        <div class="w-card"><div class="nm">Test Convert Lead <span class="w-pill p-new">New ⌄</span></div>
+          <div class="ln"><span class="k">Date</span><span class="v">Oct 05, 2026 · 15:43</span></div>
+          <div class="ln"><span class="k">Email</span><span class="v">test.convert@example.com</span></div>
+          <div class="ln"><span class="k">Phone</span><span class="v"><span class="w-tel">+91 9812345678</span></span></div>
+          <div class="ln"><span class="k">Service</span><span class="v">RCT &amp; Crown</span></div>
+          <div class="act"><span class="w-btn w-view"><svg class="m-i"><use href="#w-eye"/></svg> View</span><span class="w-btn w-del"><svg class="m-i"><use href="#w-trash"/></svg> Delete</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="m-cap">The 800-px table becomes <b>one card per submission</b> with the same columns: Date (date · time), Name (card title), Contact (Email and Phone), Service, Status, Actions. The <b>status pill keeps its colours</b> and is still a drop-down. <b>View</b> and <b>Delete</b> share the bottom row. Export, search and filters stay as they are today (already stacked).</div>
+  </div>
+
+  <div class="m-col"><h3>5. Changing a status (unchanged popup)</h3>
+    <div class="w-ph">
+      <div class="w-top"><span>☰</span><div class="r"><b>Welcome back!</b><span>Tuesday, 27 October 2026</span></div></div>
+      <div class="w-shade"></div>
+      <div class="w-dlg" style="top:150px">
+        <div class="t"><svg class="m-i" style="color:#d97706;width:16px;height:16px"><use href="#w-warn"/></svg>Update Status</div>
+        <div class="m">Are you sure you want to change the status for "Test Convert Lead" from "New" to "Closed"?
+
+Service: RCT &amp; Crown</div>
+        <div class="f"><span class="w-btn w-out">Cancel</span><span class="w-btn" style="background:#d97706;color:#fff">Update Status</span></div>
+      </div>
+    </div>
+    <div class="m-cap">Picking a new status in the card's pill opens the <b>website's own confirmation</b>, word for word, as today. It already fits a phone. "Status Updated Successfully" appears after saving. <i>(The dark background will also cover the thin white strip at the top, which it misses today: section D, #7.)</i></div>
+  </div>
+
+  <div class="m-col"><h3>6. Sort by (open)</h3>
+    <div class="w-ph">
+      <div class="w-top"><span>☰</span><div class="r"><b>Welcome back!</b><span>Tuesday, 27 October 2026</span></div></div>
+      <div class="w-pg">
+        <div class="w-h1">Dental Metrix Data</div><div class="w-sub">1 of 1 submissions</div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:10.5px;margin:100px 0 6px">Sort by <div class="w-in v m-ring" style="flex:1;margin:0">Date (Newest First) <span class="dd">⌄</span></div></div>
+      </div>
+      <div class="w-dd" style="top:200px;left:56px;right:14px"><div class="on">Date (Newest First)</div><div>Date (Oldest First)</div><div>Name (A-Z)</div><div>Name (Z-A)</div><div>Service (A-Z)</div><div>Service (Z-A)</div><div>Status (A-Z)</div><div>Status (Z-A)</div></div>
+    </div>
+    <div class="m-cap">Desktop sorts by clicking the <b>Date, Name, Service, Status</b> headers (↑↓). Cards have no headers, so phones get a small <b>Sort by</b> box with those 4 columns both ways; default unchanged (Date, newest first). <i>My call, same as the ERP pages you approved.</i></div>
+  </div>
+
+  <div class="m-col"><h3>7. Many submissions: pages</h3>
+    <div class="w-ph">
+      <div class="w-top"><span>☰</span><div class="r"><b>Welcome back!</b><span>Tuesday, 27 October 2026</span></div></div>
+      <div class="w-pg">
+        <div class="w-card"><div class="nm">Priya Joshi <span class="w-pill p-con">Contacted ⌄</span></div>
+          <div class="ln"><span class="k">Date</span><span class="v">Oct 24, 2026 · 11:02</span></div>
+          <div class="ln"><span class="k">Phone</span><span class="v"><span class="w-tel">+91 9822012345</span></span></div>
+          <div class="ln"><span class="k">Service</span><span class="v">Teeth Whitening</span></div>
+          <div class="act"><span class="w-btn w-view">View</span><span class="w-btn w-del">Delete</span></div></div>
+        <div class="w-card"><div class="nm">Rahul Kulkarni <span class="w-pill p-fu">Follow-up ⌄</span></div>
+          <div class="ln"><span class="k">Date</span><span class="v">Oct 23, 2026 · 18:40</span></div>
+          <div class="ln"><span class="k">Service</span><span class="v">Dental Implants</span></div>
+          <div class="act"><span class="w-btn w-view">View</span><span class="w-btn w-del">Delete</span></div></div>
+        <div class="w-pager"><span class="w-btn w-out" style="opacity:.5">Previous</span><span>1 of 3</span><span class="w-btn w-out">Next</span></div>
+      </div>
+    </div>
+    <div class="m-cap">Today's phone pager has only <b>Previous</b> and <b>Next</b>. The phone version adds desktop's own <b>"1 of 3"</b> text between them so you know where you are. This needs the crash fix first (section D, #1). <i>(Example data.)</i></div>
+  </div>
+
+  <div class="m-col"><h3>8. View → Submission Details (fixed)</h3>
+    <div class="w-ph">
+      <div class="w-top"><span>☰</span><div class="r"><b>Welcome back!</b><span>Tuesday, 27 October 2026</span></div></div>
+      <div class="w-shade"></div>
+      <div class="w-dlg" style="top:60px">
+        <div class="t" style="justify-content:space-between">Submission Details <span style="color:#94a3b8;font-family:Inter">×</span></div>
+        <div class="w-lbl">Status</div><div style="margin-top:3px"><span class="w-pill p-new">New ⌄</span></div>
+        <div class="w-lbl">Name</div><div class="w-val">Test Convert Lead</div>
+        <div class="w-lbl">Submitted</div><div class="w-val">Oct 05, 2026 15:43</div>
+        <div class="w-lbl">Email</div><div class="w-val">test.convert@example.com</div>
+        <div class="w-lbl">Phone</div><div class="w-val"><span class="w-tel">+91 9812345678</span></div>
+        <div class="w-lbl">Service Inquiry</div><div class="w-val">RCT &amp; Crown</div>
+        <div class="w-lbl">Message</div><div class="w-val" style="background:#f8fafc;border-radius:7px;padding:6px">Please call me to book.</div>
+      </div>
+    </div>
+    <div class="m-cap">Same popup and fields. On a phone the fields go <b>one per line</b>, so a long email no longer runs into the phone number (today they overlap). The phone number is tappable to call. It scrolls if the message is long.</div>
+  </div>
+
+  <div class="m-col"><h3>9. Delete confirmation (button fixed)</h3>
+    <div class="w-ph">
+      <div class="w-top"><span>☰</span><div class="r"><b>Welcome back!</b><span>Tuesday, 27 October 2026</span></div></div>
+      <div class="w-shade"></div>
+      <div class="w-dlg" style="top:140px">
+        <div class="t"><svg class="m-i" style="color:#dc2626;width:16px;height:16px"><use href="#w-warn"/></svg>Delete Submission</div>
+        <div class="m">Are you sure you want to permanently delete the submission from "Test Convert Lead"?
+
+Service: RCT &amp; Crown
+
+This action cannot be undone.</div>
+        <div class="f"><span class="w-btn w-out">Cancel</span><span class="w-btn" style="background:#dc2626;color:#fff">Delete</span></div>
+      </div>
+    </div>
+    <div class="m-cap">Same words. <b>Bug fix:</b> today the delete button says <b>"Update Status"</b> in orange; it becomes a red <b>Delete</b> button (section D, #2). This fix shows on desktop too.</div>
+  </div>
+
+  <div class="m-col"><h3>10. Meditouch data</h3>
+    <div class="w-ph">
+      <div class="w-top"><span>☰</span><div class="r"><b>Welcome back!</b><span>Tuesday, 27 October 2026</span></div></div>
+      <div class="w-pg">
+        <div class="w-h1">Meditouch Data</div><div class="w-sub">1 of 1 submissions</div>
+        <div class="w-btn w-purple" style="margin-bottom:8px"><svg class="m-i"><use href="#w-dl"/></svg> Export to Excel</div>
+        <div class="w-card"><div class="nm">Sample Aesthetic Lead <span class="w-pill p-new">New ⌄</span></div>
+          <div class="ln"><span class="k">Date</span><span class="v">Oct 05, 2026 · 12:36</span></div>
+          <div class="ln"><span class="k">Email</span><span class="v">sample.aesthetic@example.com</span></div>
+          <div class="ln"><span class="k">Phone</span><span class="v"><span class="w-tel">+91 9000000002</span></span></div>
+          <div class="ln"><span class="k">Service</span><span class="v">HydraFacial Skin Rejuvenation</span></div>
+          <div class="act"><span class="w-btn w-view">View</span><span class="w-btn w-del">Delete</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="m-cap">Same layout with the Meditouch purple Export button, exactly as desktop uses purple.</div>
+  </div>
+
+  <div class="m-col"><h3>11. No results / loading</h3>
+    <div class="w-ph">
+      <div class="w-top"><span>☰</span><div class="r"><b>Welcome back!</b><span>Tuesday, 27 October 2026</span></div></div>
+      <div class="w-pg">
+        <div class="w-h1">Dental Metrix Data</div><div class="w-sub">0 of 0 submissions</div>
+        <div class="w-box"><div class="w-in v">🔍 zzzz</div></div>
+        <div class="w-card" style="text-align:center;color:#64748b;padding:22px 8px">No submissions found.</div>
+        <div class="w-card" style="text-align:center;color:#64748b;padding:22px 8px">Loading submissions...</div>
+      </div>
+    </div>
+    <div class="m-cap">Today the page shows <b>nothing at all</b> while loading or when a search finds nothing (an empty table). <i>My suggestion:</i> show "No submissions found." and "Loading submissions..." on phones and desktop. New words, so <b>please approve</b>; otherwise phones stay blank like desktop.</div>
+  </div>
+
+  <div class="m-col"><h3>12. Messages (toasts)</h3>
+    <div class="w-ph">
+      <div class="w-top"><span>☰</span><div class="r"><b>Welcome back!</b><span>Tuesday, 27 October 2026</span></div></div>
+      <div class="w-pg"><div class="w-h1">Dental Metrix Data</div><div class="w-sub">1 of 1 submissions</div></div>
+      <div class="w-toast"><b>Status Updated Successfully</b>Test Convert Lead's status changed to Closed</div>
+    </div>
+    <div class="m-cap">All website messages stay word for word: Status Updated Successfully, Update Failed, Submission Deleted, Delete Failed, Export Successful, Export Failed, Login Successful, Login Failed, Logged out successfully.</div>
+  </div>
+</div>
+
+<!-- ============ C. EDGE CASES ============ -->
+<div class="m-sec"><h2>C. Edge and corner cases</h2></div>
+<ul class="w-list">
+  <li><b>Long names, emails, services</b> wrap inside the card; nothing scrolls sideways (checked at 360 / 384 / 412 px during the build).</li>
+  <li><b>No phone</b>: no call link. <b>No email / message</b>: shown empty, as desktop does today.</li>
+  <li><b>Changing a status</b>: the pill greys out with the small spinner while saving, as today. <b>Cancel</b> in the popup keeps the old status.</li>
+  <li><b>Deleting</b>: the button shows the spinner, then the page reloads (today's behaviour, kept).</li>
+  <li><b>Date filter</b> (Today / 7 / 30 days), <b>per page</b> (5 / 10 / 25 / 50), <b>search</b>: same as desktop.</li>
+  <li><b>Phones sideways and tablets</b> (up to 1023 px): the same cards. 1024 px and up: today's desktop table, unchanged.</li>
+  <li><b>Same data as the ERP</b>: a status changed here shows in the ERP's Enquiries page and the other way round.</li>
+</ul>
+
+<!-- ============ D. BUGS ============ -->
+<div class="m-sec"><h2>D. Existing bugs found while checking (these affect desktop too)</h2></div>
+<p class="subtitle">Found in today's website admin, checked live on DEV. <b>Please tell me which to fix</b> together with the phone layout. My recommendation: <b>#1, #2, #3, #7 and #8</b> (small, safe fixes). The rest only if you want.</p>
+<div class="bug crit"><b>#1 CRITICAL: data page goes blank with more than 10 submissions.</b> The page counter uses a value that doesn't exist ("startIndex is not defined"). With 11+ submissions in a clinic (more than one page), the whole Dental Metrix / Meditouch data page turns white, on <b>phone and desktop</b>. Reproduced with 16 test rows (no data saved). If LIVE has more than 10 for a clinic, the live admin page is broken right now.</div>
+<div class="bug"><b>#2 Delete popup button says "Update Status"</b> (orange) instead of <b>Delete</b> (red).</div>
+<div class="bug"><b>#3 Dashboard "Recent Submissions"</b> reads wrong field names: the service line is empty and every enquiry shows the Meditouch icon.</div>
+<div class="bug"><b>#4 "Scheduled Today"</b> counts <i>all</i> scheduled enquiries, not just today's.</div>
+<div class="bug"><b>#5 Conversion Rate</b> would show "NaN%" when there are no submissions.</div>
+<div class="bug"><b>#6 Date filter</b> only filters the rows on the current page, not all submissions.</div>
+<div class="bug"><b>#7 Popup dark background</b> leaves a thin white strip at the top of the screen.</div>
+<div class="bug"><b>#8 Details popup</b>: Email and Phone overlap when the email is long (fixed on phones by screen 8; on desktop only if very long).</div>
+<div class="bug" style="background:#fff7ed;border-color:#fdba74"><b>Security (separate task, not part of this work):</b> the admin <b>login page itself shows the username and password</b> ("Demo Credentials" box), they are also written in the website's own code, and the database lets the public website key read, change and delete all enquiries. Recommend fixing separately, carefully on LIVE.</div>
