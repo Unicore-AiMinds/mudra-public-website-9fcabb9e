@@ -126,7 +126,9 @@ export const supabase = {
         return await supabaseRequest<T[]>(table, 'GET', undefined, { params });
       } catch (error) {
         console.error(`Error fetching from ${table}:`, error);
-        return [];
+        // Pass the failure on: every caller (src/lib/api.ts) catches it and reports
+        // success: false, so the admin pages can show their error message instead of "no data"
+        throw error;
       }
     },
 

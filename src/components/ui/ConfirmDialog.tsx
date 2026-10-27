@@ -51,7 +51,8 @@ const ConfirmDialog = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    // !mt-0: a parent's space-y gap would otherwise push this full-screen background down
+    <div className="fixed inset-0 !mt-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-xl max-w-md w-full shadow-xl">
         <div className="p-6">
           <div className="flex items-center space-x-3 mb-4">

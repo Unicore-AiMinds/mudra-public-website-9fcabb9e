@@ -66,13 +66,24 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
     title: string;
     message: string;
     onConfirm: () => void;
-  }>({ isOpen: false, title: '', message: '', onConfirm: () => {} });
+    confirmText: string;
+    type: 'warning' | 'danger';
+  }>({ isOpen: false, title: '', message: '', onConfirm: () => {}, confirmText: 'Update Status', type: 'warning' });
+
+  // After a failed load, don't leave the previous rows under the error message
+  const clearRows = () => {
+    setAllData([]);
+    setFilteredData([]);
+    setTotalCount(0);
+    setTotalPages(1);
+  };
 
   // Fetch data from API
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
+        setError(null);
         const clinic = clinicType === 'dental' ? 'dental_metrix' : 'meditouch';
 
         const response = await apiClient.getSubmissions({
@@ -92,9 +103,11 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
           setTotalPages(response.totalPages || 1);
         } else {
           setError('Failed to fetch submissions');
+          clearRows();
         }
       } catch (err) {
         setError('Failed to fetch submissions');
+        clearRows();
         console.error('Data fetch error:', err);
       } finally {
         setLoading(false);
@@ -143,6 +156,8 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
 
   // Pagination is handled by API, so we use the data as-is
   const paginatedData = filteredData;
+  // First row number of the current page, for the "Showing x to y of z results" line
+  const startIndex = (currentPage - 1) * itemsPerPage;
 
   const handleSort = (field: keyof ContactSubmission) => {
     if (field === sortField) {
@@ -195,6 +210,8 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
     setConfirmDialog({
       isOpen: true,
       title: 'Update Status',
+      confirmText: 'Update Status',
+      type: 'warning',
       message: `Are you sure you want to change the status for "${submission.name}" from "${statusLabels[currentStatus]}" to "${statusLabels[newStatus]}"?\n\nService: ${submission.service_inquiry}`,
       onConfirm: async () => {
         setUpdatingStatus(submissionId.toString());
@@ -249,6 +266,8 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
     setConfirmDialog({
       isOpen: true,
       title: 'Delete Submission',
+      confirmText: 'Delete',
+      type: 'danger',
       message: `Are you sure you want to permanently delete the submission from "${submission.name}"?\n\nService: ${submission.service_inquiry}\n\nThis action cannot be undone.`,
       onConfirm: async () => {
         setDeletingSubmission(submissionId.toString());
@@ -354,7 +373,7 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
               type="text"
               placeholder="Search submissions..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
               className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-slate-500"
             />
           </div>
@@ -364,7 +383,7 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
             <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
             <select
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
+              onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
               className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-slate-500"
             >
               <option value="all">All Status</option>
@@ -394,7 +413,7 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
           {/* Items per page */}
           <select
             value={itemsPerPage}
-            onChange={(e) => setItemsPerPage(Number(e.target.value))}
+            onChange={(e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}
             className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-slate-500"
           >
             <option value={5}>5 per page</option>
@@ -404,6 +423,13 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
           </select>
         </div>
       </div>
+
+      {/* Load error (desktop and phones) */}
+      {error && (
+        <div className="bg-white rounded-xl shadow-sm border border-red-200 px-4 py-3 text-center text-sm font-medium text-red-600">
+          {error}
+        </div>
+      )}
 
       {/* Phones/tablets: one card per submission instead of the 800px table */}
       {isCompact ? (
@@ -425,7 +451,7 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
                 }}
               />
             )}
-            {paginatedData.length === 0 && (
+            {paginatedData.length === 0 && !error && (
               <div className="bg-white rounded-xl shadow-sm border border-slate-200 py-10 text-center text-sm text-slate-500">
                 No submissions found.
               </div>
@@ -631,8 +657,8 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
               <div>
                 <p className="text-sm text-slate-700">
                   Showing <span className="font-medium">{startIndex + 1}</span> to{' '}
-                  <span className="font-medium">{Math.min(startIndex + itemsPerPage, filteredData.length)}</span> of{' '}
-                  <span className="font-medium">{filteredData.length}</span> results
+                  <span className="font-medium">{Math.min(startIndex + itemsPerPage, totalCount)}</span> of{' '}
+                  <span className="font-medium">{totalCount}</span> results
                 </p>
               </div>
               <div>
@@ -678,7 +704,8 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
 
       {/* Submission Detail Modal */}
       {selectedSubmission && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        // !mt-0: the page's space-y-6 gap would otherwise push this full-screen background 24px down
+        <div className="fixed inset-0 !mt-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
@@ -715,7 +742,7 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
                 <div className={isCompact ? "grid grid-cols-1 gap-4" : "grid grid-cols-2 gap-4"}>
                   <div>
                     <label className="block text-sm font-medium text-slate-700">Email</label>
-                    <p className={isCompact ? "text-sm text-slate-900 mt-1 [overflow-wrap:anywhere]" : "text-sm text-slate-900 mt-1"}>{selectedSubmission.email}</p>
+                    <p className="text-sm text-slate-900 mt-1 [overflow-wrap:anywhere]">{selectedSubmission.email}</p>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-slate-700">Phone</label>
@@ -753,8 +780,8 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
         onConfirm={confirmDialog.onConfirm}
         title={confirmDialog.title}
         message={confirmDialog.message}
-        confirmText="Update Status"
-        type="warning"
+        confirmText={confirmDialog.confirmText}
+        type={confirmDialog.type}
       />
     </div>
   );
