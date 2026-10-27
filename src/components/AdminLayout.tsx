@@ -142,7 +142,7 @@ const AdminLayout = () => {
       {/* Main Content */}
       <div className="lg:ml-64">
         {/* Top Bar */}
-        <header className="h-16 bg-white shadow-sm border-b border-slate-200 flex items-center justify-between px-6">
+        <header className="h-16 bg-white shadow-sm border-b border-slate-200 flex items-center justify-between px-6 max-lg:relative">
           <button
             onClick={() => setIsSidebarOpen(true)}
             className="lg:hidden p-2 rounded-lg hover:bg-slate-100"
@@ -150,8 +150,9 @@ const AdminLayout = () => {
             <Menu className="h-5 w-5 text-slate-600" />
           </button>
           
-          <div className="flex items-center space-x-4">
-            <div className="text-right">
+          {/* Phones/tablets: greeting and date centred in the top bar */}
+          <div className="flex items-center space-x-4 max-lg:absolute max-lg:left-1/2 max-lg:-translate-x-1/2">
+            <div className="text-right max-lg:text-center">
               <p className="text-sm font-medium text-slate-700">Welcome back!</p>
               <p className="text-xs text-slate-500">
                 {new Date().toLocaleDateString('en-IN', { 
