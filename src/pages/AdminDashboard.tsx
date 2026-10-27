@@ -22,6 +22,7 @@ import {
 } from 'recharts';
 import { apiClient, ContactSubmission, AnalyticsData } from '@/lib/api';
 import { format } from 'date-fns';
+import { useIsCompact } from '@/hooks/use-compact';
 
 const AdminDashboard = () => {
   const [analytics, setAnalytics] = useState<AnalyticsData>({
@@ -33,6 +34,7 @@ const AdminDashboard = () => {
   const [recentSubmissions, setRecentSubmissions] = useState<ContactSubmission[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isCompact = useIsCompact();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -232,7 +234,13 @@ const AdminDashboard = () => {
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={statusData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis dataKey="name" stroke="#64748b" fontSize={12} />
+              <XAxis
+                dataKey="name"
+                stroke="#64748b"
+                fontSize={12}
+                // Phones: smaller labels and none skipped, so all 5 status names show
+                {...(isCompact ? { fontSize: 9, interval: 0 } : {})}
+              />
               <YAxis stroke="#64748b" fontSize={12} />
               <Tooltip 
                 contentStyle={{ 
@@ -274,7 +282,7 @@ const AdminDashboard = () => {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-slate-900">{submission.name}</p>
-                    <p className="text-xs text-slate-500 truncate max-w-[180px]">{submission.serviceInquiry}</p>
+                    <p className={isCompact ? "text-xs text-slate-500 [overflow-wrap:anywhere]" : "text-xs text-slate-500 truncate max-w-[180px]"}>{submission.serviceInquiry}</p>
                   </div>
                 </div>
                 <div className="text-right">
@@ -325,7 +333,7 @@ const AdminDashboard = () => {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-slate-900">{submission.name}</p>
-                    <p className="text-xs text-slate-600 truncate max-w-[180px]">{submission.service_inquiry}</p>
+                    <p className={isCompact ? "text-xs text-slate-600 [overflow-wrap:anywhere]" : "text-xs text-slate-600 truncate max-w-[180px]"}>{submission.service_inquiry}</p>
                   </div>
                 </div>
                 <div className="text-right">
