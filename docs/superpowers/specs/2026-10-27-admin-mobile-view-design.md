@@ -43,12 +43,26 @@ fit a phone.
 4. **Top bar:** "Welcome back!" and the date are centred on phones/tablets (user request); the ☰ button stays on the left.
 5. Login, side menu, toasts, confirmation popups: unchanged.
 
-## Open bug list (decide later, not fixed here)
+## Bug fixes (step 1, approved 2026-10-27; desktop and phones)
 
-Mockup section D (#1–#8 and security), plus two found in review:
-- the page number is not reset when search / filters change, so a later page can look empty
-  ("No submissions found." on phones, blank table on desktop) and the pager can show "3 of 2";
-- load errors are stored but never shown.
+Fixed, each with a live check that failed first: #1 blank data page with more than 10 submissions
+(`startIndex` defined; "Showing x to y of z" uses the real total), #2 Delete popup button now red
+"Delete", #3 dashboard Recent Submissions service line and clinic icon, #4 page goes back to 1 on
+search / status / per-page change, #5 long email wraps in the details popup, #6 popup backgrounds
+cover the whole screen (parent `space-y-6` margin removed with `!mt-0`), #8 Conversion Rate 0%
+instead of NaN%, #10 load errors shown (data layer now passes errors on; data pages show "Failed to
+fetch submissions" and clear old rows; dashboard shows its existing error screen with Retry),
+#11 (quick part) "Demo Credentials" box removed from the login page.
+
+## Still open (decide later)
+
+- #7 "Scheduled Today" counts all scheduled (recommend renaming to "Scheduled"; no scheduled-on date exists).
+- #9 date filter only checks the current page; the "Showing x of z" total ignores it.
+- Header "x of y submissions" counts only the current page.
+- A failed status update still changes the row locally until reload.
+- Searching fetches on every keystroke without cancelling older requests.
+- #11 / #12 security: password still in the website code; the public key can read, change and
+  delete enquiries (the ERP uses the same key, so this needs a separate server-side design).
 
 ## Verification
 
