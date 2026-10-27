@@ -23,6 +23,7 @@ import {
 import { apiClient, ContactSubmission, AnalyticsData } from '@/lib/api';
 import { format } from 'date-fns';
 import { useIsCompact } from '@/hooks/use-compact';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const AdminDashboard = () => {
   const [analytics, setAnalytics] = useState<AnalyticsData>({
@@ -35,6 +36,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const isCompact = useIsCompact();
+  const isPhone = useIsMobile();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -244,8 +246,13 @@ const AdminDashboard = () => {
                 dataKey="name"
                 stroke="#64748b"
                 fontSize={12}
-                // Phones: smaller labels and none skipped, so all 5 status names show
-                {...(isCompact ? { fontSize: 9, interval: 0 } : {})}
+                // Phones/tablets: none skipped, so all 5 status names show. Phones (<768px) also tilt
+                // them, otherwise "Contacted", "Follow-up" and "Scheduled" touch on narrow screens
+                {...(isCompact
+                  ? isPhone
+                    ? { fontSize: 10, interval: 0, angle: -35, textAnchor: 'end', height: 56 }
+                    : { fontSize: 9, interval: 0 }
+                  : {})}
               />
               <YAxis stroke="#64748b" fontSize={12} />
               <Tooltip 
