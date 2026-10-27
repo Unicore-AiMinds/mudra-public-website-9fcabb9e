@@ -19,6 +19,8 @@ import { exportToExcel } from '@/lib/exportUtils';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
+import AdminSortSelect from '@/components/admin/AdminSortSelect';
+import { useIsCompact } from '@/hooks/use-compact';
 
 interface AdminDataTableProps {
   clinicType: 'dental' | 'aesthetic';
@@ -28,6 +30,7 @@ interface AdminDataTableProps {
 
 const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTableProps) => {
   const { toast } = useToast();
+  const isCompact = useIsCompact();
 
   // Data and filtering
   const [allData, setAllData] = useState<ContactSubmission[]>([]);
@@ -286,7 +289,7 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
     });
   };
 
-  const getStatusSelect = (submission: ContactSubmission) => {
+  const getStatusSelect = (submission: ContactSubmission, ariaLabel?: string) => {
     const statusOptions = [
       { value: 'new', label: 'New', color: 'bg-red-100 text-red-700 border-red-200' },
       { value: 'contacted', label: 'Contacted', color: 'bg-blue-100 text-blue-700 border-blue-200' },
@@ -304,6 +307,7 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
           value={submission.status}
           onChange={(e) => handleStatusUpdate(submission.id!, e.target.value as ContactSubmission['status'], submission.status)}
           disabled={isUpdating}
+          aria-label={ariaLabel}
           className={`text-xs font-medium px-2 py-1 rounded-full border cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${currentStatus.color}`}
         >
           {statusOptions.map((option) => (
@@ -401,7 +405,105 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
         </div>
       </div>
 
-      {/* Data Table */}
+      {/* Phones/tablets: one card per submission instead of the 800px table */}
+      {isCompact ? (
+      <div className="space-y-3">
+        {loading && paginatedData.length === 0 ? (
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 py-10 text-center text-sm text-slate-500">
+            Loading submissions...
+          </div>
+        ) : (
+          <>
+            {/* Kept while there is data, so a filter that empties the page can't hide the way back */}
+            {allData.length > 0 && (
+              <AdminSortSelect
+                sortField={sortField}
+                sortDirection={sortDirection}
+                onChange={(field, direction) => {
+                  setSortField(field);
+                  setSortDirection(direction);
+                }}
+              />
+            )}
+            {paginatedData.length === 0 && (
+              <div className="bg-white rounded-xl shadow-sm border border-slate-200 py-10 text-center text-sm text-slate-500">
+                No submissions found.
+              </div>
+            )}
+            {paginatedData.map((submission) => (
+              <div key={submission.id} className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 text-sm">
+                <div className="flex items-start justify-between gap-3">
+                  <h3 className="font-sans text-sm font-medium text-slate-900 min-w-0 [overflow-wrap:anywhere]">{submission.name}</h3>
+                  <div className="flex-shrink-0">{getStatusSelect(submission, `Status for ${submission.name}`)}</div>
+                </div>
+                <dl className="mt-2 grid grid-cols-[4.5rem_minmax(0,1fr)] gap-x-2 gap-y-1">
+                  <dt className="text-xs font-medium text-slate-500 uppercase tracking-wider pt-0.5">Date</dt>
+                  <dd className="text-slate-900">
+                    {submission.submitted_at ? `${format(new Date(submission.submitted_at), 'MMM dd, yyyy')} · ${format(new Date(submission.submitted_at), 'HH:mm')}` : 'N/A'}
+                  </dd>
+                  <dt className="text-xs font-medium text-slate-500 uppercase tracking-wider pt-0.5">Email</dt>
+                  <dd className="text-slate-700 [overflow-wrap:anywhere]">{submission.email}</dd>
+                  <dt className="text-xs font-medium text-slate-500 uppercase tracking-wider pt-0.5">Phone</dt>
+                  <dd>
+                    {submission.phone && (
+                      <a href={`tel:${submission.phone.replace(/\s/g, '')}`} className="text-blue-600 underline">
+                        {submission.phone}
+                      </a>
+                    )}
+                  </dd>
+                  <dt className="text-xs font-medium text-slate-500 uppercase tracking-wider pt-0.5">Service</dt>
+                  <dd className="text-slate-900 [overflow-wrap:anywhere]">{submission.service_inquiry}</dd>
+                </dl>
+                <div className="mt-3 grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => setSelectedSubmission(submission)}
+                    className="inline-flex items-center justify-center px-3 py-2 rounded-lg border border-indigo-200 font-medium text-indigo-600 hover:text-indigo-900"
+                  >
+                    <Eye className="h-4 w-4 mr-1" />
+                    View
+                  </button>
+                  <button
+                    onClick={() => handleDeleteSubmission(submission.id!)}
+                    disabled={deletingSubmission === submission.id?.toString()}
+                    className="inline-flex items-center justify-center px-3 py-2 rounded-lg border border-red-200 font-medium text-red-600 hover:text-red-900 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {deletingSubmission === submission.id?.toString() ? (
+                      <div className="w-4 h-4 mr-1 border border-red-400 border-t-transparent rounded-full animate-spin"></div>
+                    ) : (
+                      <Trash2 className="h-4 w-4 mr-1" />
+                    )}
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </>
+        )}
+
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between gap-2 pt-1">
+            <button
+              onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+              disabled={currentPage === 1}
+              className="relative inline-flex items-center px-4 py-2 border border-slate-300 text-sm font-medium rounded-md text-slate-700 bg-white hover:bg-slate-50 disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <span className="text-sm font-medium text-slate-700">
+              {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+              disabled={currentPage === totalPages}
+              className="relative inline-flex items-center px-4 py-2 border border-slate-300 text-sm font-medium rounded-md text-slate-700 bg-white hover:bg-slate-50 disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        )}
+      </div>
+      ) : (
+      /* Data Table */
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[800px]">
@@ -572,6 +674,7 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
           </div>
         )}
       </div>
+      )}
 
       {/* Submission Detail Modal */}
       {selectedSubmission && (
@@ -596,7 +699,7 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
                   </div>
                 </div>
                 
-                <div className="grid grid-cols-2 gap-4">
+                <div className={isCompact ? "grid grid-cols-1 gap-4" : "grid grid-cols-2 gap-4"}>
                   <div>
                     <label className="block text-sm font-medium text-slate-700">Name</label>
                     <p className="text-sm text-slate-900 mt-1">{selectedSubmission.name}</p>
@@ -609,14 +712,20 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
                   </div>
                 </div>
                 
-                <div className="grid grid-cols-2 gap-4">
+                <div className={isCompact ? "grid grid-cols-1 gap-4" : "grid grid-cols-2 gap-4"}>
                   <div>
                     <label className="block text-sm font-medium text-slate-700">Email</label>
-                    <p className="text-sm text-slate-900 mt-1">{selectedSubmission.email}</p>
+                    <p className={isCompact ? "text-sm text-slate-900 mt-1 [overflow-wrap:anywhere]" : "text-sm text-slate-900 mt-1"}>{selectedSubmission.email}</p>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-slate-700">Phone</label>
-                    <p className="text-sm text-slate-900 mt-1">{selectedSubmission.phone}</p>
+                    {isCompact && selectedSubmission.phone ? (
+                      <a href={`tel:${selectedSubmission.phone.replace(/\s/g, '')}`} className="block text-sm text-blue-600 underline mt-1">
+                        {selectedSubmission.phone}
+                      </a>
+                    ) : (
+                      <p className="text-sm text-slate-900 mt-1">{selectedSubmission.phone}</p>
+                    )}
                   </div>
                 </div>
                 
