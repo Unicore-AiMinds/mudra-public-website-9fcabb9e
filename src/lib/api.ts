@@ -31,6 +31,8 @@ export interface SubmissionFilters {
   limit?: number;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
+  /** Only submissions on or after this time (ms since epoch); applied before paging */
+  submittedFrom?: number;
 }
 
 export interface AnalyticsData {
@@ -87,7 +89,8 @@ class ApiClient {
         page = 1,
         limit = 10,
         sortBy = 'submitted_at',
-        sortOrder = 'desc'
+        sortOrder = 'desc',
+        submittedFrom
       } = filters;
 
       const supabaseFilters: Record<string, unknown> = {};
@@ -118,6 +121,14 @@ class ApiClient {
           item.phone.includes(search) ||
           item.service_inquiry.toLowerCase().includes(searchLower)
         );
+      }
+
+      // Date filter (Today / Last 7 Days / Last 30 Days) over all submissions, before paging
+      if (submittedFrom) {
+        filteredData = filteredData.filter(item => {
+          const submitted = new Date(item.submitted_at || '').getTime();
+          return !isNaN(submitted) && submitted >= submittedFrom;
+        });
       }
 
       // Sort

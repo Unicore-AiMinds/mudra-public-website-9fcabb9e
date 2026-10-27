@@ -28,6 +28,26 @@ interface AdminDataTableProps {
   brandColor: string;
 }
 
+// Start of the chosen date range: Today = since midnight, Last 7 Days, Last 30 Days (one month)
+const getDateFilterStart = (dateFilter: string): number | undefined => {
+  const now = new Date();
+  const filterDate = new Date();
+  switch (dateFilter) {
+    case 'today':
+      filterDate.setHours(0, 0, 0, 0);
+      break;
+    case 'week':
+      filterDate.setDate(now.getDate() - 7);
+      break;
+    case 'month':
+      filterDate.setMonth(now.getMonth() - 1);
+      break;
+    default:
+      return undefined;
+  }
+  return filterDate.getTime();
+};
+
 const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTableProps) => {
   const { toast } = useToast();
   const isCompact = useIsCompact();
@@ -80,6 +100,9 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
 
   // Fetch data from API
   useEffect(() => {
+    // A newer request (e.g. the next letter typed in search) makes this one's answer stale
+    let ignore = false;
+
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -93,9 +116,11 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
           search: searchTerm,
           status: statusFilter !== 'all' ? statusFilter : undefined,
           sortBy: sortField,
-          sortOrder: sortDirection
+          sortOrder: sortDirection,
+          submittedFrom: getDateFilterStart(dateFilter)
         });
 
+        if (ignore) return;
         if (response.success && response.data) {
           setAllData(response.data);
           setFilteredData(response.data);
@@ -106,53 +131,26 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
           clearRows();
         }
       } catch (err) {
+        if (ignore) return;
         setError('Failed to fetch submissions');
         clearRows();
         console.error('Data fetch error:', err);
       } finally {
-        setLoading(false);
+        if (!ignore) setLoading(false);
       }
     };
 
     fetchData();
-  }, [clinicType, currentPage, itemsPerPage, searchTerm, statusFilter, sortField, sortDirection]);
+    return () => {
+      ignore = true;
+    };
+  }, [clinicType, currentPage, itemsPerPage, searchTerm, statusFilter, sortField, sortDirection, dateFilter]);
 
-  // Since API handles filtering, this is mainly for local date filtering if needed
+  // Keep the shown rows in step with the loaded rows (the date filter is applied by the API
+  // over all submissions, before paging)
   useMemo(() => {
-    let filtered = [...allData];
-
-    // Date filter (local filtering for real-time updates)
-    if (dateFilter !== 'all') {
-      const now = new Date();
-      let filterDate = new Date();
-
-      switch (dateFilter) {
-        case 'today':
-          filterDate.setHours(0, 0, 0, 0);
-          filtered = filtered.filter(item => {
-            const submittedDate = new Date(item.submitted_at || '');
-            return submittedDate >= filterDate;
-          });
-          break;
-        case 'week':
-          filterDate.setDate(now.getDate() - 7);
-          filtered = filtered.filter(item => {
-            const submittedDate = new Date(item.submitted_at || '');
-            return submittedDate >= filterDate;
-          });
-          break;
-        case 'month':
-          filterDate.setMonth(now.getMonth() - 1);
-          filtered = filtered.filter(item => {
-            const submittedDate = new Date(item.submitted_at || '');
-            return submittedDate >= filterDate;
-          });
-          break;
-      }
-    }
-
-    setFilteredData(filtered);
-  }, [allData, dateFilter]);
+    setFilteredData([...allData]);
+  }, [allData]);
 
   // Pagination is handled by API, so we use the data as-is
   const paginatedData = filteredData;
@@ -238,14 +236,7 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
               variant: "destructive",
             });
           }
-          
-          // Trigger re-filter
-          setFilteredData(prev => prev.map(submission => 
-            submission.id === submissionId 
-              ? { ...submission, status: newStatus }
-              : submission
-          ));
-          
+          // The shown rows follow allData, so a failed save leaves the old status in place
         } catch (error) {
           toast({
             title: "Update Failed",
@@ -351,7 +342,7 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
         <div>
           <h1 className="text-2xl font-bold text-slate-900">{clinicName} Data</h1>
           <p className="text-slate-600 mt-1">
-            {filteredData.length} of {allData.length} submissions
+            {filteredData.length} of {totalCount} submissions
           </p>
         </div>
         <button
@@ -400,7 +391,7 @@ const AdminDataTable = ({ clinicType, clinicName, brandColor }: AdminDataTablePr
             <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
             <select
               value={dateFilter}
-              onChange={(e) => setDateFilter(e.target.value)}
+              onChange={(e) => { setDateFilter(e.target.value); setCurrentPage(1); }}
               className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-slate-500"
             >
               <option value="all">All Time</option>
