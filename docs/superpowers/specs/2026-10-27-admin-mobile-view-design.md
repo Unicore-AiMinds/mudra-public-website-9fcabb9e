@@ -54,13 +54,16 @@ instead of NaN%, #10 load errors shown (data layer now passes errors on; data pa
 fetch submissions" and clear old rows; dashboard shows its existing error screen with Retry),
 #11 (quick part) "Demo Credentials" box removed from the login page.
 
-## Still open (decide later)
+## Bug fixes (step 2, approved 2026-10-27; desktop and phones)
 
-- #7 "Scheduled Today" counts all scheduled (recommend renaming to "Scheduled"; no scheduled-on date exists).
-- #9 date filter only checks the current page; the "Showing x of z" total ignores it.
-- Header "x of y submissions" counts only the current page.
-- A failed status update still changes the row locally until reload.
-- Searching fetches on every keystroke without cancelling older requests.
+Fixed, each with a live check that failed first: #7 dashboard box renamed "Scheduled" (it counts all
+scheduled enquiries; no scheduled-on date exists), #9 date filter (Today / Last 7 Days / Last 30 Days)
+is applied by the API over all submissions before paging, and changing it goes back to page 1,
+heading "x of y submissions" uses the real total, a failed status save keeps the old status,
+older search requests are ignored when a newer one has started.
+
+## Still open
+
 - #11 / #12 security: password still in the website code; the public key can read, change and
   delete enquiries (the ERP uses the same key, so this needs a separate server-side design).
 
