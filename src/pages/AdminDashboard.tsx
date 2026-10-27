@@ -58,6 +58,11 @@ const AdminDashboard = () => {
         if (submissionsResponse.success && submissionsResponse.data) {
           setRecentSubmissions(submissionsResponse.data);
         }
+
+        // Loading failed (the API reports it instead of throwing): show the error screen
+        if (!analyticsResponse.success || !submissionsResponse.success) {
+          setError('Failed to load dashboard data');
+        }
       } catch (err) {
         setError('Failed to load dashboard data');
         console.error('Dashboard data error:', err);
@@ -70,7 +75,8 @@ const AdminDashboard = () => {
   }, []);
 
   // Simple conversion rate calculation
-  const conversionRate = Math.round((analytics.byStatus.scheduled / analytics.total) * 100);
+  // 0% (not NaN%) when there are no submissions yet
+  const conversionRate = analytics.total ? Math.round((analytics.byStatus.scheduled / analytics.total) * 100) : 0;
 
   const pieData = [
     { name: 'Dental Metrix', value: analytics.dental, color: '#0a7490' },
@@ -270,11 +276,11 @@ const AdminDashboard = () => {
               <div key={submission.id} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    submission.formType === 'dental' 
+                    submission.clinic === 'dental_metrix' 
                       ? 'bg-mudra-primary/10 text-mudra-primary'
                       : 'bg-meditouch-primary/10 text-meditouch-primary'
                   }`}>
-                    {submission.formType === 'dental' ? (
+                    {submission.clinic === 'dental_metrix' ? (
                       <Stethoscope className="h-5 w-5" />
                     ) : (
                       <Sparkles className="h-5 w-5" />
@@ -282,7 +288,7 @@ const AdminDashboard = () => {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-slate-900">{submission.name}</p>
-                    <p className={isCompact ? "text-xs text-slate-500 [overflow-wrap:anywhere]" : "text-xs text-slate-500 truncate max-w-[180px]"}>{submission.serviceInquiry}</p>
+                    <p className={isCompact ? "text-xs text-slate-500 [overflow-wrap:anywhere]" : "text-xs text-slate-500 truncate max-w-[180px]"}>{submission.service_inquiry}</p>
                   </div>
                 </div>
                 <div className="text-right">
