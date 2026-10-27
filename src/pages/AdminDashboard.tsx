@@ -183,7 +183,7 @@ const AdminDashboard = () => {
           description="New → Scheduled"
         />
         <StatCard
-          title="Scheduled Today"
+          title="Scheduled"
           value={analytics.byStatus.scheduled}
           icon={CheckCircle2}
           color="from-blue-500 to-blue-600"
