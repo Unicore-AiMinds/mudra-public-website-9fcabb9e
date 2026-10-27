@@ -137,15 +137,6 @@ const AdminLogin = () => {
               )}
             </button>
           </form>
-
-          {/* Demo Credentials */}
-          <div className="mt-4 p-3 bg-slate-50 rounded-lg border border-slate-200">
-            <h3 className="text-xs font-medium text-slate-700 mb-1">Demo Credentials</h3>
-            <div className="text-xs text-slate-600 space-y-0.5">
-              <div><span className="font-medium">Username:</span> admin</div>
-              <div><span className="font-medium">Password:</span> mudra2024</div>
-            </div>
-          </div>
         </div>
 
         {/* Footer */}
